@@ -44,7 +44,7 @@ namespace RaceXNA
       }
 
       public BaseObject(RacingGame raceGame, String modelName, Vector3 initPos, float initScale, Vector3 initRot)
-         : base(jeu)
+         : base(raceGame)
       {
          RaceGame = raceGame;
          ModelName = modelName;
