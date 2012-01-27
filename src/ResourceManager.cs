@@ -9,20 +9,20 @@ namespace RaceXNA
    public class ResourceManager<T>
    {
       private Object LockObj = new Object();
-      public RacingGame Game { get; protected set; }
+      public RacingGame RaceGame { get; protected set; }
       List<BaseResource<T>> Resources;
       const int FILE_NOT_FOUND = -1;
 
       public ResourceManager(RacingGame game)
       {
-         Game = game;
+         RaceGame = game;
          Resources = new List<BaseResource<T>>();
       }
 
       public void Add(string name)
       {
 
-         BaseResource<T> fileToAdd = new BaseResource<T>(Game.Content, name);
+         BaseResource<T> fileToAdd = new BaseResource<T>(RaceGame.Content, name);
 
          if (!Resources.Contains(fileToAdd))
          {
@@ -37,7 +37,7 @@ namespace RaceXNA
 
       public T Find(string name)
       {
-         BaseResource<T> fileToFind = new BaseResource<T>(Game.Content, name);
+         BaseResource<T> fileToFind = new BaseResource<T>(RaceGame.Content, name);
          int fileIndex = Resources.IndexOf(fileToFind);
 
          if (fileIndex == FILE_NOT_FOUND)
