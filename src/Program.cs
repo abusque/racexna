@@ -1,6 +1,6 @@
 using System;
 
-namespace racexna
+namespace RaceXNA
 {
     static class Program
     {

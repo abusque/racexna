@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Net;
 using Microsoft.Xna.Framework.Storage;
 
-namespace racexna
+namespace RaceXNA
 {
     public class RacingGame : Microsoft.Xna.Framework.Game
     {
