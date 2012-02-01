@@ -15,8 +15,19 @@ namespace RaceXNA
 {
     public class RacingGame : Microsoft.Xna.Framework.Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        const float FPS_INTERVAL = 1.0f;
+
+        public GraphicsDeviceManager graphics;
+        public SpriteBatch spriteBatch;
+
+        public InputManager InputMgr { get; private set; }
+        public ResourceManager<Texture2D> TextureMgr { get; private set; }
+        public ResourceManager<SpriteFont> FontMgr { get; private set; }
+        public ResourceManager<Model> ModelMgr { get; private set; }
+        public FpsCounter FpsHandler { get; private set; }
+        public FpsDisplay FpsDisplayer { get; private set; }
+        public FreeCamera GameCamera { get; private set; }
+
 
         public RacingGame()
         {
