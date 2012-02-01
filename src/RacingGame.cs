@@ -76,7 +76,7 @@ namespace RaceXNA
         {
             FontMgr.Add("Fonts/Pericles20");
             ModelMgr.Add("Models/L200-FBX");
-            //TextureMgr.Add("Textures/grass1");
+            TextureMgr.Add("Textures/grass1");
         }
 
         protected override void LoadContent()
