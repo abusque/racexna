@@ -53,13 +53,13 @@ namespace RaceXNA
          TextutreRepeatedPts = new Vector2[2, 2];
          Vertices = new VertexPositionTexture[NbVertices];
          
-         CréerTableauPoints();
+         CreatePointsArray();
          InitializeVertices();
 
          base.Initialize();
       }
 
-      private void CréerTableauPoints()
+      private void CreatePointsArray()
       {
          for (int i = 0; i <= ColumnsNb; ++i)
          {
@@ -80,26 +80,28 @@ namespace RaceXNA
 
       protected override void InitializeVertices()
       {
-         int NoSommet = -1;
+         int VertexNb = -1;
+
          for (int j = 0; j < RowsNb; ++j)
          {
             if (IsTextureRepeated)
             {
                 for (int i = 0; i <= ColumnsNb; ++i)
                 {
-                    Vertices[++NoSommet] = new VertexPositionTexture(VerticesPoints[i, j], TextutreRepeatedPts[i % 2, j % 2]);
-                    Vertices[++NoSommet] = new VertexPositionTexture(VerticesPoints[i, j + 1], TextutreRepeatedPts[(i+1) % 2, (j+1) % 2]);
+                    Vertices[++VertexNb] = new VertexPositionTexture(VerticesPoints[i, j], TextutreRepeatedPts[i % 2, j % 2]);
+                    Vertices[++VertexNb] = new VertexPositionTexture(VerticesPoints[i, j + 1], TextutreRepeatedPts[i % 2, (j+1) % 2]);
                 }
             }
             else
             {
                 for (int i = 0; i <= ColumnsNb; ++i)
                 {
-                    Vertices[++NoSommet] = new VertexPositionTexture(VerticesPoints[i, j], TexturePts[i, j]);
-                    Vertices[++NoSommet] = new VertexPositionTexture(VerticesPoints[i, j + 1], TexturePts[i, j + 1]);
+                    Vertices[++VertexNb] = new VertexPositionTexture(VerticesPoints[i, j], TexturePts[i, j]);
+                    Vertices[++VertexNb] = new VertexPositionTexture(VerticesPoints[i, j + 1], TexturePts[i, j + 1]);
                 }
             }
          }
+
       }
 
       public override void Draw(GameTime gameTime)
