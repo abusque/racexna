@@ -45,18 +45,18 @@ namespace RaceXNA
 
       protected override void LoadContent()
       {
-         FontDisplay = RaceGame.FontsMgr.Find(FontName);
+         FontDisplay = RaceGame.FontMgr.Find(FontName);
          base.LoadContent();
       }
 
       public override void Update(GameTime gameTime)
       {
-         if (RaceGame.GestionFPS.ValFPS != FpsValue)
+         if (RaceGame.FpsHandler.FpsValue != FpsValue)
          {
-            StringFps = RaceGame.GestionFPS.ValFPS.ToString("0");
+            StringFps = RaceGame.FpsHandler.FpsValue.ToString("0");
             Dimention = FontDisplay.MeasureString(StringFps);
             StringPosition = BottomRightPosition - Dimention;
-            FpsValue = RaceGame.GestionFPS.ValFPS;
+            FpsValue = RaceGame.FpsHandler.FpsValue;
          }
          base.Update(gameTime);
       }
@@ -65,11 +65,11 @@ namespace RaceXNA
       {
          FillMode previousFillMode = RaceGame.GraphicsDevice.RenderState.FillMode;
          RaceGame.GraphicsDevice.RenderState.FillMode = FillMode.Solid;
-         RaceGame.SpritesMgr.Begin();
-         RaceGame.SpritesMgr.DrawString(FontDisplay, StringFps, StringPosition, Color.Tomato, 0,
+         RaceGame.spriteBatch.Begin();
+         RaceGame.spriteBatch.DrawString(FontDisplay, StringFps, StringPosition, Color.Tomato, 0,
                                       Vector2.Zero , 1.0f, SpriteEffects.None, 0);
          RaceGame.GraphicsDevice.RenderState.FillMode = previousFillMode;
-         RaceGame.SpritesMgr.End();
+         RaceGame.spriteBatch.End();
          base.Draw(gameTime);
       }
    }

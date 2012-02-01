@@ -20,9 +20,9 @@ namespace RaceXNA
       {
          get
          {
-            if (RaceGame.GestionFPS.ValFPS > 0)
+            if (RaceGame.FpsHandler.FpsValue > 0)
             {
-               angle_ += (2 * MathHelper.Pi) / (RaceGame.GestionFPS.ValFPS * 4);
+               angle_ += (2 * MathHelper.Pi) / (RaceGame.FpsHandler.FpsValue * 4);
             }
             else
             {
@@ -59,7 +59,7 @@ namespace RaceXNA
 
       public override void Initialize()
       {
-         ModelData = RaceGame.ModelsMgr.Find(ModelName);
+         ModelData = RaceGame.ModelMgr.Find(ModelName);
          Angle = 0;
          Pause = true;
          //this.Enabled = false;
@@ -80,7 +80,7 @@ namespace RaceXNA
 
       private void HandleInput()
       {
-         if (RaceGame.InputMgr.EstNouvelleTouche(Keys.Space))
+         if (RaceGame.InputMgr.IsNewKey(Keys.Space))
          {
             Pause = !Pause;
          }
@@ -100,8 +100,8 @@ namespace RaceXNA
             {
                BasicEffect effect = (BasicEffect)portionDeMaillage.Effect;
                effect.EnableDefaultLighting();
-               effect.Projection = RaceGame.CaméraJeu.Projection;
-               effect.View = RaceGame.CaméraJeu.Vue;
+               effect.Projection = RaceGame.GameCamera.Projection;
+               effect.View = RaceGame.GameCamera.View;
                effect.World = localWorld;
             }
             mesh.Draw();

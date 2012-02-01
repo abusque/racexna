@@ -36,13 +36,13 @@ namespace RaceXNA
 
       private void HandleMovement()
       {
-         if (RaceGame.InputMgr.ÉtatClavier.IsKeyDown(Keys.W))
+         if (RaceGame.InputMgr.KbState.IsKeyDown(Keys.W))
               MoveCamera(CameraRotation.Forward);
-         if (RaceGame.InputMgr.ÉtatClavier.IsKeyDown(Keys.S))
+         if (RaceGame.InputMgr.KbState.IsKeyDown(Keys.S))
              MoveCamera(CameraRotation.Backward);
-         if (RaceGame.InputMgr.ÉtatClavier.IsKeyDown(Keys.A))
+         if (RaceGame.InputMgr.KbState.IsKeyDown(Keys.A))
              MoveCamera(CameraRotation.Left);
-         if (RaceGame.InputMgr.ÉtatClavier.IsKeyDown(Keys.D))
+         if (RaceGame.InputMgr.KbState.IsKeyDown(Keys.D))
              MoveCamera(CameraRotation.Right);
       }
 
@@ -50,16 +50,16 @@ namespace RaceXNA
       {
           float rotation = 0;
 
-          if (RaceGame.GestionFPS.ValFPS > 0)
-              rotation = DEFAULT_ROTATION / RaceGame.GestionFPS.ValFPS;
+          if (RaceGame.FpsHandler.FpsValue > 0)
+              rotation = DEFAULT_ROTATION / RaceGame.FpsHandler.FpsValue;
 
-          if (RaceGame.InputMgr.ÉtatClavier.IsKeyDown(Keys.Up))
+          if (RaceGame.InputMgr.KbState.IsKeyDown(Keys.Up))
               Pitch += rotation;
-          if (RaceGame.InputMgr.ÉtatClavier.IsKeyDown(Keys.Down))
+          if (RaceGame.InputMgr.KbState.IsKeyDown(Keys.Down))
               Pitch -= rotation;
-          if (RaceGame.InputMgr.ÉtatClavier.IsKeyDown(Keys.Left))
+          if (RaceGame.InputMgr.KbState.IsKeyDown(Keys.Left))
               Yaw += rotation;
-          if (RaceGame.InputMgr.ÉtatClavier.IsKeyDown(Keys.Right))
+          if (RaceGame.InputMgr.KbState.IsKeyDown(Keys.Right))
               Yaw -= rotation;
       }
 
@@ -70,21 +70,13 @@ namespace RaceXNA
           Vector3 newPosition;
           BoundingSphere currentBoundingSphere;
 
-          if (RaceGame.GestionFPS.ValFPS > 0)
-              speed = DEFAULT_SPEED / RaceGame.GestionFPS.ValFPS;
+          if (RaceGame.FpsHandler.FpsValue > 0)
+              speed = DEFAULT_SPEED / RaceGame.FpsHandler.FpsValue;
 
           newPosition = Position + speed * movement;
           currentBoundingSphere = new BoundingSphere(newPosition, RADIUS);
-
-          if (currentBoundingSphere.Intersects(RaceGame.Phare.SphereEnglobante))
-          {
-              if (!IsCollision(newPosition, RaceGame.Phare) && !EstCollisionEau(newPosition))
-                Position = newPosition;
-          }
-          else if(!EstCollisionEau(newPosition))
-          {
-             Position = newPosition;
-          }
+          
+          Position = newPosition;
       }
 
       public override void CreateView()
@@ -104,20 +96,15 @@ namespace RaceXNA
           View = Matrix.CreateLookAt(Position, Target, CameraRotation.Up);
       }
 
-      private bool IsCollision(Vector3 pos, BaseObject obj)
-      {
-         BoundingSphere sphereCamera = new BoundingSphere(pos, RADIUS);
-
-         for (int i = 0; i < obj.ModelData.Meshes.Count; ++i)
-            if(sphereCamera.Intersects(obj.GetSphere(i)))
-               return true;
-
-         return false;
-      }
-
-      //private bool EstCollisionEau(Vector3 pos)
+      //private bool IsCollision(Vector3 pos, BaseObject obj)
       //{
-      //    return pos.Y <= Atelier.NIVEAU_EAU + RADIUS + SurfaceOndulee.AMPLITUDE_TOTALE;
+      //   BoundingSphere sphereCamera = new BoundingSphere(pos, RADIUS);
+
+      //   for (int i = 0; i < obj.ModelData.Meshes.Count; ++i)
+      //      if(sphereCamera.Intersects(obj.GetSphere(i)))
+      //         return true;
+
+      //   return false;
       //}
       
    }

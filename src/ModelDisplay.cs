@@ -51,15 +51,15 @@ namespace RaceXNA
       {
          RaceGame.GraphicsDevice.RenderState.CullMode = CullMode.CullCounterClockwiseFace;
          RaceGame.GraphicsDevice.RenderState.DepthBufferEnable = true;
-         Effect3D.View = RaceGame.CaméraJeu.Vue;
-         Effect3D.Projection = RaceGame.CaméraJeu.Projection;
+         Effect3D.View = RaceGame.GameCamera.View;
+         Effect3D.Projection = RaceGame.GameCamera.Projection;
          //Effet3D.EnableDefaultLighting();
          base.Draw(gameTime);
       }
 
       private void HandleInput()
       {
-         if (RaceGame.InputMgr.EstNouvelleTouche(Keys.F))
+         if (RaceGame.InputMgr.IsNewKey(Keys.F))
          {
             IsWireframe = !IsWireframe;
          }
