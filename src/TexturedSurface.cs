@@ -22,9 +22,12 @@ namespace RaceXNA
       String TextureName { get; set; }
       Texture2D ImageTexture { get; set; }
       Vector2[,] TexturePts { get; set; }
+      Vector2[,] TextutreRepeatedPts { get; set; }
       Vector2 DeltaTexture { get; set; }
-
-      public TexturedSurface(RacingGame raceGame, Vector3 origine, Vector2 size, Vector2 dimension, String textureName)
+      bool IsTextureRepeated { get; set; }
+      
+      
+      public TexturedSurface(RacingGame raceGame, Vector3 origine, Vector2 size, Vector2 dimension, String textureName, bool isTextureRepeated)
          : base(raceGame)
       {
          Origine = origine;
@@ -35,6 +38,7 @@ namespace RaceXNA
          ColumnsNb = (int)Dimension.X;
          RowsNb = (int)Dimension.Y;
          DeltaTexture = new Vector2(1.0f / ColumnsNb, 1.0f / RowsNb);
+         IsTextureRepeated = isTextureRepeated;
       }
 
       public override void Initialize()
@@ -46,8 +50,9 @@ namespace RaceXNA
 
          VerticesPoints = new Vector3[ColumnsNb + 1, RowsNb + 1];
          TexturePts = new Vector2[ColumnsNb + 1, RowsNb + 1];
+         TextutreRepeatedPts = new Vector2[2, 2];
          Vertices = new VertexPositionTexture[NbVertices];
-
+         
          CréerTableauPoints();
          InitializeVertices();
 
@@ -64,6 +69,13 @@ namespace RaceXNA
                TexturePts[i, j] = new Vector2(i * DeltaTexture.X, 1 - j * DeltaTexture.Y);
             }
          }
+         for (int i = 0; i <= 1; ++i)
+         {
+             for (int j = 0; j <= 1; ++j)
+             {
+                 TextutreRepeatedPts[i, j] = new Vector2(i, j);
+             }
+         }
       }
 
       protected override void InitializeVertices()
@@ -71,10 +83,21 @@ namespace RaceXNA
          int NoSommet = -1;
          for (int j = 0; j < RowsNb; ++j)
          {
-            for (int i = 0; i <= ColumnsNb; ++i)
+            if (IsTextureRepeated)
             {
-               Vertices[++NoSommet] = new VertexPositionTexture(VerticesPoints[i, j], TexturePts[i,j]);
-               Vertices[++NoSommet] = new VertexPositionTexture(VerticesPoints[i, j + 1], TexturePts[i, j + 1]);
+                for (int i = 0; i <= ColumnsNb; ++i)
+                {
+                    Vertices[++NoSommet] = new VertexPositionTexture(VerticesPoints[i, j], TextutreRepeatedPts[i % 2, j % 2]);
+                    Vertices[++NoSommet] = new VertexPositionTexture(VerticesPoints[i, j + 1], TextutreRepeatedPts[(i+1) % 2, (j+1) % 2]);
+                }
+            }
+            else
+            {
+                for (int i = 0; i <= ColumnsNb; ++i)
+                {
+                    Vertices[++NoSommet] = new VertexPositionTexture(VerticesPoints[i, j], TexturePts[i, j]);
+                    Vertices[++NoSommet] = new VertexPositionTexture(VerticesPoints[i, j + 1], TexturePts[i, j + 1]);
+                }
             }
          }
       }
@@ -91,14 +114,14 @@ namespace RaceXNA
          displayEffect.TextureEnabled = true;
          displayEffect.Texture = ImageTexture;
          displayEffect.Begin();
-         foreach (EffectPass passeEffet in displayEffect.CurrentTechnique.Passes)
+         foreach (EffectPass effectPass in displayEffect.CurrentTechnique.Passes)
          {
-            passeEffet.Begin();
+            effectPass.Begin();
             for (int noStrip = 0; noStrip < RowsNb; ++noStrip)
             {
                RaceGame.GraphicsDevice.DrawUserPrimitives<VertexPositionTexture>(PrimitiveType.TriangleStrip, Vertices, (TrianglesNbPerStrip + 2) * noStrip, TrianglesNbPerStrip);
             }
-            passeEffet.End();
+            effectPass.End();
          }
          displayEffect.End();
          displayEffect.TextureEnabled = false;
