@@ -65,11 +65,10 @@ namespace RaceXNA
       {
          FillMode previousFillMode = RaceGame.GraphicsDevice.RenderState.FillMode;
          RaceGame.GraphicsDevice.RenderState.FillMode = FillMode.Solid;
-         RaceGame.spriteBatch.Begin();
          RaceGame.spriteBatch.DrawString(FontDisplay, StringFps, StringPosition, Color.Tomato, 0,
                                       Vector2.Zero , 1.0f, SpriteEffects.None, 0);
          RaceGame.GraphicsDevice.RenderState.FillMode = previousFillMode;
-         RaceGame.spriteBatch.End();
+
          base.Draw(gameTime);
       }
    }
