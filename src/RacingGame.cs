@@ -55,7 +55,8 @@ namespace RaceXNA
             InputMgr = new InputManager(this);
             ModelDisplayer = new ModelDisplay(this);
             GameCamera = new FreeCamera(this, Vector3.Zero, Vector3.Zero, Vector3.Up);
-            //Car = new BaseObject(this, "L200-FBX", new Vector3(0, 0, -20), 0.025f, Vector3.Zero);
+
+            Car = new BaseObject(this, "L200-FBX", new Vector3(0, 0, -2), 0.01f, Vector3.Zero);
             GrassGround = new TexturedSurface(this, new Vector3(0, 0, -10), new Vector2(10, 10), new Vector2(10, 10), "grass1", true);
 
             Components.Add(FpsHandler);
@@ -63,7 +64,8 @@ namespace RaceXNA
             Components.Add(GameCamera);
             Components.Add(GrassGround);
             Components.Add(ModelDisplayer);
-            //Components.Add(Car);
+            Components.Add(Car);
+
             //Laisser FpsDisplayer a la fin de la liste pour eviter les problemes d'affichage
             Components.Add(FpsDisplayer);
 
@@ -73,7 +75,8 @@ namespace RaceXNA
         private void LoadAssets()
         {
             FontMgr.Add("Fonts/Pericles20");
-            TextureMgr.Add("Textures/grass1");
+            ModelMgr.Add("Models/L200-FBX");
+            //TextureMgr.Add("Textures/grass1");
         }
 
         protected override void LoadContent()
