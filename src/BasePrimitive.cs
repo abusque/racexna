@@ -3,14 +3,14 @@ using Microsoft.Xna.Framework;
 
 namespace RaceXNA
 {
-   public abstract class PrimitiveDeBase : Microsoft.Xna.Framework.DrawableGameComponent
+   public abstract class BasePrimitive : Microsoft.Xna.Framework.DrawableGameComponent
    {
       public RacingGame RaceGame { get; protected set; }
-      protected int NbOfSubmits { get; set; }
-      protected int NbOfTriangles { get; set; }
+      protected int NbVertices { get; set; }
+      protected int NbTriangles { get; set; }
       protected Matrix World { get; set; }
 
-      protected PrimitiveDeBase(RacingGame raceGame)
+      protected BasePrimitive(RacingGame raceGame)
           : base(raceGame)
       {
          RaceGame = raceGame;
@@ -19,7 +19,7 @@ namespace RaceXNA
 
       public override void Initialize()
       {
-         InitializeSubmits();
+         InitializeVertices();
          base.Initialize();
       }
       public override void Update(GameTime gameTime)
@@ -27,7 +27,7 @@ namespace RaceXNA
          base.Update(gameTime);
       }
      
-      protected  abstract void InitializeSubmits();
+      protected  abstract void InitializeVertices();
 
       public override void Draw(GameTime gameTime)
       {

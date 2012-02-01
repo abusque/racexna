@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 
 namespace RaceXNA
 {
-   class TexturedSurface : BaseObject
+   public class TexturedSurface : BasePrimitive
    {
       const float CIRCLE_IN_DEGREES = 360;
       const float WAVELENGTH = 16;
@@ -24,14 +24,14 @@ namespace RaceXNA
       Vector2[,] TexturePts { get; set; }
       Vector2 DeltaTexture { get; set; }
 
-      public TexturedSurface(Atelier jeu, Vector3 origine, Vector2 size, Vector2 dimension, String textureName)
-         : base(jeu)
+      public TexturedSurface(RacingGame raceGame, Vector3 origine, Vector2 size, Vector2 dimension, String textureName)
+         : base(raceGame)
       {
          Origine = origine;
          Size = size;
          Dimension = dimension;
          TextureName = textureName;
-         ImageTexture = Jeu.TexturesMgr.Find(TextureName);
+         ImageTexture = RaceGame.TextureMgr.Find(TextureName);
          ColumnsNb = (int)Dimension.X;
          RowsNb = (int)Dimension.Y;
          DeltaTexture = new Vector2(1.0f / ColumnsNb, 1.0f / RowsNb);
@@ -41,15 +41,15 @@ namespace RaceXNA
       {
          PointsNb = (ColumnsNb + 1) * (RowsNb + 1);
          TrianglesNbPerStrip = ColumnsNb * 2;
-         NbSommets = (TrianglesNbPerStrip + 2) * RowsNb;
+         NbVertices = (TrianglesNbPerStrip + 2) * RowsNb;
          Delta = new Vector2(Size.X / ColumnsNb, Size.Y / RowsNb);
 
          VerticesPoints = new Vector3[ColumnsNb + 1, RowsNb + 1];
          TexturePts = new Vector2[ColumnsNb + 1, RowsNb + 1];
-         Vertices = new VertexPositionTexture[NbSommets];
+         Vertices = new VertexPositionTexture[NbVertices];
 
          CréerTableauPoints();
-         InitialiserSommets();
+         InitializeVertices();
 
          base.Initialize();
       }
@@ -66,7 +66,7 @@ namespace RaceXNA
          }
       }
 
-      protected override void InitialiserSommets()
+      protected override void InitializeVertices()
       {
          int NoSommet = -1;
          for (int j = 0; j < RowsNb; ++j)
@@ -81,27 +81,27 @@ namespace RaceXNA
 
       public override void Draw(GameTime gameTime)
       {
-         Jeu.GraphicsDevice.VertexDeclaration = new VertexDeclaration(GraphicsDevice, VertexPositionTexture.VertexElements);
-         Jeu.GraphicsDevice.RenderState.CullMode = CullMode.CullCounterClockwiseFace;
+         RaceGame.GraphicsDevice.VertexDeclaration = new VertexDeclaration(GraphicsDevice, VertexPositionTexture.VertexElements);
+         RaceGame.GraphicsDevice.RenderState.CullMode = CullMode.CullCounterClockwiseFace;
          //BasicEffect effetAffichage = new BasicEffect(Jeu.GraphicsDevice, null);
-         BasicEffect effetAffichage = Jeu.Affichage3D.Effet3D;
-         effetAffichage.World = Monde;
-         effetAffichage.View = Jeu.CaméraJeu.Vue;
-         effetAffichage.Projection = Jeu.CaméraJeu.Projection;
-         effetAffichage.TextureEnabled = true;
-         effetAffichage.Texture = ImageTexture;
-         effetAffichage.Begin();
-         foreach (EffectPass passeEffet in effetAffichage.CurrentTechnique.Passes)
+         BasicEffect displayEffect = RaceGame.ModelDisplayer.Effect3D;
+         displayEffect.World = World;
+         displayEffect.View = RaceGame.GameCamera.View;
+         displayEffect.Projection = RaceGame.GameCamera.Projection;
+         displayEffect.TextureEnabled = true;
+         displayEffect.Texture = ImageTexture;
+         displayEffect.Begin();
+         foreach (EffectPass passeEffet in displayEffect.CurrentTechnique.Passes)
          {
             passeEffet.Begin();
             for (int noStrip = 0; noStrip < RowsNb; ++noStrip)
             {
-               Jeu.GraphicsDevice.DrawUserPrimitives<VertexPositionTexture>(PrimitiveType.TriangleStrip, Vertices, (TrianglesNbPerStrip + 2) * noStrip, TrianglesNbPerStrip);
+               RaceGame.GraphicsDevice.DrawUserPrimitives<VertexPositionTexture>(PrimitiveType.TriangleStrip, Vertices, (TrianglesNbPerStrip + 2) * noStrip, TrianglesNbPerStrip);
             }
             passeEffet.End();
          }
-         effetAffichage.End();
-         effetAffichage.TextureEnabled = false;
+         displayEffect.End();
+         displayEffect.TextureEnabled = false;
          base.Draw(gameTime);
       }
    }
