@@ -19,10 +19,10 @@ namespace RaceXNA
          Resources = new List<BaseResource<T>>();
       }
 
-      public void Add(string name)
+      public void Add(string path)
       {
 
-         BaseResource<T> fileToAdd = new BaseResource<T>(RaceGame.Content, name);
+         BaseResource<T> fileToAdd = new BaseResource<T>(RaceGame.Content, path);
 
          if (!Resources.Contains(fileToAdd))
          {
