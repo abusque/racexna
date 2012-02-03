@@ -19,7 +19,7 @@ namespace RaceXNA
       protected int RowsNb { get; set; }
       int PointsNb { get; set; }
       int TrianglesNbPerStrip { get; set; }
-      String TextureName { get; set; }
+      protected String TextureName { get; private set; }
       Texture2D ImageTexture { get; set; }
       Vector2[,] TexturePts { get; set; }
       Vector2[,] TextutreRepeatedPts { get; set; }

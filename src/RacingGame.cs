@@ -57,7 +57,7 @@ namespace RaceXNA
             //GameCamera = new FreeCamera(this, Vector3.Zero, Vector3.Zero, Vector3.Up);
 
             Car = new Vehicle(this, "L200-FBX", new Vector3(0, 0, -2), 0.01f, new Vector3(0, MathHelper.Pi, 0));
-            GrassGround = new TexturedSurface(this, new Vector3(-25, 0, 23), new Vector3(50,0,-200), new Vector2(20, 20), "grass1", true);
+            GrassGround = new Terrain(this, new Vector3(-25, 0, 23), new Vector3(500,0,-500), new Vector2(100, 100), "grass1", true);
 
             GameCamera = Car.Camera;
 
