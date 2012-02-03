@@ -11,7 +11,7 @@ namespace RaceXNA
       protected RacingGame RaceGame { get; private set; }
       private string ModelName { get; set; }
       public Model Model { get; private set; }
-      protected Matrix World;
+      public Matrix World { get; protected set; }
       public Vector3 Position { get; protected set; }
       public float Scale { get; protected set; }
       public Vector3 Rotation { get; protected set; }
