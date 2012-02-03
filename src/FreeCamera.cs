@@ -36,13 +36,13 @@ namespace RaceXNA
 
       private void HandleMovement()
       {
-         if (RaceGame.InputMgr.KbState.IsKeyDown(Keys.W))
+         if (RaceGame.InputMgr.IsKeyDown(Keys.W))
               MoveCamera(CameraRotation.Forward);
-         if (RaceGame.InputMgr.KbState.IsKeyDown(Keys.S))
+         if (RaceGame.InputMgr.IsKeyDown(Keys.S))
              MoveCamera(CameraRotation.Backward);
-         if (RaceGame.InputMgr.KbState.IsKeyDown(Keys.A))
+         if (RaceGame.InputMgr.IsKeyDown(Keys.A))
              MoveCamera(CameraRotation.Left);
-         if (RaceGame.InputMgr.KbState.IsKeyDown(Keys.D))
+         if (RaceGame.InputMgr.IsKeyDown(Keys.D))
              MoveCamera(CameraRotation.Right);
       }
 
@@ -52,14 +52,13 @@ namespace RaceXNA
 
           if (RaceGame.FpsHandler.FpsValue > 0)
               rotation = DEFAULT_ROTATION / RaceGame.FpsHandler.FpsValue;
-
-          if (RaceGame.InputMgr.KbState.IsKeyDown(Keys.Up))
+          if (RaceGame.InputMgr.IsKeyDown(Keys.Up))
               Pitch += rotation;
-          if (RaceGame.InputMgr.KbState.IsKeyDown(Keys.Down))
+          if (RaceGame.InputMgr.IsKeyDown(Keys.Down))
               Pitch -= rotation;
-          if (RaceGame.InputMgr.KbState.IsKeyDown(Keys.Left))
+          if (RaceGame.InputMgr.IsKeyDown(Keys.Left))
               Yaw += rotation;
-          if (RaceGame.InputMgr.KbState.IsKeyDown(Keys.Right))
+          if (RaceGame.InputMgr.IsKeyDown(Keys.Right))
               Yaw -= rotation;
       }
 

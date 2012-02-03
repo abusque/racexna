@@ -91,7 +91,7 @@ namespace RaceXNA
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+            if (InputMgr.CurrentControllerState.Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
             base.Update(gameTime);

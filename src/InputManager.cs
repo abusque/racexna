@@ -6,12 +6,14 @@ namespace RaceXNA
 {
    public class InputManager : Microsoft.Xna.Framework.GameComponent
    {
-      Game RaceGame;
-      Keys[] PreviousKeys { get; set; }
-      Keys[] CurrentKeys { get; set; }
-      public KeyboardState KbState { get; private set; }
-      public MouseState PreviousMouseState { get; private set; }
-      public MouseState CurrentMouseState { get; private set; }
+      private Game RaceGame;
+      public GamePadState PreviousControllerState { get; private set; }
+      public GamePadState CurrentControllerState { get; private set; }
+      private Keys[] PreviousKeys { get; set; }
+      private Keys[] CurrentKeys { get; set; }
+      private KeyboardState KbState { get; set; }
+      private MouseState PreviousMouseState { get; set; }
+      private MouseState CurrentMouseState { get; set; }
 
       public InputManager(Game game)
          : base(game)
@@ -25,6 +27,8 @@ namespace RaceXNA
          CurrentKeys = new Keys[0];
          CurrentMouseState = Mouse.GetState();
          PreviousMouseState = CurrentMouseState;
+         CurrentControllerState = GamePad.GetState(PlayerIndex.One);
+         PreviousControllerState = CurrentControllerState;
          base.Initialize();
       }
 
@@ -33,6 +37,9 @@ namespace RaceXNA
          PreviousKeys = CurrentKeys;
          KbState = Keyboard.GetState();
          CurrentKeys = KbState.GetPressedKeys();
+
+         PreviousControllerState = CurrentControllerState;
+         CurrentControllerState = GamePad.GetState(PlayerIndex.One);
 
          if (RaceGame.IsMouseVisible)
          {
@@ -47,10 +54,7 @@ namespace RaceXNA
          PreviousMouseState = CurrentMouseState;
          CurrentMouseState = Mouse.GetState();
 
-         if (CurrentMouseState.LeftButton == ButtonState.Pressed)
-         {
-            Vector2 Position = GetMousePos();
-         }
+         Vector2 Position = GetMousePos();
       }
 
       public bool IsKbActive
@@ -61,7 +65,7 @@ namespace RaceXNA
       public bool IsNewKey(Keys key)
       {
          int keyCount = PreviousKeys.Length;
-         bool newKey = IsHeld(key);
+         bool newKey = IsKeyDown(key);
          int i = 0;
 
          while (i < keyCount && newKey)
@@ -71,6 +75,11 @@ namespace RaceXNA
          }
 
          return newKey;
+      }
+
+      public bool IsKeyDown(Keys key)
+      {
+          return KbState.IsKeyDown(key);
       }
 
       public bool IsNewRightClick()
@@ -86,11 +95,6 @@ namespace RaceXNA
       public Vector2 GetMousePos()
       {
          return new Vector2(CurrentMouseState.X, CurrentMouseState.Y);
-      }
-
-      public bool IsHeld(Keys touche)
-      {
-          return KbState.IsKeyDown(touche);
       }
    }
 }
