@@ -12,9 +12,9 @@ namespace RaceXNA
       VertexPositionTexture[] Vertices { get; set; }
       protected Vector3[,] VerticesPoints { get; set; }
       protected Vector3 Origine { get; set; }
-      Vector2 Size { get; set; }
+      Vector3 Size { get; set; }
       Vector2 Dimension { get; set; }
-      protected Vector2 Delta { get; set; }
+      protected Vector3 Delta { get; set; }
       protected int ColumnsNb { get; set; }
       protected int RowsNb { get; set; }
       int PointsNb { get; set; }
@@ -26,8 +26,7 @@ namespace RaceXNA
       Vector2 DeltaTexture { get; set; }
       bool IsTextureRepeated { get; set; }
       
-      
-      public TexturedSurface(RacingGame raceGame, Vector3 origine, Vector2 size, Vector2 dimension, String textureName, bool isTextureRepeated)
+      public TexturedSurface(RacingGame raceGame, Vector3 origine, Vector3 size, Vector2 dimension, String textureName, bool isTextureRepeated)
          : base(raceGame)
       {
          Origine = origine;
@@ -46,26 +45,25 @@ namespace RaceXNA
          PointsNb = (ColumnsNb + 1) * (RowsNb + 1);
          TrianglesNbPerStrip = ColumnsNb * 2;
          NbVertices = (TrianglesNbPerStrip + 2) * RowsNb;
-         Delta = new Vector2(Size.X / ColumnsNb, Size.Y / RowsNb);
-
+         Delta = new Vector3(Size.X / ColumnsNb, Size.Y / RowsNb, Size.Z / RowsNb);
          VerticesPoints = new Vector3[ColumnsNb + 1, RowsNb + 1];
          TexturePts = new Vector2[ColumnsNb + 1, RowsNb + 1];
          TextutreRepeatedPts = new Vector2[2, 2];
          Vertices = new VertexPositionTexture[NbVertices];
          
-         CréerTableauPoints();
+         CreatePointsArray();
          InitializeVertices();
 
          base.Initialize();
       }
 
-      private void CréerTableauPoints()
+      private void CreatePointsArray()
       {
          for (int i = 0; i <= ColumnsNb; ++i)
          {
             for (int j = 0; j <= RowsNb; ++j)
             {
-               VerticesPoints[i, j] = new Vector3(Origine.X + (i * Delta.X), Origine.Y + (j * Delta.Y), Origine.Z);
+               VerticesPoints[i, j] = new Vector3(Origine.X + (i * Delta.X), Origine.Y + (j * Delta.Y), Origine.Z + (j*Delta.Z));
                TexturePts[i, j] = new Vector2(i * DeltaTexture.X, 1 - j * DeltaTexture.Y);
             }
          }
@@ -88,7 +86,7 @@ namespace RaceXNA
                 for (int i = 0; i <= ColumnsNb; ++i)
                 {
                     Vertices[++NoSommet] = new VertexPositionTexture(VerticesPoints[i, j], TextutreRepeatedPts[i % 2, j % 2]);
-                    Vertices[++NoSommet] = new VertexPositionTexture(VerticesPoints[i, j + 1], TextutreRepeatedPts[(i+1) % 2, (j+1) % 2]);
+                    Vertices[++NoSommet] = new VertexPositionTexture(VerticesPoints[i, j + 1], TextutreRepeatedPts[i % 2, (j+1) % 2]);
                 }
             }
             else
