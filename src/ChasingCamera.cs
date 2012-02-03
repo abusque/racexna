@@ -4,22 +4,24 @@ namespace RaceXNA
 {
     public class ChasingCamera : Camera
     {
-        const Vector3 DEFAULT_ORIENTATION = Vector3.Up;
         const float HEIGHT = 1;
-        const float DISTANCE = 10;
+        const float DISTANCE = 1;
 
+        Vehicle TargetVehicle { get; set; }
 
-        public ChasingCamera(RacingGame raceGame)
-            : base(raceGame)
+        public ChasingCamera(Vehicle targetVehicle)
+            : base(targetVehicle.RaceGame)
         {
-            Position = new Vector3(RaceGame.Car.Position.X, RaceGame.Car.Position.Y + HEIGHT, RaceGame.Car.Position.Z - DISTANCE);
-            Target = RaceGame.Car.Position;
+            TargetVehicle = targetVehicle;
+
+            Position = new Vector3(TargetVehicle.Position.X, TargetVehicle.Position.Y + HEIGHT, TargetVehicle.Position.Z + DISTANCE);
+            Target = TargetVehicle.Position;
         }
 
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime)
         {
-            Position = new Vector3(RaceGame.Car.Position.X, RaceGame.Car.Position.Y + HEIGHT, RaceGame.Car.Position.Z - DISTANCE);
-            Target = RaceGame.Car.Position;
+            Position = new Vector3(TargetVehicle.Position.X, TargetVehicle.Position.Y + HEIGHT, TargetVehicle.Position.Z + DISTANCE);
+            Target = TargetVehicle.Position;
             CreateView();
 
             base.Update(gameTime);

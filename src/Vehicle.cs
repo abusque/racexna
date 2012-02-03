@@ -12,12 +12,14 @@ namespace RaceXNA
 
         public Vector3 Acceleration { get; private set; }
         public Vector3 Velocity { get; private set; }
+        public ChasingCamera Camera { get; private set; }
 
         public Vehicle(RacingGame raceGame, String modelName, Vector3 initPos, float initScale, Vector3 initRot)
             : base(raceGame, modelName, initPos, initScale, initRot)
         {
             Acceleration = Vector3.Zero;
             Velocity = Vector3.Zero;
+            Camera = new ChasingCamera(this);
         }
 
         public override void Update(GameTime gameTime)
