@@ -14,7 +14,7 @@ namespace RaceXNA
         {
             TargetVehicle = targetVehicle;
 
-            Position = new Vector3(TargetVehicle.Position.X, TargetVehicle.Position.Y + HEIGHT, TargetVehicle.Position.Z - DISTANCE);
+            Position = new Vector3(TargetVehicle.Position.X, TargetVehicle.Position.Y + HEIGHT, TargetVehicle.Position.Z + DISTANCE);
             Target = new Vector3(TargetVehicle.Position.X, TargetVehicle.Position.Y + HEIGHT, TargetVehicle.Position.Z);
             CreateViewpoint(Position, Target, Vector3.Up);
             CreateProjection();
@@ -22,7 +22,7 @@ namespace RaceXNA
 
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime)
         {
-            Position = new Vector3(TargetVehicle.Position.X, TargetVehicle.Position.Y + HEIGHT, TargetVehicle.Position.Z - DISTANCE);
+            Position = new Vector3(TargetVehicle.Position.X, TargetVehicle.Position.Y + HEIGHT, TargetVehicle.Position.Z + DISTANCE);
             Target = new Vector3(TargetVehicle.Position.X, TargetVehicle.Position.Y + HEIGHT, TargetVehicle.Position.Z);
             CreateViewpoint(Position, Target, Vector3.Up);
 
