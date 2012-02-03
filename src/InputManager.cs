@@ -7,8 +7,7 @@ namespace RaceXNA
    public class InputManager : Microsoft.Xna.Framework.GameComponent
    {
       private Game RaceGame;
-      public GamePadState PreviousControllerState { get; private set; }
-      public GamePadState CurrentControllerState { get; private set; }
+      public GamePadState ControllerState { get; private set; }
       private Keys[] PreviousKeys { get; set; }
       private Keys[] CurrentKeys { get; set; }
       private KeyboardState KbState { get; set; }
@@ -27,8 +26,7 @@ namespace RaceXNA
          CurrentKeys = new Keys[0];
          CurrentMouseState = Mouse.GetState();
          PreviousMouseState = CurrentMouseState;
-         CurrentControllerState = GamePad.GetState(PlayerIndex.One);
-         PreviousControllerState = CurrentControllerState;
+         ControllerState = GamePad.GetState(PlayerIndex.One);
          base.Initialize();
       }
 
@@ -38,8 +36,7 @@ namespace RaceXNA
          KbState = Keyboard.GetState();
          CurrentKeys = KbState.GetPressedKeys();
 
-         PreviousControllerState = CurrentControllerState;
-         CurrentControllerState = GamePad.GetState(PlayerIndex.One);
+         ControllerState = GamePad.GetState(PlayerIndex.One);
 
          if (RaceGame.IsMouseVisible)
          {

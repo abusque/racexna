@@ -8,7 +8,8 @@ namespace RaceXNA
 {
     public class Vehicle : BaseObject
     {
-        const float BASE_ACCEL = 1.0f;
+        const float BASE_ACCEL = 0.25f;
+        const float FRICTION = 0.05f;
 
         public Vector3 Acceleration { get; private set; }
         public Vector3 Velocity { get; private set; }
@@ -24,9 +25,16 @@ namespace RaceXNA
 
         public override void Update(GameTime gameTime)
         {
+            Vector3 forward = World.Forward;
+            forward.Normalize();
+
             HandleInput();
-            Velocity += Acceleration * gameTime.ElapsedGameTime.Seconds;
-            Position += Velocity * gameTime.ElapsedGameTime.Seconds;
+            Acceleration -= forward * FRICTION;
+
+            Velocity += Acceleration / RaceGame.FpsHandler.FpsValue;
+            if (Velocity.Z < 0)
+                Velocity = Vector3.Zero;
+            Position -= Velocity / RaceGame.FpsHandler.FpsValue;
 
             base.Update(gameTime);
         }
@@ -35,7 +43,7 @@ namespace RaceXNA
         {
             Vector3 forward = World.Forward;
             forward.Normalize();
-            float rightTriggerValue = RaceGame.InputMgr.CurrentControllerState.Triggers.Right;
+            float rightTriggerValue = RaceGame.InputMgr.ControllerState.Triggers.Right;
 
             if (rightTriggerValue > 0.0f)
             {
