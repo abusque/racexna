@@ -57,7 +57,7 @@ namespace RaceXNA
             //GameCamera = new FreeCamera(this, Vector3.Zero, Vector3.Zero, Vector3.Up);
 
             Car = new Vehicle(this, "L200-FBX", new Vector3(0, 0, -2), 0.01f, new Vector3(0, MathHelper.Pi, 0));
-            GrassGround = new TexturedSurface(this, new Vector3(-25, 0, 23), new Vector3(50,0,-50), new Vector2(20, 20), "grass1", true);
+            GrassGround = new TexturedSurface(this, new Vector3(-25, 0, 23), new Vector3(50,0,-200), new Vector2(20, 20), "grass1", true);
 
             GameCamera = Car.Camera;
 
@@ -93,7 +93,7 @@ namespace RaceXNA
 
         protected override void Update(GameTime gameTime)
         {
-            if (InputMgr.CurrentControllerState.Buttons.Back == ButtonState.Pressed)
+            if (InputMgr.ControllerState.Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
             base.Update(gameTime);
