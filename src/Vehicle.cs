@@ -37,6 +37,7 @@ namespace RaceXNA
             forward.Normalize();
             float rightTriggerValue = RaceGame.InputMgr.CurrentControllerState.Triggers.Right;
 
+
             if (rightTriggerValue > 0.0f)
             {
                 Acceleration += forward * BASE_ACCEL * rightTriggerValue;
