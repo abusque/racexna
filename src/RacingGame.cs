@@ -27,7 +27,7 @@ namespace RaceXNA
         public FpsCounter FpsHandler { get; private set; }
         public FpsDisplay FpsDisplayer { get; private set; }
         public FreeCamera GameCamera { get; private set; }
-        public BaseObject Car { get; private set; }
+        public Vehicle Car { get; private set; }
         public TexturedSurface GrassGround { get; private set; }
         public ModelDisplay ModelDisplayer { get; private set; }
 
@@ -56,7 +56,7 @@ namespace RaceXNA
             ModelDisplayer = new ModelDisplay(this);
             GameCamera = new FreeCamera(this, Vector3.Zero, Vector3.Zero, Vector3.Up);
 
-            Car = new BaseObject(this, "L200-FBX", new Vector3(0, 0, -2), 0.01f, Vector3.Zero);
+            Car = new Vehicle(this, "L200-FBX", new Vector3(0, 0, -2), 0.01f, Vector3.Zero);
             GrassGround = new TexturedSurface(this, new Vector3(0, 0, -10), new Vector3(10,0,-10), new Vector2(20, 20), "grass1", true);
 
             Components.Add(FpsHandler);
@@ -91,7 +91,7 @@ namespace RaceXNA
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+            if (InputMgr.CurrentControllerState.Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
             base.Update(gameTime);

@@ -16,33 +16,6 @@ namespace RaceXNA
       public float Scale { get; protected set; }
       public Vector3 Rotation { get; protected set; }
       private BoundingSphere[] Spheres { get; set; }
-      float angle_;
-      public float Angle
-      {
-         get
-         {
-            if (RaceGame.FpsHandler.FpsValue > 0)
-            {
-                angle_ += (2 * MathHelper.Pi) / (RaceGame.FpsHandler.FpsValue * 4);
-            }
-            else
-            {
-               angle_ = 0;
-            }
-            return angle_;
-         }
-         set { angle_ = value; }
-      }
-
-      bool pause_;
-      bool Pause
-      {
-         get { return pause_; }
-         set
-         {
-            pause_ = value;
-         }
-      }
 
       public BaseObject(RacingGame raceGame, String modelName, Vector3 initPos, float initScale, Vector3 initRot)
          : base(raceGame)
@@ -84,8 +57,6 @@ namespace RaceXNA
       public override void Initialize()
       {
          Model = RaceGame.ModelMgr.Find(ModelName);
-         Angle = 0;
-         Pause = true;
          CreateSpheres();
 
          base.Initialize();
@@ -93,22 +64,11 @@ namespace RaceXNA
 
       public override void Update(GameTime gameTime)
       {
-         HandleInput();
-         if (!Pause)
-         {
-            World = Matrix.Identity * Matrix.CreateScale(Scale);
-            World *= Matrix.CreateFromYawPitchRoll(Angle, Rotation.X, Rotation.Z);
-            World *= Matrix.CreateTranslation(Position);
-         }
-         base.Update(gameTime);
-      }
+         World = Matrix.Identity * Matrix.CreateScale(Scale);
+         World *= Matrix.CreateFromYawPitchRoll(Rotation.Y, Rotation.X, Rotation.Z);
+         World *= Matrix.CreateTranslation(Position);
 
-      private void HandleInput()
-      {
-         if (RaceGame.InputMgr.IsNewKey(Keys.Space))
-         {
-            Pause = !Pause;
-         }
+         base.Update(gameTime);
       }
 
       public override void Draw(GameTime gameTime)
