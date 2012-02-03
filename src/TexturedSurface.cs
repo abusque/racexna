@@ -86,13 +86,8 @@ namespace RaceXNA
             {
                 for (int i = 0; i <= ColumnsNb; ++i)
                 {
-<<<<<<< HEAD
-                    Vertices[++NoSommet] = new VertexPositionTexture(VerticesPoints[i, j], TextutreRepeatedPts[i % 2, j % 2]);
-                    Vertices[++NoSommet] = new VertexPositionTexture(VerticesPoints[i, j + 1], TextutreRepeatedPts[i % 2, (j+1) % 2]);
-=======
                     Vertices[++VertexNb] = new VertexPositionTexture(VerticesPoints[i, j], TextutreRepeatedPts[i % 2, j % 2]);
                     Vertices[++VertexNb] = new VertexPositionTexture(VerticesPoints[i, j + 1], TextutreRepeatedPts[i % 2, (j+1) % 2]);
->>>>>>> 9b72c72a3b02bf5a410cf607f0a60f0f8e11b72c
                 }
             }
             else
