@@ -26,7 +26,7 @@ namespace RaceXNA
         public ResourceManager<Model> ModelMgr { get; private set; }
         public FpsCounter FpsHandler { get; private set; }
         public FpsDisplay FpsDisplayer { get; private set; }
-        public FreeCamera GameCamera { get; private set; }
+        public ChasingCamera GameCamera { get; private set; }
         public Vehicle Car { get; private set; }
         public TexturedSurface GrassGround { get; private set; }
         public ModelDisplay ModelDisplayer { get; private set; }
@@ -54,12 +54,12 @@ namespace RaceXNA
             FpsDisplayer = new FpsDisplay(this, "Pericles20");
             InputMgr = new InputManager(this);
             ModelDisplayer = new ModelDisplay(this);
-            GameCamera = new FreeCamera(this, Vector3.Zero, Vector3.Zero, Vector3.Up);
+            //GameCamera = new FreeCamera(this, Vector3.Zero, Vector3.Zero, Vector3.Up);
 
             Car = new Vehicle(this, "L200-FBX", new Vector3(0, 0, -2), 0.01f, Vector3.Zero);
             GrassGround = new TexturedSurface(this, new Vector3(0, 0, -10), new Vector3(10,0,-10), new Vector2(20, 20), "grass1", true);
 
-            //GameCamera = Car.Camera;
+            GameCamera = Car.Camera;
 
             Components.Add(FpsHandler);
             Components.Add(InputMgr);
