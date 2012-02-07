@@ -63,10 +63,10 @@ namespace RaceXNA
 
             Components.Add(FpsHandler);
             Components.Add(InputMgr);
-            Components.Add(GameCamera);
             Components.Add(GrassGround);
             Components.Add(ModelDisplayer);
             Components.Add(Car);
+            Components.Add(GameCamera);
 
             //Laisser FpsDisplayer a la fin de la liste pour eviter les problemes d'affichage
             Components.Add(FpsDisplayer);
