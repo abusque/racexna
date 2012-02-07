@@ -65,7 +65,7 @@ namespace RaceXNA
             Components.Add(InputMgr);
             Components.Add(GrassGround);
             Components.Add(ModelDisplayer);
-            Components.Add(Car);
+            Components.Add(Car); //Mettre GameCamera apres Car pour eviter les problemes
             Components.Add(GameCamera);
 
             //Laisser FpsDisplayer a la fin de la liste pour eviter les problemes d'affichage
