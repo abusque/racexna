@@ -36,8 +36,8 @@ namespace RaceXNA
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            graphics.SynchronizeWithVerticalRetrace = false;
-            IsFixedTimeStep = false;
+            graphics.SynchronizeWithVerticalRetrace = true;
+            IsFixedTimeStep = true;
             IsMouseVisible = false;
             graphics.IsFullScreen = false;
         }
