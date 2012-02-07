@@ -8,8 +8,9 @@ namespace RaceXNA
 {
     public class Vehicle : BaseObject
     {
-        const float BASE_ACCEL = 0.25f;
-        const float FRICTION = 0.05f;
+        const float MAX_ACCEL = 100.0f;
+        const float BASE_ACCEL = 7.0f;
+        const float FRICTION = 2.0f;
 
         const float BASE_ROT = 0.75f;
 
@@ -27,19 +28,25 @@ namespace RaceXNA
 
         public override void Update(GameTime gameTime)
         {
-            //J'ai fait mes changements dans une nouvelle méthode temporairement 
-            //pour pas que tu sois mélanger quand tu voudras modifier l'accélération
-            HandleRotation();
-
-            Vector3 forward = World.Forward;
-            forward.Normalize();
+            Vector3 backward = World.Backward;
+            backward.Normalize();
 
             HandleInput();
-            Acceleration -= forward * FRICTION;
+            if (Acceleration.Length() > 0)
+            {
+                Acceleration += backward * FRICTION;
+            }
 
             Velocity += Acceleration / RaceGame.FpsHandler.FpsValue;
             if (Velocity.Z < 0)
+            {
                 Velocity = Vector3.Zero;
+                Acceleration = Vector3.Zero;
+            }
+
+            //J'ai fait mes changements dans une nouvelle méthode temporairement 
+            //pour pas que tu sois mélanger quand tu voudras modifier l'accélération
+            HandleRotation();
 
             Position -= Velocity / RaceGame.FpsHandler.FpsValue;
 
@@ -51,10 +58,15 @@ namespace RaceXNA
             Vector3 forward = World.Forward;
             forward.Normalize();
             float rightTriggerValue = RaceGame.InputMgr.ControllerState.Triggers.Right;
+            float leftTriggerValue = RaceGame.InputMgr.ControllerState.Triggers.Left;
             
             if (rightTriggerValue > 0.0f)
             {
                 Acceleration += forward * BASE_ACCEL * rightTriggerValue;
+            }
+            if (leftTriggerValue > 0.0f)
+            {
+                Acceleration -= forward * BASE_ACCEL * leftTriggerValue;
             }
         }
 
