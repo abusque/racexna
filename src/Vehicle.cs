@@ -84,7 +84,7 @@ namespace RaceXNA
             Vector3 forward = World.Forward;
             forward.Normalize();
 
-            Position -= forward * Speed / RaceGame.FpsHandler.FpsValue;
+            Position -= forward * Speed / RaceGame.FpsHandler.FpsValue; //A changer pour += lorsque l'orientation du modele sera la bonne
         }
 
         private void HandleRotation()
