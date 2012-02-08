@@ -14,12 +14,12 @@ namespace RaceXNA
 
         const float BASE_ROT = 0.75f;
 
-        public enum Gear { Neutral, Forward, Reverse };
+        public enum Gears { Neutral, Forward, Reverse };
 
         public float Acceleration { get; private set; }
         public float Speed { get; private set; }
         public ChasingCamera Camera { get; private set; }
-        public Gear GearState { get; private set; }
+        public Gears GearState { get; private set; }
 
         public Vehicle(RacingGame raceGame, String modelName, Vector3 initPos, float initScale, Vector3 initRot)
             : base(raceGame, modelName, initPos, initScale, initRot)
@@ -27,7 +27,7 @@ namespace RaceXNA
             Acceleration = 0;
             Speed = 0;
             Camera = new ChasingCamera(this);
-            GearState = Gear.Neutral;
+            GearState = Gears.Neutral;
         }
 
         public override void Update(GameTime gameTime)
@@ -50,17 +50,17 @@ namespace RaceXNA
             if (rightTriggerValue > 0.0f)
             {
                 Acceleration += BASE_ACCEL * rightTriggerValue / RaceGame.FpsHandler.FpsValue;
-                GearState = Gear.Forward;
+                GearState = Gears.Forward;
             }
             else if (leftTriggerValue > 0.0f)
             {
                 Acceleration -= BASE_ACCEL * leftTriggerValue / RaceGame.FpsHandler.FpsValue;
-                GearState = Gear.Reverse;
+                GearState = Gears.Reverse;
             }
             else
             {
                 Acceleration = 0.0f;
-                GearState = Gear.Neutral;
+                GearState = Gears.Neutral;
             }
 
             Speed += Acceleration / RaceGame.FpsHandler.FpsValue;

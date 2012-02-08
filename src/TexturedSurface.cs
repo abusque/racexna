@@ -9,31 +9,32 @@ namespace RaceXNA
    {
       const float CIRCLE_IN_DEGREES = 360;
       const float WAVELENGTH = 16;
+
       VertexPositionTexture[] Vertices { get; set; }
       protected Vector3[,] VerticesPoints { get; set; }
-      protected Vector3 Origine { get; set; }
+      protected Vector3 Origin { get; set; }
       Vector3 Size { get; set; }
       Vector2 Dimension { get; set; }
       protected Vector3 Delta { get; set; }
       protected int ColumnsNb { get; set; }
       protected int RowsNb { get; set; }
       int PointsNb { get; set; }
-      int TrianglesNbPerStrip { get; set; }
+      int TrianglesPerStrip { get; set; }
       protected String TextureName { get; private set; }
-      Texture2D ImageTexture { get; set; }
+      Texture2D Texture { get; set; }
       Vector2[,] TexturePts { get; set; }
       Vector2[,] TextutreRepeatedPts { get; set; }
       Vector2 DeltaTexture { get; set; }
       bool IsTextureRepeated { get; set; }
       
-      public TexturedSurface(RacingGame raceGame, Vector3 origine, Vector3 size, Vector2 dimension, String textureName, bool isTextureRepeated)
+      public TexturedSurface(RacingGame raceGame, Vector3 origin, Vector3 size, Vector2 dimension, String textureName, bool isTextureRepeated)
          : base(raceGame)
       {
-         Origine = origine;
+         Origin = origin;
          Size = size;
          Dimension = dimension;
          TextureName = textureName;
-         ImageTexture = RaceGame.TextureMgr.Find(TextureName);
+         Texture = RaceGame.TextureMgr.Find(TextureName);
          ColumnsNb = (int)Dimension.X;
          RowsNb = (int)Dimension.Y;
          DeltaTexture = new Vector2(1.0f / ColumnsNb, 1.0f / RowsNb);
@@ -43,8 +44,8 @@ namespace RaceXNA
       public override void Initialize()
       {
          PointsNb = (ColumnsNb + 1) * (RowsNb + 1);
-         TrianglesNbPerStrip = ColumnsNb * 2;
-         NbVertices = (TrianglesNbPerStrip + 2) * RowsNb;
+         TrianglesPerStrip = ColumnsNb * 2;
+         NbVertices = (TrianglesPerStrip + 2) * RowsNb;
          Delta = new Vector3(Size.X / ColumnsNb, Size.Y / RowsNb, Size.Z / RowsNb);
          VerticesPoints = new Vector3[ColumnsNb + 1, RowsNb + 1];
          TexturePts = new Vector2[ColumnsNb + 1, RowsNb + 1];
@@ -63,7 +64,7 @@ namespace RaceXNA
          {
             for (int j = 0; j <= RowsNb; ++j)
             {
-               VerticesPoints[i, j] = new Vector3(Origine.X + (i * Delta.X), Origine.Y + (j * Delta.Y), Origine.Z + (j*Delta.Z));
+               VerticesPoints[i, j] = new Vector3(Origin.X + (i * Delta.X), Origin.Y + (j * Delta.Y), Origin.Z + (j*Delta.Z));
                TexturePts[i, j] = new Vector2(i * DeltaTexture.X, 1 - j * DeltaTexture.Y);
             }
          }
@@ -106,25 +107,30 @@ namespace RaceXNA
       {
          RaceGame.GraphicsDevice.VertexDeclaration = new VertexDeclaration(GraphicsDevice, VertexPositionTexture.VertexElements);
          RaceGame.GraphicsDevice.RenderState.CullMode = CullMode.CullCounterClockwiseFace;
-         //BasicEffect effetAffichage = new BasicEffect(Jeu.GraphicsDevice, null);
+
          BasicEffect displayEffect = RaceGame.ModelDisplayer.Effect3D;
          displayEffect.World = World;
          displayEffect.View = RaceGame.GameCamera.View;
          displayEffect.Projection = RaceGame.GameCamera.Projection;
          displayEffect.TextureEnabled = true;
-         displayEffect.Texture = ImageTexture;
+         displayEffect.Texture = Texture;
          displayEffect.Begin();
+
          foreach (EffectPass effectPass in displayEffect.CurrentTechnique.Passes)
          {
             effectPass.Begin();
+
             for (int noStrip = 0; noStrip < RowsNb; ++noStrip)
             {
-               RaceGame.GraphicsDevice.DrawUserPrimitives<VertexPositionTexture>(PrimitiveType.TriangleStrip, Vertices, (TrianglesNbPerStrip + 2) * noStrip, TrianglesNbPerStrip);
+               RaceGame.GraphicsDevice.DrawUserPrimitives<VertexPositionTexture>(PrimitiveType.TriangleStrip, Vertices, (TrianglesPerStrip + 2) * noStrip, TrianglesPerStrip);
             }
+
             effectPass.End();
          }
+
          displayEffect.End();
          displayEffect.TextureEnabled = false;
+
          base.Draw(gameTime);
       }
    }

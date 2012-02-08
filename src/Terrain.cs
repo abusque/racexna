@@ -7,36 +7,58 @@ namespace RaceXNA
 {
     public class Terrain : TexturedSurface
     {
-        
-        const string ASPHALT = "asphalt1";
-        const float ASPHALT_FRICTION = 0.05f;
-        const string GRASS = "grass1";
-        const float GRASS_FRICTION = 2 * ASPHALT_FRICTION;
-        const string SAND = "sand1";
-        const float SAND_FRICTION = 4 * ASPHALT_FRICTION;
-        public float FrictionValue { get; private set; }
-        public string TerrainType { get; private set; }
+        public enum TerrainTypes { Asphalt, Grass, Sand };
 
-        public Terrain(RacingGame raceGame, Vector3 origine, Vector3 size, Vector2 dimension, String textureName, bool isTextureRepeated)
-            :base(raceGame,origine,size,dimension,textureName,isTextureRepeated)
+        const string ASPHALT_FILENAME = "asphalt1";
+        const string GRASS_FILENAME =  "grass1";
+        const string SAND_FILENAME = "sand1";
+
+        const float ASPHALT_FRICTION = 0.05f;
+        const float GRASS_FRICTION = 0.1f;
+        const float SAND_FRICTION = 0.2f;
+
+        public float FrictionCoeff { get; private set; }
+        public TerrainTypes TerrainType { get; private set; }
+
+        public Terrain(RacingGame raceGame, Vector3 origin, Vector3 size, Vector2 dimension, bool isTextureRepeated, TerrainTypes terrainType)
+            :base(raceGame, origin, size, dimension, GetTextureName(terrainType), isTextureRepeated)
         {
-            TerrainType = textureName;
-            DeterminateFrictionValue();
+            TerrainType = terrainType;
+            SetFrictionCoeff();
         }
 
-        private void DeterminateFrictionValue()
+        private void SetFrictionCoeff()
         {
-            switch (TextureName)
+            switch (TerrainType)
             {
-                case ASPHALT:
-                    FrictionValue = ASPHALT_FRICTION;
+                case TerrainTypes.Asphalt:
+                    FrictionCoeff = ASPHALT_FRICTION;
                     break;
-                case GRASS:
-                    FrictionValue = GRASS_FRICTION;
+                case TerrainTypes.Grass:
+                    FrictionCoeff = GRASS_FRICTION;
                     break;
-                case SAND:
-                    FrictionValue = SAND_FRICTION;
+                case TerrainTypes.Sand:
+                    FrictionCoeff = SAND_FRICTION;
                     break;
+                default:
+                    FrictionCoeff = ASPHALT_FRICTION;
+                    break;
+            }
+        }
+
+        static public string GetTextureName(TerrainTypes terrainType)
+        {
+            switch (terrainType)
+            {
+                case TerrainTypes.Asphalt:
+                    return ASPHALT_FILENAME;
+                case TerrainTypes.Grass:
+                    return GRASS_FILENAME;
+                case TerrainTypes.Sand:
+                    return SAND_FILENAME;
+                default:
+                    return ASPHALT_FILENAME;
+
             }
         }
     }
