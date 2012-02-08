@@ -14,18 +14,20 @@ namespace RaceXNA
 
         const float BASE_ROT = 0.75f;
 
-        public Vector3 Acceleration { get; private set; }
-        public Vector3 Velocity { get; private set; }
+        public enum Gear { Neutral, Forward, Reverse };
+
+        public float Acceleration { get; private set; }
+        public float Speed { get; private set; }
         public ChasingCamera Camera { get; private set; }
-        public bool GoingForward { get; private set; }
+        public Gear GearState { get; private set; }
 
         public Vehicle(RacingGame raceGame, String modelName, Vector3 initPos, float initScale, Vector3 initRot)
             : base(raceGame, modelName, initPos, initScale, initRot)
         {
-            Acceleration = Vector3.Zero;
-            Velocity = Vector3.Zero;
+            Acceleration = 0;
+            Speed = 0;
             Camera = new ChasingCamera(this);
-            GoingForward = true;
+            GearState = Gear.Neutral;
         }
 
         public override void Update(GameTime gameTime)
@@ -33,57 +35,61 @@ namespace RaceXNA
 
             HandleAcceleration();
 
-
-
             HandleRotation();
 
-            Position -= Velocity / RaceGame.FpsHandler.FpsValue;
+            Move();
 
             base.Update(gameTime);
         }
 
         private void HandleAcceleration()
         {
-            Vector3 forward = World.Forward;
-            forward.Normalize();
             float rightTriggerValue = RaceGame.InputMgr.ControllerState.Triggers.Right;
             float leftTriggerValue = RaceGame.InputMgr.ControllerState.Triggers.Left;
             
             if (rightTriggerValue > 0.0f)
             {
-                Acceleration += forward * BASE_ACCEL * rightTriggerValue;
-                GoingForward = true;
+                Acceleration += BASE_ACCEL * rightTriggerValue / RaceGame.FpsHandler.FpsValue;
+                GearState = Gear.Forward;
             }
             else if (leftTriggerValue > 0.0f)
             {
-                Acceleration -= forward * BASE_ACCEL * leftTriggerValue;
-                GoingForward = false;
+                Acceleration -= BASE_ACCEL * leftTriggerValue / RaceGame.FpsHandler.FpsValue;
+                GearState = Gear.Reverse;
+            }
+            else
+            {
+                Acceleration = 0.0f;
+                GearState = Gear.Neutral;
             }
 
-            if (Acceleration.Length() > 0.0f)
-            {
-                if (GoingForward)
-                    Acceleration -= forward * FRICTION;
-                else
-                    Acceleration += forward * FRICTION;
-            }
+            Speed += Acceleration / RaceGame.FpsHandler.FpsValue;
 
-            Velocity += Acceleration / RaceGame.FpsHandler.FpsValue;
-            if (GoingForward && Vector3.Dot(forward, Velocity) < 0)
+            if (Speed > 0.0f)
             {
-                Velocity = Vector3.Zero;
-                Acceleration = Vector3.Zero;
+                Speed -= FRICTION / RaceGame.FpsHandler.FpsValue;
+                if (Speed < 0.0f)
+                    Speed = 0.0f;
             }
-            else if(!GoingForward && Vector3.Dot(forward, Velocity) > 0)
+            else if (Speed < 0.0f)
             {
-                Velocity = Vector3.Zero;
-                Acceleration = Vector3.Zero;
+                Speed += FRICTION / RaceGame.FpsHandler.FpsValue;
+                if (Speed > 0.0f)
+                    Speed = 0.0f;
             }
+        }
+
+        private void Move()
+        {
+            Vector3 forward = World.Forward;
+            forward.Normalize();
+
+            Position -= forward * Speed / RaceGame.FpsHandler.FpsValue;
         }
 
         private void HandleRotation()
         {
-            if(Velocity.Length() < 0.5f)
+            if(Speed < 0.01f  && Speed > -0.01f)
                 return;
 
             float leftThumbStickHorizontalValue = -RaceGame.InputMgr.ControllerState.ThumbSticks.Left.X;
@@ -91,7 +97,7 @@ namespace RaceXNA
 
             yaw = BASE_ROT * leftThumbStickHorizontalValue / RaceGame.FpsHandler.FpsValue;
 
-            if (!GoingForward)
+            if (Speed < 0.0f)
                 yaw = -yaw;
 
             Rotation = new Vector3(Rotation.X, Rotation.Y + yaw, Rotation.Z);
