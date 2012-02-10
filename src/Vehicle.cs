@@ -24,9 +24,6 @@ namespace RaceXNA
         public ChasingCamera Camera { get; private set; }
         public Gears GearState { get; private set; }
 
-        private bool WasAccelering { get; set; }
-        private bool WasDeccelering { get; set; }
-
         public Vehicle(RacingGame raceGame, String modelName, Vector3 initPos, float initScale, Vector3 initRot)
             : base(raceGame, modelName, initPos, initScale, initRot)
         {
@@ -56,26 +53,20 @@ namespace RaceXNA
 
             if (leftTriggerValue > 0.0f)
             {
-                if (WasAccelering)
-                {
-                    WasAccelering = false;
+                if (GearState == Gears.Forward)
                     Acceleration = 0;
-                }
+
                 Acceleration -= BASE_ACCEL * leftTriggerValue / RaceGame.FpsHandler.FpsValue;
                 GearState = Gears.Reverse;
-                WasDeccelering = true;
 
             }
             else if (rightTriggerValue > 0.0f)
             {
-                if (WasDeccelering)
-                {
-                    WasDeccelering = false;
+                if (GearState == Gears.Reverse)
                     Acceleration = 0;
-                }
+
                 Acceleration += BASE_ACCEL * rightTriggerValue / RaceGame.FpsHandler.FpsValue;
                 GearState = Gears.Forward;
-                WasAccelering = true;
             }
 
             if (leftTriggerValue == 0 && rightTriggerValue == 0)
