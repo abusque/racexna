@@ -26,9 +26,13 @@ namespace RaceXNA
         public ResourceManager<Model> ModelMgr { get; private set; }
         public FpsCounter FpsHandler { get; private set; }
         public FpsDisplay FpsDisplayer { get; private set; }
-        public ChasingCamera GameCamera { get; private set; }
+        public AccelerationDisplay AccelerationDisplayer { get; private set; }
+        public SpeedDisplay SpeedDisplayer { get; private set; }
+        //public ChasingCamera GameCamera { get; private set; }
+        public FreeCamera GameCamera { get; private set; }
         public Vehicle Car { get; private set; }
         public TexturedSurface GrassGround { get; private set; }
+        public AccidentedTexturedSurface GrassGroundTest { get; private set; }
         public ModelDisplay ModelDisplayer { get; private set; }
 
 
@@ -54,21 +58,28 @@ namespace RaceXNA
             FpsDisplayer = new FpsDisplay(this, "Pericles20");
             InputMgr = new InputManager(this);
             ModelDisplayer = new ModelDisplay(this);
-            //GameCamera = new FreeCamera(this, Vector3.Zero, Vector3.Zero, Vector3.Up);
+            GameCamera = new FreeCamera(this, Vector3.Zero, Vector3.Zero, Vector3.Up);
+            SpeedDisplayer = new SpeedDisplay(this, "Pericles20");
+            AccelerationDisplayer = new AccelerationDisplay(this, "Pericles20");
 
             Car = new Vehicle(this, "L200-FBX", new Vector3(0, 0, -2), 0.01f, new Vector3(0, MathHelper.Pi, 0));
-            GrassGround = new Terrain(this, new Vector3(-25, 0, 23), new Vector3(500,0,-500), new Vector2(100, 100), true, Terrain.TerrainTypes.Grass);
+            //GrassGround = new Terrain(this, new Vector3(-25, 0, 23), new Vector3(500,0,-500), new Vector2(100, 100), true, Terrain.TerrainTypes.Grass);
+            GrassGroundTest = new AccidentedTexturedSurface(this, new Vector3(0, 0, -2), new Vector2(500, -500), new Vector2(100, 100), "grass1", true);
 
-            GameCamera = Car.Camera;
+            //GameCamera = Car.Camera;
+            GameCamera = new FreeCamera(this, new Vector3(0, 5, 5), new Vector3(0, 0, -10), Vector3.Up);
 
             Components.Add(FpsHandler);
             Components.Add(InputMgr);
-            Components.Add(GrassGround);
+            //Components.Add(GrassGround);
+            Components.Add(GrassGroundTest);
             Components.Add(ModelDisplayer);
             Components.Add(Car); //Mettre GameCamera apres Car pour eviter les problemes
             Components.Add(GameCamera);
 
             //Laisser FpsDisplayer a la fin de la liste pour eviter les problemes d'affichage
+            Components.Add(AccelerationDisplayer);
+            Components.Add(SpeedDisplayer);
             Components.Add(FpsDisplayer);
 
             base.Initialize();

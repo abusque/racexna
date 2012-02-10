@@ -8,7 +8,10 @@ namespace RaceXNA
 {
     public class Vehicle : BaseObject
     {
-        const float MAX_ACCEL = 100.0f;
+        const float MAX_ACCEL = 30.0f;
+        const float MIN_ACCEL = -20.0f;
+        const float MAX_SPEED = 80.0f;
+        const float MIN_SPEED = -40.0f;
         const float BASE_ACCEL = 7.0f;
         const float FRICTION = 2.5f;
 
@@ -21,6 +24,9 @@ namespace RaceXNA
         public ChasingCamera Camera { get; private set; }
         public Gears GearState { get; private set; }
 
+        private bool WasAccelering { get; set; }
+        private bool WasDeccelering { get; set; }
+
         public Vehicle(RacingGame raceGame, String modelName, Vector3 initPos, float initScale, Vector3 initRot)
             : base(raceGame, modelName, initPos, initScale, initRot)
         {
@@ -28,6 +34,7 @@ namespace RaceXNA
             Speed = 0;
             Camera = new ChasingCamera(this);
             GearState = Gears.Neutral;
+            
         }
 
         public override void Update(GameTime gameTime)
@@ -46,24 +53,50 @@ namespace RaceXNA
         {
             float rightTriggerValue = RaceGame.InputMgr.ControllerState.Triggers.Right;
             float leftTriggerValue = RaceGame.InputMgr.ControllerState.Triggers.Left;
-            
-            if (rightTriggerValue > 0.0f)
+
+            if (leftTriggerValue > 0.0f)
             {
-                Acceleration += BASE_ACCEL * rightTriggerValue / RaceGame.FpsHandler.FpsValue;
-                GearState = Gears.Forward;
-            }
-            else if (leftTriggerValue > 0.0f)
-            {
+                if (WasAccelering)
+                {
+                    WasAccelering = false;
+                    Acceleration = 0;
+                }
                 Acceleration -= BASE_ACCEL * leftTriggerValue / RaceGame.FpsHandler.FpsValue;
                 GearState = Gears.Reverse;
+                WasDeccelering = true;
+
             }
-            else
+            else if (rightTriggerValue > 0.0f)
+            {
+                if (WasDeccelering)
+                {
+                    WasDeccelering = false;
+                    Acceleration = 0;
+                }
+                Acceleration += BASE_ACCEL * rightTriggerValue / RaceGame.FpsHandler.FpsValue;
+                GearState = Gears.Forward;
+                WasAccelering = true;
+            }
+
+            if (leftTriggerValue == 0 && rightTriggerValue == 0)
             {
                 Acceleration = 0.0f;
                 GearState = Gears.Neutral;
             }
+            
+
+
+            if (Acceleration >= MAX_ACCEL)
+                Acceleration = MAX_ACCEL;
+            else if (Acceleration <= MIN_ACCEL)
+                Acceleration = MIN_ACCEL;
 
             Speed += Acceleration / RaceGame.FpsHandler.FpsValue;
+
+            if (Speed >= MAX_SPEED)
+                Speed = MAX_SPEED;
+            else if (Speed <= MIN_SPEED)
+                Speed = MIN_SPEED;
 
             if (Speed > 0.0f)
             {
