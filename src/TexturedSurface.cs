@@ -21,7 +21,7 @@ namespace RaceXNA
       int PointsNb { get; set; }
       int TrianglesPerStrip { get; set; }
       protected String TextureName { get; private set; }
-      Texture2D Texture { get; set; }
+      Texture2D TextureData { get; set; }
       Vector2[,] TexturePts { get; set; }
       Vector2[,] TextutreRepeatedPts { get; set; }
       Vector2 DeltaTexture { get; set; }
@@ -34,7 +34,7 @@ namespace RaceXNA
          Size = size;
          Dimension = dimension;
          TextureName = textureName;
-         Texture = RaceGame.TextureMgr.Find(TextureName);
+         TextureData = RaceGame.TextureMgr.Find(TextureName);
          ColumnsNb = (int)Dimension.X;
          RowsNb = (int)Dimension.Y;
          DeltaTexture = new Vector2(1.0f / ColumnsNb, 1.0f / RowsNb);
@@ -113,7 +113,7 @@ namespace RaceXNA
          displayEffect.View = RaceGame.GameCamera.View;
          displayEffect.Projection = RaceGame.GameCamera.Projection;
          displayEffect.TextureEnabled = true;
-         displayEffect.Texture = Texture;
+         displayEffect.Texture = TextureData;
          displayEffect.Begin();
 
          foreach (EffectPass effectPass in displayEffect.CurrentTechnique.Passes)
