@@ -20,23 +20,7 @@ namespace RaceXNA
 
         public enum Gears { Neutral, Forward, Reverse };
 
-        float acceleration;
-        public float Acceleration 
-        {
-            get
-            {
-                return acceleration;
-            }
-            private set
-            {
-                if (value < MAX_ACCEL && value > MIN_ACCEL)
-                    acceleration = value;
-                else if (value >= MAX_ACCEL)
-                    acceleration = MAX_ACCEL;
-                else
-                    acceleration = MIN_ACCEL;
-            }
-        }
+        public float Acceleration;
         float speed;
         public float Speed 
         {
@@ -100,30 +84,6 @@ namespace RaceXNA
             float rightTriggerValue = RaceGame.InputMgr.ControllerState.Triggers.Right;
             float leftTriggerValue = RaceGame.InputMgr.ControllerState.Triggers.Left;
 
-            //if (leftTriggerValue > 0.0f)
-            //{
-            //    if (GearState == Gears.Forward)
-            //        Acceleration = 0;
-
-            //    Acceleration -= BASE_ACCEL * leftTriggerValue / RaceGame.FpsHandler.FpsValue;
-            //    GearState = Gears.Reverse;
-
-            //}
-            //else if (rightTriggerValue > 0.0f)
-            //{
-            //    if (GearState == Gears.Reverse)
-            //        Acceleration = 0;
-
-            //    Acceleration += BASE_ACCEL * rightTriggerValue / RaceGame.FpsHandler.FpsValue;
-            //    GearState = Gears.Forward;
-            //}
-
-            //if (leftTriggerValue == 0 && rightTriggerValue == 0)
-            //{
-            //    Acceleration = 0.0f;
-            //    GearState = Gears.Neutral;
-            //}
-
             if (leftTriggerValue > 0)
             {
                 Acceleration = leftTriggerValue * MIN_ACCEL;
@@ -167,13 +127,11 @@ namespace RaceXNA
 
         private void HandleRotation()
         {
-            //if(Speed < 0.01f  && Speed > -0.01f)
-            //    return;
+            if(Speed < 0.01f  && Speed > -0.01f)
+                return;
 
             float leftThumbStickHorizontalValue = -RaceGame.InputMgr.ControllerState.ThumbSticks.Left.X;
-            //yaw = MAX_ROT * leftThumbStickHorizontalValue / RaceGame.FpsHandler.FpsValue;
-            //Yaw = (float)(MAX_ROT * leftThumbStickHorizontalValue * FCT_COEFF * Math.Log(Math.Abs(Speed+1))/ RaceGame.FpsHandler.FpsValue);
-            Yaw = (float)(MAX_ROT * leftThumbStickHorizontalValue * FCT_COEFF * Math.Sqrt(Math.Abs(Speed)) / RaceGame.FpsHandler.FpsValue);
+            Yaw = MAX_ROT * leftThumbStickHorizontalValue / RaceGame.FpsHandler.FpsValue;
 
             Rotation = new Vector3(Rotation.X, Rotation.Y + yaw, Rotation.Z);
         }
