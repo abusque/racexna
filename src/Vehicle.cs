@@ -57,6 +57,7 @@ namespace RaceXNA
         }
         public ChasingCamera Camera { get; private set; }
         public Gears GearState { get; private set; }
+        public BoundingBox ModelBoundingBox { get; private set; }
 
         public Vehicle(RacingGame raceGame, String modelName, Vector3 initPos, float initScale, Vector3 initRot)
             : base(raceGame, modelName, initPos, initScale, initRot)
@@ -65,6 +66,12 @@ namespace RaceXNA
             Speed = 0;
             Camera = new ChasingCamera(this);
             GearState = Gears.Neutral; 
+        }
+
+        public override void Initialize()
+        {
+            
+            base.Initialize();
         }
 
         public override void Update(GameTime gameTime)

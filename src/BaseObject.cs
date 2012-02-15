@@ -8,45 +8,56 @@ namespace RaceXNA
 {
    public class BaseObject : Microsoft.Xna.Framework.DrawableGameComponent
    {
-      public RacingGame RaceGame { get; private set; }
-      private string ModelName { get; set; }
-      public Model Model { get; private set; }
-      protected Matrix World;
-      public Vector3 Position { get; protected set; }
-      public float Scale { get; protected set; }
-      public Vector3 Rotation { get; protected set; }
-      private BoundingSphere[] Spheres { get; set; }
+       public RacingGame RaceGame { get; private set; }
+       private string ModelName { get; set; }
+       public Model ModelData { get; private set; }
+       protected Matrix World;
+       public Vector3 Position { get; protected set; }
+       public float Scale { get; protected set; }
+       public Vector3 Rotation { get; protected set; }
+       private BoundingSphere[] Spheres { get; set; }
+       private BoundingBox[] Boxes { get; set; }
 
-      public BaseObject(RacingGame raceGame, String modelName, Vector3 initPos, float initScale, Vector3 initRot)
-         : base(raceGame)
-      {
-         RaceGame = raceGame;
-         ModelName = modelName;
-         Position = initPos;
-         Scale = initScale;
-         Rotation = initRot;
 
-         World = Matrix.Identity * Matrix.CreateScale(Scale);
-         World *= Matrix.CreateFromYawPitchRoll(Rotation.Y, Rotation.X, Rotation.Z);
-         World.Translation = Position;
-      }
+       public BaseObject(RacingGame raceGame, String modelName, Vector3 initPos, float initScale, Vector3 initRot)
+          : base(raceGame)
+       {
+          RaceGame = raceGame;
+          ModelName = modelName;
+          Position = initPos;
+          Scale = initScale;
+          Rotation = initRot;
+
+          World = Matrix.Identity * Matrix.CreateScale(Scale);
+          World *= Matrix.CreateFromYawPitchRoll(Rotation.Y, Rotation.X, Rotation.Z);
+          World.Translation = Position;
+       }
 
       private void CreateSpheres()
       {
-         Spheres = new BoundingSphere[Model.Meshes.Count];
+         Spheres = new BoundingSphere[ModelData.Meshes.Count];
          float radius;
          Vector3 center;
-         Matrix[] transformations = new Matrix[Model.Bones.Count];
-         Model.CopyAbsoluteBoneTransformsTo(transformations);
+         Matrix[] transformations = new Matrix[ModelData.Bones.Count];
+         ModelData.CopyAbsoluteBoneTransformsTo(transformations);
          Matrix localTrans;
 
          for (int i = 0; i < Spheres.Length; ++i)
          {
-            localTrans =  transformations[Model.Meshes[i].ParentBone.Index] * World;
-            center = Vector3.Transform(Model.Meshes[i].BoundingSphere.Center, localTrans);
-            radius = Scale * Model.Meshes[i].BoundingSphere.Radius;
+            localTrans =  transformations[ModelData.Meshes[i].ParentBone.Index] * World;
+            center = Vector3.Transform(ModelData.Meshes[i].BoundingSphere.Center, localTrans);
+            radius = Scale * ModelData.Meshes[i].BoundingSphere.Radius;
             Spheres[i] = new BoundingSphere(center, radius);
          }
+      }
+
+      private void CreateBoxes()
+      {
+          Boxes = new BoundingBox[ModelData.Meshes.Count];
+          for (int i = 0; i < Boxes.Length; ++i)
+          {
+              Boxes = BoundingBox.CreateFromSphere(Spheres[i]);
+          }
       }
 
       public BoundingSphere GetSphere(int i)
@@ -54,9 +65,14 @@ namespace RaceXNA
          return Spheres[i];
       }
 
+      public BoundingBox GetBox(int i)
+      {
+          return Boxes[i];
+      }
+
       public override void Initialize()
       {
-         Model = RaceGame.ModelMgr.Find(ModelName);
+         ModelData = RaceGame.ModelMgr.Find(ModelName);
          CreateSpheres();
 
          base.Initialize();
@@ -75,10 +91,10 @@ namespace RaceXNA
       {
          //Jeu.GraphicsDevice.RenderState.CullMode = CullMode.CullCounterClockwiseFace;
          // Au cas où le modèle se composerait de plusieurs morceaux
-         Matrix[] transformations = new Matrix[Model.Bones.Count];
-         Model.CopyAbsoluteBoneTransformsTo(transformations);
+         Matrix[] transformations = new Matrix[ModelData.Bones.Count];
+         ModelData.CopyAbsoluteBoneTransformsTo(transformations);
 
-         foreach (ModelMesh mesh in Model.Meshes)
+         foreach (ModelMesh mesh in ModelData.Meshes)
          {
             Matrix localWorld = transformations[mesh.ParentBone.Index] * GetWorld();
             foreach (ModelMeshPart meshPart in mesh.MeshParts)
