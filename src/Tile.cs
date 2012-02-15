@@ -7,24 +7,32 @@ namespace RaceXNA
 {
     public class Tile : BasePrimitive
     {
-        const float CIRCLE_IN_DEGREES = 360;
+        const int COLS = 1;
+        const int ROWS = 1;
+        const int TRIANGLES = 2;
+
+        VertexPositionTexture[] Vertices { get; set; }
+        protected Vector3[,] VerticesPoints { get; set; }
+        protected Vector3 Origin { get; set; }
+        Vector3 Size { get; set; }
+        Vector2 Dimension { get; set; }
+        protected String TextureName { get; private set; }
+        Texture2D TextureData { get; set; }
+        Vector2[,] TexturePts { get; set; }
 
         public Tile(RacingGame raceGame, Vector3 origin, Vector3 size, String textureName)
          : base(raceGame)
-      {
+       {
          Origin = origin;
          Size = size;
          TextureName = textureName;
          TextureData = RaceGame.TextureMgr.Find(TextureName);
-      }
+       }
 
        public override void Initialize()
        {
-           PointsNb = (ColumnsNb + 1) * (RowsNb + 1);
-           TrianglesPerStrip = ColumnsNb * 2;
-           NbVertices = (TrianglesPerStrip + 2) * RowsNb;
-           VerticesPoints = new Vector3[ColumnsNb + 1, RowsNb + 1];
-           TexturePts = new Vector2[ColumnsNb + 1, RowsNb + 1];
+           VerticesPoints = new Vector3[COLS + 1, ROWS + 1];
+           TexturePts = new Vector2[COLS + 1, ROWS + 1];
            Vertices = new VertexPositionTexture[NbVertices];
 
            CreatePointsArray();
@@ -35,14 +43,59 @@ namespace RaceXNA
 
        private void CreatePointsArray()
        {
-           for (int i = 0; i <= ColumnsNb; ++i)
+           for (int i = 0; i <= COLS; ++i)
            {
-               for (int j = 0; j <= RowsNb; ++j)
+               for (int j = 0; j <= ROWS; ++j)
                {
-                   VerticesPoints[i, j] = new Vector3(Origin.X + (i * Delta.X), Origin.Y + (j * Delta.Y), Origin.Z + (j * Delta.Z));
-                   TexturePts[i, j] = new Vector2(i * DeltaTexture.X, 1 - j * DeltaTexture.Y);
+                   VerticesPoints[i, j] = new Vector3(Origin.X + i * Size.X, Origin.Y + j * Size.Y, Origin.Z + j * Size.Z);
+                   TexturePts[i, j] = new Vector2(i, 1 - j);
                }
            }
+       }
+
+       protected override void InitializeVertices()
+       {
+           int VertexNb = -1;
+
+           for (int j = 0; j < ROWS; ++j)
+           {
+               for (int i = 0; i <= COLS; ++i)
+               {
+                   Vertices[++VertexNb] = new VertexPositionTexture(VerticesPoints[i, j], TexturePts[i, j]);
+                   Vertices[++VertexNb] = new VertexPositionTexture(VerticesPoints[i, j + 1], TexturePts[i, j + 1]);
+               }
+           }
+       }
+
+       public override void Draw(GameTime gameTime)
+       {
+           RaceGame.GraphicsDevice.VertexDeclaration = new VertexDeclaration(GraphicsDevice, VertexPositionTexture.VertexElements);
+           RaceGame.GraphicsDevice.RenderState.CullMode = CullMode.CullCounterClockwiseFace;
+
+           BasicEffect displayEffect = RaceGame.ModelDisplayer.Effect3D;
+           displayEffect.World = World;
+           displayEffect.View = RaceGame.GameCamera.View;
+           displayEffect.Projection = RaceGame.GameCamera.Projection;
+           displayEffect.TextureEnabled = true;
+           displayEffect.Texture = TextureData;
+           displayEffect.Begin();
+
+           foreach (EffectPass effectPass in displayEffect.CurrentTechnique.Passes)
+           {
+               effectPass.Begin();
+
+               for (int stripNb = 0; stripNb < ROWS; ++stripNb)
+               {
+                   RaceGame.GraphicsDevice.DrawUserPrimitives<VertexPositionTexture>(PrimitiveType.TriangleStrip, Vertices, (TRIANGLES + 2) * stripNb, TRIANGLES);
+               }
+
+               effectPass.End();
+           }
+
+           displayEffect.End();
+           displayEffect.TextureEnabled = false;
+
+           base.Draw(gameTime);
        }
     }
 }

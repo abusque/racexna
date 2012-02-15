@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 
 namespace RaceXNA
 {
-    public class Terrain : TexturedSurface
+    public class TerrainTile : Tile
     {
         public enum TerrainTypes { Asphalt, Grass, Sand };
 
@@ -20,8 +20,8 @@ namespace RaceXNA
         public float FrictionCoeff { get; private set; }
         public TerrainTypes TerrainType { get; private set; }
 
-        public Terrain(RacingGame raceGame, Vector3 origin, Vector3 size, Vector2 dimension, bool isTextureRepeated, TerrainTypes terrainType)
-            :base(raceGame, origin, size, dimension, GetTextureName(terrainType), isTextureRepeated)
+        public TerrainTile(RacingGame raceGame, Vector3 origin, Vector3 size, TerrainTypes terrainType)
+            :base(raceGame, origin, size, GetTextureName(terrainType))
         {
             TerrainType = terrainType;
             SetFrictionCoeff();
