@@ -24,7 +24,7 @@ namespace RaceXNA
       Vector2 BottomRightPosition { get; set; }
       Vector2 StringPosition { get; set; }
       string StringSpeed { get; set; }
-      Vector2 Dimention { get; set; }
+      Vector2 Dimension { get; set; }
       SpriteFont FontDisplay { get; set; }
       float SpeedValue { get; set; }
       string FontName { get; set; }
@@ -55,8 +55,8 @@ namespace RaceXNA
          if (RaceGame.Car.Speed != SpeedValue)
          {
             StringSpeed = RaceGame.Car.Speed.ToString("0");
-            Dimention = FontDisplay.MeasureString(StringSpeed);
-            StringPosition = BottomRightPosition - Dimention;
+            Dimension = FontDisplay.MeasureString(StringSpeed);
+            StringPosition = BottomRightPosition - Dimension;
             SpeedValue = RaceGame.Car.Speed;
          }
          base.Update(gameTime);

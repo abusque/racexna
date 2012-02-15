@@ -63,8 +63,8 @@ namespace RaceXNA
             FpsDisplayer = new FpsDisplay(this, "Pericles20");
             InputMgr = new InputManager(this);
             ModelDisplayer = new ModelDisplay(this);
+
             HeadsUpDisplay = new HUD(this);
-            
 
             Car = new Vehicle(this, "L200-FBX", new Vector3(0, 0, -2), 0.01f, new Vector3(0, MathHelper.Pi, 0));
             //GrassGround = new Terrain(this, new Vector3(-25, 0, 23), new Vector3(500,0,-500), new Vector2(100, 100), true, Terrain.TerrainTypes.Grass);
@@ -91,12 +91,10 @@ namespace RaceXNA
         private void LoadAssets()
         {
             FontMgr.Add("Fonts/Pericles20");
-            FontMgr.Add("Fonts/Arial12");
             ModelMgr.Add("Models/L200-FBX");
             TextureMgr.Add("Textures/grass1");
             TextureMgr.Add("Textures/Odometer");
             TextureMgr.Add("Textures/NeedleMap");
-            MusicsMgr.Add("Musics/KalimariDesert");
         }
 
         protected override void LoadContent()
