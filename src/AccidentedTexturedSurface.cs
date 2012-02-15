@@ -11,8 +11,8 @@ namespace RaceXNA
         const float WAVELENGTH = 16;
 
         const int SEED = 5;
-        const float MARGIN = 0.1f;
-        const float MAX_DIST = 1.0f;
+        const float MARGIN = 1.0f;
+        const float MAX_DIST = 3.0f;
 
         VertexPositionTexture[] Vertices { get; set; }
         protected Vector3[,] VerticesPoints { get; set; }
@@ -125,23 +125,23 @@ namespace RaceXNA
             {
                 for (int j = 0; j < RowsNb; ++j)
                 {
-                    //if (RandomGenerator.Next() > 0)
-                    //{
-                    //    CurrentHeight += (float)RandomGenerator.NextDouble() * MARGIN;
-                    //}
-                    //else
-                    //{
-                    //    CurrentHeight -= (float)RandomGenerator.NextDouble() * MARGIN;
-                    //}
-                    //if (CurrentHeight >= MaxHeight)
-                    //{
-                    //    CurrentHeight = MaxHeight;
-                    //}
-                    //else if (CurrentHeight <= MinHeight)
-                    //{
-                    //    CurrentHeight = MinHeight;
-                    //}
-                    VerticesPoints[i, j] = new Vector3(VerticesPoints[i, j].X, 0, VerticesPoints[i, j].Z);
+                    if (RandomGenerator.Next(-2,3) > 0)
+                    {
+                        CurrentHeight += (float)RandomGenerator.NextDouble() * MARGIN;
+                    }
+                    else
+                    {
+                        CurrentHeight -= (float)RandomGenerator.NextDouble() * MARGIN;
+                    }
+                    if (CurrentHeight >= MaxHeight)
+                    {
+                        CurrentHeight = MaxHeight;
+                    }
+                    else if (CurrentHeight <= MinHeight)
+                    {
+                        CurrentHeight = MinHeight;
+                    }
+                    VerticesPoints[i, j] = new Vector3(VerticesPoints[i, j].X, CurrentHeight, VerticesPoints[i, j].Z);
                 }
             }
         }
