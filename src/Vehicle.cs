@@ -30,8 +30,7 @@ namespace RaceXNA
             Acceleration = 0;
             Speed = 0;
             Camera = new ChasingCamera(this);
-            GearState = Gears.Neutral;
-            
+            GearState = Gears.Neutral; 
         }
 
         public override void Update(GameTime gameTime)

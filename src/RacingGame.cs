@@ -24,26 +24,28 @@ namespace RaceXNA
         public ResourceManager<Texture2D> TextureMgr { get; private set; }
         public ResourceManager<SpriteFont> FontMgr { get; private set; }
         public ResourceManager<Model> ModelMgr { get; private set; }
+        public ResourceManager<Song> MusicsMgr { get; private set; }
         public FpsCounter FpsHandler { get; private set; }
         public FpsDisplay FpsDisplayer { get; private set; }
+        public HUD HeadsUpDisplay { get; private set; }
         public AccelerationDisplay AccelerationDisplayer { get; private set; }
         public SpeedDisplay SpeedDisplayer { get; private set; }
-        //public ChasingCamera GameCamera { get; private set; }
-        public FreeCamera GameCamera { get; private set; }
+        public ChasingCamera GameCamera { get; private set; }
+        //public FreeCamera GameCamera { get; private set; }
         public Vehicle Car { get; private set; }
         public TexturedSurface GrassGround { get; private set; }
         public AccidentedTexturedSurface GrassGroundTest { get; private set; }
         public ModelDisplay ModelDisplayer { get; private set; }
 
-
         public RacingGame()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            graphics.SynchronizeWithVerticalRetrace = true;
-            IsFixedTimeStep = true;
+            graphics.SynchronizeWithVerticalRetrace = false;
+            IsFixedTimeStep = false;
             IsMouseVisible = false;
             graphics.IsFullScreen = false;
+            //MediaPlayer.IsRepeating = true;
         }
 
         protected override void Initialize()
@@ -51,23 +53,25 @@ namespace RaceXNA
             FontMgr = new ResourceManager<SpriteFont>(this);
             TextureMgr = new ResourceManager<Texture2D>(this);
             ModelMgr = new ResourceManager<Model>(this);
+            MusicsMgr = new ResourceManager<Song>(this);
 
             LoadAssets();
+
+            //MediaPlayer.Play(MusicsMgr.Find("KalimariDesert"));
 
             FpsHandler = new FpsCounter(this, FPS_INTERVAL);
             FpsDisplayer = new FpsDisplay(this, "Pericles20");
             InputMgr = new InputManager(this);
             ModelDisplayer = new ModelDisplay(this);
-            GameCamera = new FreeCamera(this, Vector3.Zero, Vector3.Zero, Vector3.Up);
-            SpeedDisplayer = new SpeedDisplay(this, "Pericles20");
-            AccelerationDisplayer = new AccelerationDisplay(this, "Pericles20");
+            HeadsUpDisplay = new HUD(this);
+            
 
             Car = new Vehicle(this, "L200-FBX", new Vector3(0, 0, -2), 0.01f, new Vector3(0, MathHelper.Pi, 0));
             //GrassGround = new Terrain(this, new Vector3(-25, 0, 23), new Vector3(500,0,-500), new Vector2(100, 100), true, Terrain.TerrainTypes.Grass);
             GrassGroundTest = new AccidentedTexturedSurface(this, new Vector3(0, 0, -2), new Vector2(500, -500), new Vector2(100, 100), "grass1", true);
 
-            //GameCamera = Car.Camera;
-            GameCamera = new FreeCamera(this, new Vector3(0, 5, 5), new Vector3(0, 0, -10), Vector3.Up);
+            GameCamera = Car.Camera;
+            //GameCamera = new FreeCamera(this, new Vector3(0, 5, 5), new Vector3(0, 0, -10), Vector3.Up);
 
             Components.Add(FpsHandler);
             Components.Add(InputMgr);
@@ -78,8 +82,7 @@ namespace RaceXNA
             Components.Add(GameCamera);
 
             //Laisser FpsDisplayer a la fin de la liste pour eviter les problemes d'affichage
-            Components.Add(AccelerationDisplayer);
-            Components.Add(SpeedDisplayer);
+            Components.Add(HeadsUpDisplay);
             Components.Add(FpsDisplayer);
 
             base.Initialize();
@@ -88,8 +91,12 @@ namespace RaceXNA
         private void LoadAssets()
         {
             FontMgr.Add("Fonts/Pericles20");
+            FontMgr.Add("Fonts/Arial12");
             ModelMgr.Add("Models/L200-FBX");
             TextureMgr.Add("Textures/grass1");
+            TextureMgr.Add("Textures/Odometer");
+            TextureMgr.Add("Textures/NeedleMap");
+            MusicsMgr.Add("Musics/KalimariDesert");
         }
 
         protected override void LoadContent()
@@ -101,18 +108,22 @@ namespace RaceXNA
         {
         }
 
-
         protected override void Update(GameTime gameTime)
         {
             if (InputMgr.ControllerState.Buttons.Back == ButtonState.Pressed)
                 this.Exit();
+            if (InputMgr.IsNewKey(Keys.F2))
+            {
+                graphics.SynchronizeWithVerticalRetrace = !graphics.SynchronizeWithVerticalRetrace;
+                IsFixedTimeStep = !IsFixedTimeStep;
+            }
 
             base.Update(gameTime);
         }
 
         protected override bool BeginDraw()
         {
-            GraphicsDevice.Clear(Color.Black);
+            GraphicsDevice.Clear(Color.Chocolate);
             spriteBatch.Begin();
 
             return base.BeginDraw();
