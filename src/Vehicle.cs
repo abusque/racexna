@@ -10,13 +10,13 @@ namespace RaceXNA
     {
         const float MAX_ACCEL = 20.0f;
         const float MIN_ACCEL = -15.0f;
-        const float MAX_SPEED = 80.0f;
+        const float MAX_SPEED = 120.0f;
         const float MIN_SPEED = -20.0f;
         const float BASE_ACCEL = 7.0f;
         const float FRICTION = 2.5f;
 
         const float MAX_ROT = 0.75f;
-        const float FCT_COEFF = 0.2f; //doit être suppérieur à 0 pour faire sens
+        const float ROT_COEFF = 0.1f; //doit être suppérieur à 0 pour faire sens
 
         public enum Gears { Neutral, Forward, Reverse };
 
@@ -131,7 +131,7 @@ namespace RaceXNA
                 return;
 
             float leftThumbStickHorizontalValue = -RaceGame.InputMgr.ControllerState.ThumbSticks.Left.X;
-            Yaw = MAX_ROT * leftThumbStickHorizontalValue / RaceGame.FpsHandler.FpsValue;
+            Yaw = MAX_ROT * leftThumbStickHorizontalValue * ROT_COEFF * (float)(Math.Sqrt(Math.Abs(Speed)))/ RaceGame.FpsHandler.FpsValue;
 
             Rotation = new Vector3(Rotation.X, Rotation.Y + yaw, Rotation.Z);
         }
