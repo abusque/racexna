@@ -16,8 +16,8 @@ namespace RaceXNA
 {
    public class FpsDisplay : Microsoft.Xna.Framework.DrawableGameComponent
    {
-      const int BOTTOM_MARGIN = 10;
-      const int RIGHT_MARGIN = 15;
+      const int BOTTOM_MARGIN = 300;
+      const int RIGHT_MARGIN = 720;
 
       RacingGame RaceGame { get; set; }
       Vector2 BottomRightPosition { get; set; }
@@ -51,24 +51,30 @@ namespace RaceXNA
 
       public override void Update(GameTime gameTime)
       {
-         if (RaceGame.FpsHandler.FpsValue != FpsValue)
+         if (RaceGame.HeadsUpDisplay.IsProgramerDisplay)
          {
-            StringFps = RaceGame.FpsHandler.FpsValue.ToString("0");
-            Dimention = FontDisplay.MeasureString(StringFps);
-            StringPosition = BottomRightPosition - Dimention;
-            FpsValue = RaceGame.FpsHandler.FpsValue;
+             if (RaceGame.FpsHandler.FpsValue != FpsValue)
+             {
+                 StringFps = RaceGame.FpsHandler.FpsValue.ToString("0");
+                 Dimention = FontDisplay.MeasureString(StringFps);
+                 StringPosition = BottomRightPosition - Dimention;
+                 FpsValue = RaceGame.FpsHandler.FpsValue;
+             }
          }
+         
          base.Update(gameTime);
       }
 
       public override void Draw(GameTime gameTime)
       {
-         FillMode previousFillMode = RaceGame.GraphicsDevice.RenderState.FillMode;
-         RaceGame.GraphicsDevice.RenderState.FillMode = FillMode.Solid;
-         RaceGame.spriteBatch.DrawString(FontDisplay, StringFps, StringPosition, Color.Tomato, 0,
-                                      Vector2.Zero , 1.0f, SpriteEffects.None, 0);
-         RaceGame.GraphicsDevice.RenderState.FillMode = previousFillMode;
-
+         if (RaceGame.HeadsUpDisplay.IsProgramerDisplay)
+         {
+            FillMode previousFillMode = RaceGame.GraphicsDevice.RenderState.FillMode;
+            RaceGame.GraphicsDevice.RenderState.FillMode = FillMode.Solid;
+            RaceGame.spriteBatch.DrawString(FontDisplay, StringFps, StringPosition, Color.Tomato, 0,
+                                           Vector2.Zero, 1.0f, SpriteEffects.None, 0);
+            RaceGame.GraphicsDevice.RenderState.FillMode = previousFillMode;
+         }
          base.Draw(gameTime);
       }
    }

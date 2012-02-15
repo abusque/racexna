@@ -17,14 +17,14 @@ namespace RaceXNA
 
    public class SpeedDisplay : Microsoft.Xna.Framework.DrawableGameComponent
    {
-      const int BOTTOM_MARGIN = 10;
-      const int RIGHT_MARGIN = 105;
+      const int BOTTOM_MARGIN = 350;
+      const int RIGHT_MARGIN = 720;
 
       RacingGame RaceGame { get; set; }
       Vector2 BottomRightPosition { get; set; }
       Vector2 StringPosition { get; set; }
       string StringSpeed { get; set; }
-      Vector2 Dimension { get; set; }
+      Vector2 Dimention { get; set; }
       SpriteFont FontDisplay { get; set; }
       float SpeedValue { get; set; }
       string FontName { get; set; }
@@ -52,24 +52,29 @@ namespace RaceXNA
 
       public override void Update(GameTime gameTime)
       {
-         if (RaceGame.Car.Speed != SpeedValue)
+         if (RaceGame.HeadsUpDisplay.IsProgramerDisplay)
          {
-            StringSpeed = RaceGame.Car.Speed.ToString("0");
-            Dimension = FontDisplay.MeasureString(StringSpeed);
-            StringPosition = BottomRightPosition - Dimension;
-            SpeedValue = RaceGame.Car.Speed;
+              if (RaceGame.Car.Speed != SpeedValue)
+              {
+                  StringSpeed = RaceGame.Car.Speed.ToString("0");
+                  Dimention = FontDisplay.MeasureString(StringSpeed);
+                  StringPosition = BottomRightPosition - Dimention;
+                  SpeedValue = RaceGame.Car.Speed;
+              }
          }
          base.Update(gameTime);
       }
 
       public override void Draw(GameTime gameTime)
       {
-         FillMode previousFillMode = RaceGame.GraphicsDevice.RenderState.FillMode;
-         RaceGame.GraphicsDevice.RenderState.FillMode = FillMode.Solid;
-         RaceGame.spriteBatch.DrawString(FontDisplay, StringSpeed, StringPosition, Color.Tomato, 0,
-                                      Vector2.Zero , 1.0f, SpriteEffects.None, 0);
-         RaceGame.GraphicsDevice.RenderState.FillMode = previousFillMode;
-
+         if (RaceGame.HeadsUpDisplay.IsProgramerDisplay)
+         {
+              FillMode previousFillMode = RaceGame.GraphicsDevice.RenderState.FillMode;
+              RaceGame.GraphicsDevice.RenderState.FillMode = FillMode.Solid;
+              RaceGame.spriteBatch.DrawString(FontDisplay, StringSpeed, StringPosition, Color.Tomato, 0,
+                                           Vector2.Zero, 1.0f, SpriteEffects.None, 0);
+              RaceGame.GraphicsDevice.RenderState.FillMode = previousFillMode;
+         }
          base.Draw(gameTime);
       }
    }
