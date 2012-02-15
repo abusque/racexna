@@ -20,7 +20,7 @@ namespace RaceXNA
         public float FrictionCoeff { get; private set; }
         public TerrainTypes TerrainType { get; private set; }
 
-        public TerrainTile(RacingGame raceGame, Vector3 origin, Vector3 size, TerrainTypes terrainType)
+        public TerrainTile(RacingGame raceGame, Vector3 origin, Vector2 size, TerrainTypes terrainType)
             :base(raceGame, origin, size, GetTextureName(terrainType))
         {
             TerrainType = terrainType;

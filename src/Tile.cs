@@ -14,13 +14,13 @@ namespace RaceXNA
         VertexPositionTexture[] Vertices { get; set; }
         protected Vector3[,] VerticesPoints { get; set; }
         protected Vector3 Origin { get; set; }
-        Vector3 Size { get; set; }
+        Vector2 Size { get; set; }
         Vector2 Dimension { get; set; }
         protected String TextureName { get; private set; }
         Texture2D TextureData { get; set; }
         Vector2[,] TexturePts { get; set; }
 
-        public Tile(RacingGame raceGame, Vector3 origin, Vector3 size, String textureName)
+        public Tile(RacingGame raceGame, Vector3 origin, Vector2 size, String textureName)
          : base(raceGame)
        {
          Origin = origin;
@@ -47,7 +47,7 @@ namespace RaceXNA
            {
                for (int j = 0; j <= ROWS; ++j)
                {
-                   VerticesPoints[i, j] = new Vector3(Origin.X + i * Size.X, Origin.Y + j * Size.Y, Origin.Z + j * Size.Z);
+                   VerticesPoints[i, j] = new Vector3(Origin.X + i * Size.X, Origin.Y, Origin.Z + j * Size.Y);
                    TexturePts[i, j] = new Vector2(i, 1 - j);
                }
            }
