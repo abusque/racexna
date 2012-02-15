@@ -56,7 +56,7 @@ namespace RaceXNA
           Boxes = new BoundingBox[ModelData.Meshes.Count];
           for (int i = 0; i < Boxes.Length; ++i)
           {
-              Boxes = BoundingBox.CreateFromSphere(Spheres[i]);
+              Boxes[i] = BoundingBox.CreateFromSphere(Spheres[i]);
           }
       }
 
