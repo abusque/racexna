@@ -31,9 +31,8 @@ namespace RaceXNA
         public AccelerationDisplay AccelerationDisplayer { get; private set; }
         public SpeedDisplay SpeedDisplayer { get; private set; }
         public ChasingCamera GameCamera { get; private set; }
-        //public FreeCamera GameCamera { get; private set; }
         public Vehicle Car { get; private set; }
-        public TexturedSurface GrassGround { get; private set; }
+        public Terrain Ground { get; private set; }
         public AccidentedTexturedSurface GrassGroundTest { get; private set; }
         public ModelDisplay ModelDisplayer { get; private set; }
 
@@ -67,18 +66,17 @@ namespace RaceXNA
             HeadsUpDisplay = new HUD(this);
 
             Car = new Vehicle(this, "L200-FBX", new Vector3(0, 0, -2), 0.01f, new Vector3(0, MathHelper.Pi, 0));
-            //GrassGround = new Terrain(this, new Vector3(-25, 0, 23), new Vector3(500,0,-500), new Vector2(100, 100), true, Terrain.TerrainTypes.Grass);
             GrassGroundTest = new AccidentedTexturedSurface(this, new Vector3(0, 0, -2), new Vector2(500, -500), new Vector2(100, 100), "grass1", true);
-            Terrain testTerrain = new Terrain(this, Vector3.Zero, TextureMgr.Find("testmap"));
+            //Ground = new Terrain(this, Vector3.Zero, TextureMgr.Find("testmap"));
+            //TerrainTile testTile = new TerrainTile(this, new Vector3(0, 0, 5), new Vector2(1, 1), TerrainTile.TerrainTypes.Grass);
 
             GameCamera = Car.Camera;
-            //GameCamera = new FreeCamera(this, new Vector3(0, 5, 5), new Vector3(0, 0, -10), Vector3.Up);
 
             Components.Add(FpsHandler);
             Components.Add(InputMgr);
-            //Components.Add(GrassGround);
+            //Components.Add(testTile);
+            //Components.Add(Ground);
             Components.Add(GrassGroundTest);
-            Components.Add(testTerrain);
             Components.Add(ModelDisplayer);
             Components.Add(Car); //Mettre GameCamera apres Car pour eviter les problemes
             Components.Add(GameCamera);
@@ -95,6 +93,8 @@ namespace RaceXNA
             FontMgr.Add("Fonts/Pericles20");
             ModelMgr.Add("Models/L200-FBX");
             TextureMgr.Add("Textures/grass1");
+            TextureMgr.Add("Textures/asphalt1");
+            TextureMgr.Add("Textures/sand1");
             TextureMgr.Add("Textures/Odometer");
             TextureMgr.Add("Textures/NeedleMap");
             TextureMgr.Add("Textures/testmap");

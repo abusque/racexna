@@ -23,7 +23,7 @@ namespace RaceXNA
       protected String TextureName { get; private set; }
       Texture2D TextureData { get; set; }
       Vector2[,] TexturePts { get; set; }
-      Vector2[,] TextutreRepeatedPts { get; set; }
+      Vector2[,] TextureRepeatedPts { get; set; }
       Vector2 DeltaTexture { get; set; }
       bool IsTextureRepeated { get; set; }
       
@@ -49,7 +49,7 @@ namespace RaceXNA
          Delta = new Vector3(Size.X / ColumnsNb, Size.Y / RowsNb, Size.Z / RowsNb);
          VerticesPoints = new Vector3[ColumnsNb + 1, RowsNb + 1];
          TexturePts = new Vector2[ColumnsNb + 1, RowsNb + 1];
-         TextutreRepeatedPts = new Vector2[2, 2];
+         TextureRepeatedPts = new Vector2[2, 2];
          Vertices = new VertexPositionTexture[NbVertices];
          
          CreatePointsArray();
@@ -72,7 +72,7 @@ namespace RaceXNA
          {
              for (int j = 0; j <= 1; ++j)
              {
-                 TextutreRepeatedPts[i, j] = new Vector2(i, j);
+                 TextureRepeatedPts[i, j] = new Vector2(i, j);
              }
          }
       }
@@ -87,8 +87,8 @@ namespace RaceXNA
             {
                 for (int i = 0; i <= ColumnsNb; ++i)
                 {
-                    Vertices[++VertexNb] = new VertexPositionTexture(VerticesPoints[i, j], TextutreRepeatedPts[i % 2, j % 2]);
-                    Vertices[++VertexNb] = new VertexPositionTexture(VerticesPoints[i, j + 1], TextutreRepeatedPts[i % 2, (j+1) % 2]);
+                    Vertices[++VertexNb] = new VertexPositionTexture(VerticesPoints[i, j], TextureRepeatedPts[i % 2, j % 2]);
+                    Vertices[++VertexNb] = new VertexPositionTexture(VerticesPoints[i, j + 1], TextureRepeatedPts[i % 2, (j+1) % 2]);
                 }
             }
             else
