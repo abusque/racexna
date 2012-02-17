@@ -69,6 +69,7 @@ namespace RaceXNA
             Car = new Vehicle(this, "L200-FBX", new Vector3(0, 0, -2), 0.01f, new Vector3(0, MathHelper.Pi, 0));
             //GrassGround = new Terrain(this, new Vector3(-25, 0, 23), new Vector3(500,0,-500), new Vector2(100, 100), true, Terrain.TerrainTypes.Grass);
             GrassGroundTest = new AccidentedTexturedSurface(this, new Vector3(0, 0, -2), new Vector2(500, -500), new Vector2(100, 100), "grass1", true);
+            Terrain testTerrain = new Terrain(this, Vector3.Zero, TextureMgr.Find("testmap"));
 
             GameCamera = Car.Camera;
             //GameCamera = new FreeCamera(this, new Vector3(0, 5, 5), new Vector3(0, 0, -10), Vector3.Up);
@@ -77,6 +78,7 @@ namespace RaceXNA
             Components.Add(InputMgr);
             //Components.Add(GrassGround);
             Components.Add(GrassGroundTest);
+            Components.Add(testTerrain);
             Components.Add(ModelDisplayer);
             Components.Add(Car); //Mettre GameCamera apres Car pour eviter les problemes
             Components.Add(GameCamera);
@@ -95,6 +97,7 @@ namespace RaceXNA
             TextureMgr.Add("Textures/grass1");
             TextureMgr.Add("Textures/Odometer");
             TextureMgr.Add("Textures/NeedleMap");
+            TextureMgr.Add("Textures/testmap");
         }
 
         protected override void LoadContent()
