@@ -36,6 +36,7 @@ namespace RaceXNA
         public TexturedSurface GrassGround { get; private set; }
         public AccidentedTexturedSurface GrassGroundTest { get; private set; }
         public ModelDisplay ModelDisplayer { get; private set; }
+        public Obstacle[] Obstacles { get; private set; }
 
         public RacingGame()
         {
@@ -66,7 +67,10 @@ namespace RaceXNA
 
             HeadsUpDisplay = new HUD(this);
 
+            Obstacles = new Obstacle[1];
+
             Car = new Vehicle(this, "L200-FBX", new Vector3(0, 0, -2), 0.01f, new Vector3(0, MathHelper.Pi, 0));
+            Obstacles[0] = new Obstacle(this, "L200-FBX", new Vector3(50, 0, -50), 0.01f, Vector3.Zero);
             //GrassGround = new Terrain(this, new Vector3(-25, 0, 23), new Vector3(500,0,-500), new Vector2(100, 100), true, Terrain.TerrainTypes.Grass);
             GrassGroundTest = new AccidentedTexturedSurface(this, new Vector3(0, 0, -2), new Vector2(500, -500), new Vector2(100, 100), "grass1", true);
 
@@ -79,6 +83,7 @@ namespace RaceXNA
             Components.Add(GrassGroundTest);
             Components.Add(ModelDisplayer);
             Components.Add(Car); //Mettre GameCamera apres Car pour eviter les problemes
+            Components.Add(Obstacles[0]);
             Components.Add(GameCamera);
 
             //Laisser FpsDisplayer a la fin de la liste pour eviter les problemes d'affichage
@@ -92,6 +97,7 @@ namespace RaceXNA
         {
             FontMgr.Add("Fonts/Pericles20");
             ModelMgr.Add("Models/L200-FBX");
+            ModelMgr.Add("Models/tree");
             TextureMgr.Add("Textures/grass1");
             TextureMgr.Add("Textures/Odometer");
             TextureMgr.Add("Textures/NeedleMap");
