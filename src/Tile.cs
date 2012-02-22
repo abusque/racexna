@@ -10,6 +10,7 @@ namespace RaceXNA
         const int COLS = 1;
         const int ROWS = 1;
         const int TRIANGLES = 2;
+        const int NB_VERTICES = 4;
 
         VertexPositionTexture[] Vertices { get; set; }
         protected Vector3[,] VerticesPoints { get; set; }
@@ -33,7 +34,7 @@ namespace RaceXNA
        {
            VerticesPoints = new Vector3[COLS + 1, ROWS + 1];
            TexturePts = new Vector2[COLS + 1, ROWS + 1];
-           Vertices = new VertexPositionTexture[NbVertices];
+           Vertices = new VertexPositionTexture[NB_VERTICES];
 
            CreatePointsArray();
            InitializeVertices();

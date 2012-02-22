@@ -58,6 +58,7 @@ namespace RaceXNA
         public ChasingCamera Camera { get; private set; }
         public Gears GearState { get; private set; }
         public BoundingBox ModelBoundingBox { get; private set; }
+        public bool IsCollision { get; set; }
 
         public Vehicle(RacingGame raceGame, String modelName, Vector3 initPos, float initScale, Vector3 initRot)
             : base(raceGame, modelName, initPos, initScale, initRot)
@@ -65,12 +66,12 @@ namespace RaceXNA
             Acceleration = 0;
             Speed = 0;
             Camera = new ChasingCamera(this);
-            GearState = Gears.Neutral; 
+            GearState = Gears.Neutral;
+            IsCollision = false;
         }
 
         public override void Initialize()
         {
-            
             base.Initialize();
         }
 
@@ -82,6 +83,8 @@ namespace RaceXNA
             HandleRotation();
 
             Move();
+
+            HandleCollision();
 
             base.Update(gameTime);
         }
@@ -124,6 +127,29 @@ namespace RaceXNA
             }
         }
 
+        private void HandleRotation()
+        {
+            if (Speed < 0.01f && Speed > -0.01f)
+                return;
+
+            float leftThumbStickHorizontalValue = -RaceGame.InputMgr.ControllerState.ThumbSticks.Left.X;
+
+
+
+            if (RaceGame.InputMgr.ControllerState.IsButtonDown(Buttons.X))
+            {
+                float yawValue = 0;
+                yawValue = MAX_ROT * leftThumbStickHorizontalValue / RaceGame.FpsHandler.FpsValue;
+                Rotation = new Vector3(Rotation.X, Rotation.Y + yawValue, Rotation.Z);
+            }
+            else
+            {
+                Yaw = MAX_ROT * leftThumbStickHorizontalValue * ROT_COEFF * (float)(Math.Sqrt(Math.Abs(Speed))) / RaceGame.FpsHandler.FpsValue;
+                Rotation = new Vector3(Rotation.X, Rotation.Y + Yaw, Rotation.Z);
+            }
+
+        }
+
         private void Move()
         {
             Vector3 forward = World.Forward;
@@ -132,15 +158,38 @@ namespace RaceXNA
             Position -= forward * Speed / RaceGame.FpsHandler.FpsValue; //A changer pour += lorsque l'orientation du modele sera la bonne
         }
 
-        private void HandleRotation()
+        private void HandleCollision()
         {
-            if(Speed < 0.01f  && Speed > -0.01f)
-                return;
+            for (int i = 0; i < ModelData.Meshes.Count; ++i)
+            {
+                Spheres[i] = new BoundingSphere(Position, Spheres[i].Radius);
+            }
 
-            float leftThumbStickHorizontalValue = -RaceGame.InputMgr.ControllerState.ThumbSticks.Left.X;
-            Yaw = MAX_ROT * leftThumbStickHorizontalValue * ROT_COEFF * (float)(Math.Sqrt(Math.Abs(Speed)))/ RaceGame.FpsHandler.FpsValue;
+            CreateBigSphere();
 
-            Rotation = new Vector3(Rotation.X, Rotation.Y + yaw, Rotation.Z);
+            IsCollision = false;
+
+            if (BigSphere.Intersects(RaceGame.OneObstacle.BigSphere))
+            {
+                for (int i = 0; i < ModelData.Meshes.Count; ++i)
+                {
+                    for (int j = 0; j < RaceGame.OneObstacle.ModelData.Meshes.Count; ++j)
+                    {
+                        IsCollision = Spheres[i].Intersects(RaceGame.OneObstacle.GetSphere(j));
+                    }
+                }
+            }
+
+            if (IsCollision)
+            {
+                Vector3 VectorCollision = new Vector3(Position.X - RaceGame.OneObstacle.Position.X,
+                                                      Position.Y - RaceGame.OneObstacle.Position.Y,
+                                                      Position.Z - RaceGame.OneObstacle.Position.Z);
+                VectorCollision.Normalize();
+                VectorCollision /= RaceGame.FpsHandler.FpsValue;
+                Position += VectorCollision;
+                Speed = 0;
+            }
         }
     }
 }

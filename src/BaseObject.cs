@@ -8,6 +8,10 @@ namespace RaceXNA
 {
    public class BaseObject : Microsoft.Xna.Framework.DrawableGameComponent
    {
+       const float RADIUS = 2f;
+       const float RADIUS_MODIFICATOR = 0.70f;
+       public BoundingSphere TestSphere { get; private set; }
+
        public RacingGame RaceGame { get; private set; }
        private string ModelName { get; set; }
        public Model ModelData { get; private set; }
@@ -15,8 +19,10 @@ namespace RaceXNA
        public Vector3 Position { get; protected set; }
        public float Scale { get; protected set; }
        public Vector3 Rotation { get; protected set; }
-       private BoundingSphere[] Spheres { get; set; }
-       private BoundingBox[] Boxes { get; set; }
+       protected BoundingSphere[] Spheres { get; set; }
+       public BoundingSphere BigSphere { get; private set; }
+       protected BoundingBox[] Boxes { get; set; }
+       public BoundingBox BigBox { get; private set; }
 
 
        public BaseObject(RacingGame raceGame, String modelName, Vector3 initPos, float initScale, Vector3 initRot)
@@ -31,6 +37,8 @@ namespace RaceXNA
           World = Matrix.Identity * Matrix.CreateScale(Scale);
           World *= Matrix.CreateFromYawPitchRoll(Rotation.Y, Rotation.X, Rotation.Z);
           World.Translation = Position;
+
+          TestSphere = new BoundingSphere(Position, RADIUS);
        }
 
       private void CreateSpheres()
@@ -46,9 +54,20 @@ namespace RaceXNA
          {
             localTrans =  transformations[ModelData.Meshes[i].ParentBone.Index] * World;
             center = Vector3.Transform(ModelData.Meshes[i].BoundingSphere.Center, localTrans);
-            radius = Scale * ModelData.Meshes[i].BoundingSphere.Radius;
+            radius = Scale * RADIUS_MODIFICATOR * ModelData.Meshes[i].BoundingSphere.Radius;
             Spheres[i] = new BoundingSphere(center, radius);
          }
+
+         CreateBigSphere();
+      }
+
+      protected void CreateBigSphere()
+      {
+          BigSphere = BoundingSphere.CreateMerged(Spheres[0], Spheres[1]);
+          for (int i = 2; i < Spheres.Length; ++i)
+          {
+              BigSphere = BoundingSphere.CreateMerged(BigSphere, Spheres[i]);
+          }
       }
 
       private void CreateBoxes()
@@ -57,6 +76,11 @@ namespace RaceXNA
           for (int i = 0; i < Boxes.Length; ++i)
           {
               Boxes[i] = BoundingBox.CreateFromSphere(Spheres[i]);
+          }
+          BigBox = BoundingBox.CreateMerged(Boxes[0], Boxes[1]);
+          for (int i = 2; i < Boxes.Length; ++i)
+          {
+              BigBox = BoundingBox.CreateMerged(BigBox, Boxes[i]);
           }
       }
 
