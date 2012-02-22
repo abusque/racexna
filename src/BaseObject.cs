@@ -9,7 +9,7 @@ namespace RaceXNA
    public class BaseObject : Microsoft.Xna.Framework.DrawableGameComponent
    {
        const float RADIUS = 2f;
-       const float RADIUS_MODIFICATOR = 0.70f;
+       const float RADIUS_MODIFICATOR = 0.65f;
        public BoundingSphere TestSphere { get; private set; }
 
        public RacingGame RaceGame { get; private set; }

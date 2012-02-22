@@ -68,7 +68,7 @@ namespace RaceXNA
             HeadsUpDisplay = new HUD(this);
 
             Car = new Vehicle(this, "L200-FBX", new Vector3(0, 0, -2), 0.01f, new Vector3(0, MathHelper.Pi, 0));
-            OneObstacle = new Obstacle(this, "L200-FBX", new Vector3(20, 0, -40), 0.01f, Vector3.Zero);
+            OneObstacle = new Obstacle(this, "L200-FBX", new Vector3(30, 0, -60), 0.01f, Vector3.Zero);
             //GrassGround = new Terrain(this, new Vector3(-25, 0, 23), new Vector3(500,0,-500), new Vector2(100, 100), true, Terrain.TerrainTypes.Grass);
             GrassGroundTest = new AccidentedTexturedSurface(this, new Vector3(0, 0, -2), new Vector2(500, -500), new Vector2(100, 100), "grass1", true);
             GrassGroundTest1 = new TexturedSurface(this, new Vector3(0, 0, -2), new Vector3(100, 0, -100), new Vector2(100, 100), "grass1", true);

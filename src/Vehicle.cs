@@ -57,7 +57,7 @@ namespace RaceXNA
         }
         public ChasingCamera Camera { get; private set; }
         public Gears GearState { get; private set; }
-        public BoundingBox ModelBoundingBox { get; private set; }
+        public BoundingBox CarBoundingBox { get; private set; }
         public bool IsCollision { get; set; }
 
         public Vehicle(RacingGame raceGame, String modelName, Vector3 initPos, float initScale, Vector3 initRot)
@@ -85,6 +85,20 @@ namespace RaceXNA
             Move();
 
             HandleCollision();
+
+            #region ProgrammerHelper
+            if (RaceGame.InputMgr.ControllerState.IsButtonDown(Buttons.B))
+            {
+                Speed = 0; Acceleration = 0;
+            }
+            if (RaceGame.InputMgr.ControllerState.IsButtonDown(Buttons.X))
+            {
+                if (Speed >=0)
+                    Rotation = new Vector3(Rotation.X, Rotation.Y + MAX_ROT * -RaceGame.InputMgr.ControllerState.ThumbSticks.Left.X * 1.5f / RaceGame.FpsHandler.FpsValue, Rotation.Z);
+                else
+                    Rotation = new Vector3(Rotation.X, Rotation.Y - MAX_ROT * -RaceGame.InputMgr.ControllerState.ThumbSticks.Left.X * 1.5f / RaceGame.FpsHandler.FpsValue, Rotation.Z);
+            }
+            #endregion
 
             base.Update(gameTime);
         }
@@ -134,20 +148,9 @@ namespace RaceXNA
 
             float leftThumbStickHorizontalValue = -RaceGame.InputMgr.ControllerState.ThumbSticks.Left.X;
 
-
-
-            if (RaceGame.InputMgr.ControllerState.IsButtonDown(Buttons.X))
-            {
-                float yawValue = 0;
-                yawValue = MAX_ROT * leftThumbStickHorizontalValue / RaceGame.FpsHandler.FpsValue;
-                Rotation = new Vector3(Rotation.X, Rotation.Y + yawValue, Rotation.Z);
-            }
-            else
-            {
-                Yaw = MAX_ROT * leftThumbStickHorizontalValue * ROT_COEFF * (float)(Math.Sqrt(Math.Abs(Speed))) / RaceGame.FpsHandler.FpsValue;
-                Rotation = new Vector3(Rotation.X, Rotation.Y + Yaw, Rotation.Z);
-            }
-
+            Yaw = MAX_ROT * leftThumbStickHorizontalValue * ROT_COEFF * (float)(Math.Sqrt(Math.Abs(Speed))) / RaceGame.FpsHandler.FpsValue;
+            
+            Rotation = new Vector3(Rotation.X, Rotation.Y + Yaw, Rotation.Z);
         }
 
         private void Move()
@@ -160,14 +163,13 @@ namespace RaceXNA
 
         private void HandleCollision()
         {
+            IsCollision = false;
+
             for (int i = 0; i < ModelData.Meshes.Count; ++i)
             {
                 Spheres[i] = new BoundingSphere(Position, Spheres[i].Radius);
             }
-
             CreateBigSphere();
-
-            IsCollision = false;
 
             if (BigSphere.Intersects(RaceGame.OneObstacle.BigSphere))
             {
@@ -190,6 +192,11 @@ namespace RaceXNA
                 Position += VectorCollision;
                 Speed = 0;
             }
+        }
+
+        private void CreateCarBoundingBox()
+        {
+
         }
     }
 }
