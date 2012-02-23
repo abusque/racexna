@@ -32,8 +32,6 @@ namespace RaceXNA
         public SpeedDisplay SpeedDisplayer { get; private set; }
         public ChasingCamera GameCamera { get; private set; }
         public Vehicle Car { get; private set; }
-        public Terrain Ground { get; private set; }
-        public AccidentedTexturedSurface GrassGroundTest { get; private set; }
         public ModelDisplay ModelDisplayer { get; private set; }
 
         public RacingGame()
@@ -66,17 +64,11 @@ namespace RaceXNA
             HeadsUpDisplay = new HUD(this);
 
             Car = new Vehicle(this, "L200-FBX", new Vector3(0, 0, -2), 0.01f, new Vector3(0, MathHelper.Pi, 0));
-            GrassGroundTest = new AccidentedTexturedSurface(this, new Vector3(0, 0, -2), new Vector2(500, -500), new Vector2(100, 100), "grass1", true);
-            //Ground = new Terrain(this, Vector3.Zero, TextureMgr.Find("testmap"));
-            //TerrainTile testTile = new TerrainTile(this, new Vector3(0, 0, 5), new Vector2(1, 1), TerrainTile.TerrainTypes.Grass);
 
             GameCamera = Car.Camera;
 
             Components.Add(FpsHandler);
             Components.Add(InputMgr);
-            //Components.Add(testTile);
-            //Components.Add(Ground);
-            Components.Add(GrassGroundTest);
             Components.Add(ModelDisplayer);
             Components.Add(Car); //Mettre GameCamera apres Car pour eviter les problemes
             Components.Add(GameCamera);
