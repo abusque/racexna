@@ -16,88 +16,120 @@ namespace RaceXNA
 {
     public class Terrain : Microsoft.Xna.Framework.DrawableGameComponent
     {
-        private RacingGame RaceGame;
-        private Vector2 Dimension { get; set; }
-        private Vector3 Origin { get; set; }
-        private Vector2 Size { get; set; }
-        private Vector2 TileSize { get; set; }
-        private TerrainTile[,] TerrainTiles { get; set; }
-        private Texture2D MapTexture { get; set; }
+        const int INDICES_PER_TILE = 6;
+        const int INDICES_PER_TRIANGLE = 3;
 
-        public Terrain(RacingGame raceGame, Vector3 origin, Texture2D mapTexture)
+        RacingGame RaceGame { get; set; }
+        Vector3 Origin { get; set; }
+        string ColorMapName { get; set; }
+        string HeightMapName { get; set; }
+        int Width { get; set; }
+        int Height { get; set; }
+        float[,] VerticesHeight { get; set; }
+        VertexPositionColor[] Vertices { get; set; }
+        int[] Indices { get; set; }
+
+        public Terrain(RacingGame raceGame, Vector3 origin, string colorMapName, string heightMapName)
             : base(raceGame)
         {
             RaceGame = raceGame;
             Origin = origin;
-            MapTexture = mapTexture;
-            Size = new Vector2(MapTexture.Width, MapTexture.Height);
-            Dimension = new Vector2(MapTexture.Width, MapTexture.Height);
-            TileSize = new Vector2(Size.X / Dimension.X, Size.Y / Dimension.Y);
+            ColorMapName = colorMapName;
+            HeightMapName = heightMapName;
         }
 
         public override void Initialize()
         {
-            TerrainTiles = new TerrainTile[(int)Dimension.X, (int)Dimension.Y];
-            CreateFromTexture();
+            ReadHeightMap();
+            CreateVertices();
+            CreateIndices();
 
             base.Initialize();
         }
 
         public override void Draw(GameTime gameTime)
         {
-            for (int i = 0; i < Size.X; ++i)
+            RaceGame.GraphicsDevice.VertexDeclaration = new VertexDeclaration(GraphicsDevice, VertexPositionColor.VertexElements);
+            RaceGame.GraphicsDevice.RenderState.CullMode = CullMode.None;
+            RaceGame.GraphicsDevice.RenderState.FillMode = FillMode.WireFrame;
+
+            BasicEffect displayEffect = RaceGame.ModelDisplayer.Effect3D;
+            displayEffect.World = Matrix.Identity;
+            displayEffect.View = RaceGame.GameCamera.View;
+            displayEffect.Projection = RaceGame.GameCamera.Projection;
+            displayEffect.Begin();
+
+            foreach (EffectPass effectPass in displayEffect.CurrentTechnique.Passes)
             {
-                for (int j = 0; j < Size.Y; ++j)
-                {
-                    TerrainTiles[i, j].Draw(gameTime);
-                }
+                effectPass.Begin();
+
+                RaceGame.GraphicsDevice.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, Vertices, 0, Vertices.Length,
+                    Indices, 0, Indices.Length / INDICES_PER_TRIANGLE);
+
+                effectPass.End();
             }
+
+            displayEffect.End();
+
+            RaceGame.GraphicsDevice.RenderState.FillMode = FillMode.Solid;
 
             base.Draw(gameTime);
         }
 
-        private void CreateFromTexture()
+        private void CreateVertices()
         {
-            Color[][] pixelColors = new Color[MapTexture.Width][];
-            for(int i = 0; i < MapTexture.Width; ++i)
-                pixelColors[i] = new Color[MapTexture.Height];
-            Rectangle sourceRectangle;
-
-            for (int i = 0; i < MapTexture.Width; ++i)
+            Vertices = new VertexPositionColor[Width * Height];
+            for (int i = 0; i < Width; ++i)
             {
-                for (int j = 0; j < MapTexture.Height; ++j)
+                for (int j = 0; j < Height; ++j)
                 {
-                    sourceRectangle = new Rectangle(i, j, 1, 1);
-                    MapTexture.GetData<Color>(0, sourceRectangle, pixelColors[i], j, 1);
+                    Vertices[i + j * Width].Position = new Vector3(Origin.X + i, Origin.Y + VerticesHeight[i, j], Origin.Z - j);
+                    Vertices[i + j * Width].Color = Color.White;
                 }
             }
+        }
 
-            for (int i = 0; i < MapTexture.Width; ++i)
+        private void CreateIndices()
+        {
+            Indices = new int[(Width - 1) * (Height - 1) * INDICES_PER_TILE];
+
+            int counter = 0;
+            for (int j = 0; j < Height - 1; ++j)
             {
-                for (int j = 0; j < MapTexture.Height; ++j)
+                for (int i = 0; i < Width - 1; ++i)
                 {
-                    if(pixelColors[i][j] == Color.Black)
-                    {
-                        TerrainTiles[i, j] = new TerrainTile(RaceGame, new Vector3(Origin.X + i * TileSize.X, Origin.Y + 0, Origin.Z + j * TileSize.Y),
-                            new Vector2(TileSize.X, TileSize.Y), TerrainTile.TerrainTypes.Asphalt);
-                    }
-                    else if(pixelColors[i][j] == Color.White)
-                    {
-                        TerrainTiles[i, j] = new TerrainTile(RaceGame, new Vector3(Origin.X + i * TileSize.X, Origin.Y + 0, Origin.Z + j * TileSize.Y),
-                            new Vector2(TileSize.X, TileSize.Y), TerrainTile.TerrainTypes.Sand);
-                    }
-                    else if(pixelColors[i][j] == Color.Green)
-                    {
-                        TerrainTiles[i, j] = new TerrainTile(RaceGame, new Vector3(Origin.X + i * TileSize.X, Origin.Y + 0, Origin.Z + j * TileSize.Y),
-                            new Vector2(TileSize.X, TileSize.Y), TerrainTile.TerrainTypes.Grass);
-                    }
-                    else
-                    {
-                        TerrainTiles[i, j] = new TerrainTile(RaceGame, new Vector3(Origin.X + i * TileSize.X, Origin.Y + 0, Origin.Z + j * TileSize.Y),
-                            new Vector2(TileSize.X, TileSize.Y), TerrainTile.TerrainTypes.Asphalt);
-                    }
+                    int lowerLeft = i + j * Width;
+                    int lowerRight = (i + 1) + j * Width;
+                    int topLeft = i + (j + 1) * Width;
+                    int topRight = (i + 1) + (j + 1) * Width;
 
-                    TerrainTiles[i, j].Initialize();
+                    Indices[counter++] = topLeft;
+                    Indices[counter++] = lowerRight;
+                    Indices[counter++] = lowerLeft;
+
+                    Indices[counter++] = topLeft;
+                    Indices[counter++] = topRight;
+                    Indices[counter++] = lowerRight;
+                }
+            }
+        }
+
+        private void ReadHeightMap()
+        {
+            Texture2D heightMap = RaceGame.TextureMgr.Find(HeightMapName);
+
+            Width = heightMap.Width;
+            Height = heightMap.Height;
+
+            Color[] pixelColors = new Color[Width * Height];
+            heightMap.GetData(pixelColors);
+
+            VerticesHeight = new float[Width, Height];
+            for (int i = 0; i < Width; ++i)
+            {
+                for (int j = 0; j < Height; ++j)
+                {
+                    VerticesHeight[i, j] = pixelColors[i + j * Width].R / 5.0f; //On divise la valeur du rouge par 5 pour la ramener entre 0 et 51
                 }
             }
         }

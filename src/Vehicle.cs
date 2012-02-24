@@ -21,6 +21,7 @@ namespace RaceXNA
         public enum Gears { Neutral, Forward, Reverse };
 
         public float Acceleration;
+
         float speed;
         public float Speed 
         {
@@ -38,6 +39,7 @@ namespace RaceXNA
                     speed = MIN_SPEED;
             }
         }
+
         float yaw;
         public float Yaw
         {
@@ -55,6 +57,7 @@ namespace RaceXNA
                 yaw = value;
             }
         }
+
         public ChasingCamera Camera { get; private set; }
         public Gears GearState { get; private set; }
         public BoundingBox CarBoundingBox { get; private set; }
