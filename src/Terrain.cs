@@ -29,6 +29,7 @@ namespace RaceXNA
         float[,] VerticesHeight { get; set; }
         VertexPositionNormalTexture[] Vertices { get; set; }
         int[] Indices { get; set; }
+        Texture2D TerrainTexture { get; set; }
 
         public Terrain(RacingGame raceGame, Vector3 origin, string colorMapName, string heightMapName)
             : base(raceGame)
@@ -41,6 +42,7 @@ namespace RaceXNA
 
         public override void Initialize()
         {
+            TerrainTexture = RaceGame.TextureMgr.Find("colormap");
             ReadHeightMap();
             CreateVertices();
             CreateIndices();
@@ -53,13 +55,15 @@ namespace RaceXNA
         {
             RaceGame.GraphicsDevice.VertexDeclaration = new VertexDeclaration(GraphicsDevice, VertexPositionNormalTexture.VertexElements);
             RaceGame.GraphicsDevice.RenderState.CullMode = CullMode.None;
-            RaceGame.GraphicsDevice.RenderState.FillMode = FillMode.WireFrame;
+            RaceGame.GraphicsDevice.RenderState.FillMode = FillMode.Solid;
 
             BasicEffect displayEffect = RaceGame.ModelDisplayer.Effect3D;
             displayEffect.World = Matrix.Identity;
             displayEffect.View = RaceGame.GameCamera.View;
             displayEffect.Projection = RaceGame.GameCamera.Projection;
-            displayEffect.EnableDefaultLighting;
+            displayEffect.EnableDefaultLighting();
+            displayEffect.TextureEnabled = true;
+            displayEffect.Texture = TerrainTexture;
             displayEffect.Begin();
 
             foreach (EffectPass effectPass in displayEffect.CurrentTechnique.Passes)
@@ -74,8 +78,6 @@ namespace RaceXNA
 
             displayEffect.End();
 
-            RaceGame.GraphicsDevice.RenderState.FillMode = FillMode.Solid;
-
             base.Draw(gameTime);
         }
 
@@ -87,7 +89,8 @@ namespace RaceXNA
                 for (int j = 0; j < Height; ++j)
                 {
                     Vertices[i + j * Width].Position = new Vector3(Origin.X + i, Origin.Y + VerticesHeight[i, j], Origin.Z - j);
-                    //Vertices[i + j * Width].Color = Color.White;
+                    Vertices[i + j * Width].TextureCoordinate.X = (float)i / 127.0f;
+                    Vertices[i + j * Width].TextureCoordinate.Y = (float)j / 127.0f;
                 }
             }
         }

@@ -67,7 +67,7 @@ namespace RaceXNA
 
             Car = new Vehicle(this, "L200-FBX", new Vector3(0, 0, -2), 0.01f, new Vector3(0, MathHelper.Pi, 0));
             OneObstacle = new BaseObject(this, "L200-FBX", new Vector3(30, 0, -60), 0.01f, Vector3.Zero);
-            Ground = new Terrain(this, new Vector3(-20, -10, 0), "Patate", "heightmap");
+            Ground = new Terrain(this, new Vector3(-20, 0, 0), "Patate", "flatmap");
 
             GameCamera = Car.Camera;
 
@@ -97,6 +97,8 @@ namespace RaceXNA
             TextureMgr.Add("Textures/Odometer");
             TextureMgr.Add("Textures/NeedleMap");
             TextureMgr.Add("Textures/heightmap");
+            TextureMgr.Add("Textures/colormap");
+            TextureMgr.Add("Textures/flatmap");
         }
 
         protected override void LoadContent()
