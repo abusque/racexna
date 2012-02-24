@@ -33,6 +33,7 @@ namespace RaceXNA
         public ChasingCamera GameCamera { get; private set; }
         public Vehicle Car { get; private set; }
         public ModelDisplay ModelDisplayer { get; private set; }
+        public Terrain Ground { get; private set; }
 
         public RacingGame()
         {
@@ -64,6 +65,7 @@ namespace RaceXNA
             HeadsUpDisplay = new HUD(this);
 
             Car = new Vehicle(this, "L200-FBX", new Vector3(0, 0, -2), 0.01f, new Vector3(0, MathHelper.Pi, 0));
+            Ground = new Terrain(this, new Vector3(-20, -15, 0), "Patate", "heightmap");
 
             GameCamera = Car.Camera;
 
@@ -71,6 +73,7 @@ namespace RaceXNA
             Components.Add(InputMgr);
             Components.Add(ModelDisplayer);
             Components.Add(Car); //Mettre GameCamera apres Car pour eviter les problemes
+            Components.Add(Ground);
             Components.Add(GameCamera);
 
             //Laisser FpsDisplayer a la fin de la liste pour eviter les problemes d'affichage
@@ -89,7 +92,7 @@ namespace RaceXNA
             TextureMgr.Add("Textures/sand1");
             TextureMgr.Add("Textures/Odometer");
             TextureMgr.Add("Textures/NeedleMap");
-            TextureMgr.Add("Textures/testmap");
+            TextureMgr.Add("Textures/heightmap");
         }
 
         protected override void LoadContent()
