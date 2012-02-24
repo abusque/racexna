@@ -27,7 +27,7 @@ namespace RaceXNA
         int Width { get; set; }
         int Height { get; set; }
         float[,] VerticesHeight { get; set; }
-        VertexPositionColor[] Vertices { get; set; }
+        VertexPositionNormalTexture[] Vertices { get; set; }
         int[] Indices { get; set; }
 
         public Terrain(RacingGame raceGame, Vector3 origin, string colorMapName, string heightMapName)
@@ -44,13 +44,14 @@ namespace RaceXNA
             ReadHeightMap();
             CreateVertices();
             CreateIndices();
+            CalculateNormals();
 
             base.Initialize();
         }
 
         public override void Draw(GameTime gameTime)
         {
-            RaceGame.GraphicsDevice.VertexDeclaration = new VertexDeclaration(GraphicsDevice, VertexPositionColor.VertexElements);
+            RaceGame.GraphicsDevice.VertexDeclaration = new VertexDeclaration(GraphicsDevice, VertexPositionNormalTexture.VertexElements);
             RaceGame.GraphicsDevice.RenderState.CullMode = CullMode.None;
             RaceGame.GraphicsDevice.RenderState.FillMode = FillMode.WireFrame;
 
@@ -58,6 +59,7 @@ namespace RaceXNA
             displayEffect.World = Matrix.Identity;
             displayEffect.View = RaceGame.GameCamera.View;
             displayEffect.Projection = RaceGame.GameCamera.Projection;
+            displayEffect.EnableDefaultLighting;
             displayEffect.Begin();
 
             foreach (EffectPass effectPass in displayEffect.CurrentTechnique.Passes)
@@ -79,13 +81,13 @@ namespace RaceXNA
 
         private void CreateVertices()
         {
-            Vertices = new VertexPositionColor[Width * Height];
+            Vertices = new VertexPositionNormalTexture[Width * Height];
             for (int i = 0; i < Width; ++i)
             {
                 for (int j = 0; j < Height; ++j)
                 {
                     Vertices[i + j * Width].Position = new Vector3(Origin.X + i, Origin.Y + VerticesHeight[i, j], Origin.Z - j);
-                    Vertices[i + j * Width].Color = Color.White;
+                    //Vertices[i + j * Width].Color = Color.White;
                 }
             }
         }
@@ -132,6 +134,34 @@ namespace RaceXNA
                 {
                     VerticesHeight[i, j] = pixelColors[i + j * Width].R * HEIGHT_FACTOR;
                 }
+            }
+        }
+
+        private void CalculateNormals()
+        {
+            for (int i = 0; i < Vertices.Length; ++i)
+            {
+                Vertices[i].Normal = Vector3.Zero;
+            }
+
+            for (int i = 0; i < Indices.Length / INDICES_PER_TRIANGLE; ++i)
+            {
+                int index1 = Indices[i * INDICES_PER_TRIANGLE];
+                int index2 = Indices[i * INDICES_PER_TRIANGLE + 1];
+                int index3 = Indices[i * INDICES_PER_TRIANGLE + 2];
+
+                Vector3 side1 = Vertices[index1].Position - Vertices[index3].Position;
+                Vector3 side2 = Vertices[index1].Position - Vertices[index2].Position;
+                Vector3 normal = Vector3.Cross(side1, side2);
+
+                Vertices[index1].Normal += normal;
+                Vertices[index2].Normal += normal;
+                Vertices[index3].Normal += normal;
+            }
+
+            for (int i = 0; i < Vertices.Length; ++i)
+            {
+                Vertices[i].Normal.Normalize();
             }
         }
     }
