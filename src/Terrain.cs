@@ -18,6 +18,7 @@ namespace RaceXNA
     {
         const int INDICES_PER_TILE = 6;
         const int INDICES_PER_TRIANGLE = 3;
+        const float HEIGHT_FACTOR = 0.1f;
 
         RacingGame RaceGame { get; set; }
         Vector3 Origin { get; set; }
@@ -129,7 +130,7 @@ namespace RaceXNA
             {
                 for (int j = 0; j < Height; ++j)
                 {
-                    VerticesHeight[i, j] = pixelColors[i + j * Width].R / 5.0f; //On divise la valeur du rouge par 5 pour la ramener entre 0 et 51
+                    VerticesHeight[i, j] = pixelColors[i + j * Width].R * HEIGHT_FACTOR;
                 }
             }
         }
