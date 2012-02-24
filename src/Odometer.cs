@@ -110,7 +110,7 @@ namespace RaceXNA
 
         private void HandleOdometer()
         {
-            ActualSpeed = RaceGame.Car.Speed;
+            ActualSpeed = (float)Math.Abs(RaceGame.Car.Speed);
             float slightestDistance = MAX_SPEED;
             for (int i = 0; i < ArraysLenght; ++i)
             {

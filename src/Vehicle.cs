@@ -193,10 +193,5 @@ namespace RaceXNA
                 Speed = 0;
             }
         }
-
-        private void CreateCarBoundingBox()
-        {
-
-        }
     }
 }

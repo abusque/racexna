@@ -72,6 +72,7 @@ namespace RaceXNA
 
       private void CreateBoxes()
       {
+          
           Boxes = new BoundingBox[ModelData.Meshes.Count];
           for (int i = 0; i < Boxes.Length; ++i)
           {
