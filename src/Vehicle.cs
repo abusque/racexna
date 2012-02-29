@@ -87,8 +87,6 @@ namespace RaceXNA
 
             Move();
 
-            UpgradeBoxes();
-
             HandleCollision();
 
             #region ProgrammerHelper
@@ -166,14 +164,13 @@ namespace RaceXNA
             Position -= forward * Speed / RaceGame.FpsHandler.FpsValue; //A changer pour += lorsque l'orientation du modele sera la bonne
         }
 
-        private void UpgradeBoxes()
+        private void UpdateBoxes()
         {
-            CreateBoxes();
             for (int i = 0; i < Boxes.Count; ++i)
             {
-                Vector3[] cornersArray = Boxes[i].GetCorners();
-                cornersArray[i] = Vector3.Transform(cornersArray[i], World);
-                Boxes[i] = BoundingBox.CreateFromPoints(cornersArray);
+                Vector3[] corners = Boxes[i].GetCorners();
+                Vector3.Transform(corners, ref World, corners);
+                Boxes[i] = BoundingBox.CreateFromPoints(corners);
             } 
             
         }
@@ -197,22 +194,25 @@ namespace RaceXNA
 
         private bool CheckCollision(BaseObject oneObstacle)
         {
-            bool isCollision = false;
-
             BigSphere = new BoundingSphere(Position, BigSphere.Radius);
 
             if (BigSphere.Intersects(oneObstacle.BigSphere))
             {
+                UpdateBoxes();
+
                 for (int i = 0; i < Boxes.Count; ++i)
                 {
                     for (int j = 0; j < oneObstacle.GetBoxesCount(); ++j)
                     {
-                        isCollision = Boxes[i].Intersects(oneObstacle.GetBox(j));
+                        if (Boxes[i].Intersects(oneObstacle.GetBox(j)))
+                        {
+                            return true;
+                        }
                     }
                 }
             }
 
-            return isCollision;
+            return false;
         }
     }
 }
