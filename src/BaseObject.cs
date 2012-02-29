@@ -106,7 +106,7 @@ namespace RaceXNA
           for (int i = 0; i < verticesPosition.Length; i++)
           {
               verticesPosition[i] = meshVertices[i].Position;
-              verticesPosition[i] = Vector3.Transform(verticesPosition[i], World);
+              //verticesPosition[i] = Vector3.Transform(verticesPosition[i], World);
           }
 
           return BoundingBox.CreateFromPoints(verticesPosition);

@@ -186,8 +186,7 @@ namespace RaceXNA
             BigSphere = new BoundingSphere(Position, BigSphere.Radius);
             BoundingBox box;
 
-            //if (BigSphere.Intersects(oneObstacle.BigSphere))
-            if(true)
+            if (BigSphere.Intersects(oneObstacle.BigSphere))
             {
                 for (int i = 0; i < Boxes.Count; ++i)
                 {

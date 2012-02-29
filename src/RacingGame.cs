@@ -31,6 +31,7 @@ namespace RaceXNA
         public AccelerationDisplay AccelerationDisplayer { get; private set; }
         public SpeedDisplay SpeedDisplayer { get; private set; }
         public ChasingCamera GameCamera { get; private set; }
+        //public FreeCamera GameCamera { get; private set; }
         public Vehicle Car { get; private set; }
         public ModelDisplay ModelDisplayer { get; private set; }
         public Terrain Ground { get; private set; }
@@ -66,11 +67,12 @@ namespace RaceXNA
 
             HeadsUpDisplay = new HUD(this);
 
-            Car = new Vehicle(this, "L200-FBX", new Vector3(0, 0, -2), 0.1f, new Vector3(0, MathHelper.Pi, 0));
+            Car = new Vehicle(this, "L200-FBX", new Vector3(0, 0, -2), 0.01f, new Vector3(0, MathHelper.Pi, 0));
             Ground = new Terrain(this, new Vector3(-20, 0, 0), "Patate", "flatmap");
             GameTrack = new Track(this, Ground);
 
             GameCamera = Car.Camera;
+            //GameCamera = new FreeCamera(this, new Vector3(0, 0, 2), Vector3.Zero, Vector3.Zero);
 
             Components.Add(FpsHandler);
             Components.Add(InputMgr);
