@@ -87,6 +87,8 @@ namespace RaceXNA
 
             Move();
 
+            UpgradeBoxes();
+
             HandleCollision();
 
             #region ProgrammerHelper
@@ -164,37 +166,53 @@ namespace RaceXNA
             Position -= forward * Speed / RaceGame.FpsHandler.FpsValue; //A changer pour += lorsque l'orientation du modele sera la bonne
         }
 
+        private void UpgradeBoxes()
+        {
+            CreateBoxes();
+            for (int i = 0; i < Boxes.Count; ++i)
+            {
+                Vector3[] cornersArray = Boxes[i].GetCorners();
+                cornersArray[i] = Vector3.Transform(cornersArray[i], World);
+                Boxes[i] = BoundingBox.CreateFromPoints(cornersArray);
+            } 
+            
+        }
+
         private void HandleCollision()
         {
-            IsCollision = false;
-
-            for (int i = 0; i < ModelData.Meshes.Count; ++i)
+            for (int i = 0; i < RaceGame.GameTrack.Obstacles.Count; ++i)
             {
-                Spheres[i] = new BoundingSphere(Position, Spheres[i].Radius);
-            }
-            CreateBigSphere();
-
-            if (BigSphere.Intersects(RaceGame.OneObstacle.BigSphere))
-            {
-                for (int i = 0; i < ModelData.Meshes.Count; ++i)
+                if (CheckCollision(RaceGame.GameTrack.Obstacles[i]))
                 {
-                    for (int j = 0; j < RaceGame.OneObstacle.ModelData.Meshes.Count; ++j)
+                    Vector3 VectorCollision = new Vector3(Position.X - RaceGame.GameTrack.Obstacles[i].Position.X,
+                                                          Position.Y - RaceGame.GameTrack.Obstacles[i].Position.Y,
+                                                          Position.Z - RaceGame.GameTrack.Obstacles[i].Position.Z);
+                    VectorCollision.Normalize();
+                    VectorCollision /= RaceGame.FpsHandler.FpsValue;
+                    Position += VectorCollision;
+                    Speed = 0;
+                }
+            }
+        }
+
+        private bool CheckCollision(BaseObject oneObstacle)
+        {
+            bool isCollision = false;
+
+            BigSphere = new BoundingSphere(Position, BigSphere.Radius);
+
+            if (BigSphere.Intersects(oneObstacle.BigSphere))
+            {
+                for (int i = 0; i < Boxes.Count; ++i)
+                {
+                    for (int j = 0; j < oneObstacle.GetBoxesCount(); ++j)
                     {
-                        IsCollision = Spheres[i].Intersects(RaceGame.OneObstacle.GetSphere(j));
+                        isCollision = Boxes[i].Intersects(oneObstacle.GetBox(j));
                     }
                 }
             }
 
-            if (IsCollision)
-            {
-                Vector3 VectorCollision = new Vector3(Position.X - RaceGame.OneObstacle.Position.X,
-                                                      Position.Y - RaceGame.OneObstacle.Position.Y,
-                                                      Position.Z - RaceGame.OneObstacle.Position.Z);
-                VectorCollision.Normalize();
-                VectorCollision /= RaceGame.FpsHandler.FpsValue;
-                Position += VectorCollision;
-                Speed = 0;
-            }
+            return isCollision;
         }
     }
 }

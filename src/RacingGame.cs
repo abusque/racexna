@@ -34,6 +34,7 @@ namespace RaceXNA
         public Vehicle Car { get; private set; }
         public ModelDisplay ModelDisplayer { get; private set; }
         public Terrain Ground { get; private set; }
+        public Track GameTrack { get; private set; }
         public BaseObject OneObstacle { get; private set; }
 
         public RacingGame()
@@ -68,6 +69,7 @@ namespace RaceXNA
             Car = new Vehicle(this, "L200-FBX", new Vector3(0, 0, -2), 0.01f, new Vector3(0, MathHelper.Pi, 0));
             OneObstacle = new BaseObject(this, "L200-FBX", new Vector3(30, 0, -60), 0.01f, Vector3.Zero);
             Ground = new Terrain(this, new Vector3(-20, 0, 0), "Patate", "flatmap");
+            GameTrack = new Track(this, Ground);
 
             GameCamera = Car.Camera;
 
@@ -75,8 +77,7 @@ namespace RaceXNA
             Components.Add(InputMgr);
             Components.Add(ModelDisplayer);
             Components.Add(Car); //Mettre GameCamera apres Car pour eviter les problemes
-            Components.Add(OneObstacle);
-            Components.Add(Ground);
+            Components.Add(GameTrack);
             Components.Add(GameCamera);
 
             //Laisser FpsDisplayer a la fin de la liste pour eviter les problemes d'affichage

@@ -2,13 +2,13 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 
 
 namespace RaceXNA
 {
    public class BaseObject : Microsoft.Xna.Framework.DrawableGameComponent
    {
-       const float RADIUS = 2f;
        const float RADIUS_MODIFICATOR = 0.65f;
        public BoundingSphere TestSphere { get; private set; }
 
@@ -20,9 +20,9 @@ namespace RaceXNA
        public float Scale { get; protected set; }
        public Vector3 Rotation { get; protected set; }
        protected BoundingSphere[] Spheres { get; set; }
-       public BoundingSphere BigSphere { get; private set; }
-       protected BoundingBox[] Boxes { get; set; }
-       public BoundingBox BigBox { get; private set; }
+       public BoundingSphere BigSphere { get; protected set; }
+       protected List<BoundingBox> Boxes { get; set; }
+       public BoundingBox BigBox { get; protected set; }
 
 
        public BaseObject(RacingGame raceGame, String modelName, Vector3 initPos, float initScale, Vector3 initRot)
@@ -33,12 +33,20 @@ namespace RaceXNA
           Position = initPos;
           Scale = initScale;
           Rotation = initRot;
+       }
 
-          World = Matrix.Identity * Matrix.CreateScale(Scale);
-          World *= Matrix.CreateFromYawPitchRoll(Rotation.Y, Rotation.X, Rotation.Z);
-          World.Translation = Position;
+       public override void Initialize()
+       {
+           ModelData = RaceGame.ModelMgr.Find(ModelName);
 
-          TestSphere = new BoundingSphere(Position, RADIUS);
+           World = Matrix.Identity * Matrix.CreateScale(Scale);
+           World *= Matrix.CreateFromYawPitchRoll(Rotation.Y, Rotation.X, Rotation.Z);
+           World.Translation = Position;
+
+           CreateSpheres();
+           CreateBoxes();
+
+           base.Initialize();
        }
 
       private void CreateSpheres()
@@ -70,19 +78,32 @@ namespace RaceXNA
           }
       }
 
-      private void CreateBoxes()
+      protected void CreateBoxes()
       {
-          
-          Boxes = new BoundingBox[ModelData.Meshes.Count];
-          for (int i = 0; i < Boxes.Length; ++i)
+          Boxes = new List<BoundingBox>();
+          foreach(ModelMesh mesh in ModelData.Meshes)
           {
-              Boxes[i] = BoundingBox.CreateFromSphere(Spheres[i]);
+              Boxes.Add(CreateNewBox(mesh));
           }
-          BigBox = BoundingBox.CreateMerged(Boxes[0], Boxes[1]);
-          for (int i = 2; i < Boxes.Length; ++i)
+      }
+
+      protected BoundingBox CreateNewBox(ModelMesh mesh)
+      {
+          int lengthBuffer = mesh.VertexBuffer.SizeInBytes;
+          int lengthVertex = VertexPositionNormalTexture.SizeInBytes;
+          int verticesNb = lengthBuffer / lengthVertex;
+          VertexPositionNormalTexture[] meshVertices = new VertexPositionNormalTexture[verticesNb];
+          mesh.VertexBuffer.GetData<VertexPositionNormalTexture>(meshVertices);
+
+          Vector3[] verticesPosition = new Vector3[meshVertices.Length];
+
+          for (int i = 0; i < verticesPosition.Length; i++)
           {
-              BigBox = BoundingBox.CreateMerged(BigBox, Boxes[i]);
+              verticesPosition[i] = meshVertices[i].Position;
+              verticesPosition[i] = Vector3.Transform(verticesPosition[i], World);
           }
+
+          return BoundingBox.CreateFromPoints(verticesPosition);
       }
 
       public BoundingSphere GetSphere(int i)
@@ -95,12 +116,9 @@ namespace RaceXNA
           return Boxes[i];
       }
 
-      public override void Initialize()
+      public int GetBoxesCount()
       {
-         ModelData = RaceGame.ModelMgr.Find(ModelName);
-         CreateSpheres();
-
-         base.Initialize();
+          return Boxes.Count;
       }
 
       public override void Update(GameTime gameTime)
