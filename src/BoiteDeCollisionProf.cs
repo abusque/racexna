@@ -16,7 +16,6 @@ namespace AtelierXNA
       ObjetDeBasePhysique ObjetPhysique { get; set; }
       BoundingBox Boîte { get; set; }
 
-
       public BoîteCollision(Atelier jeu, ObjetDeBasePhysique objetPhysique, BoundingBox boîte, Color couleur)
          : base(jeu)
       {

@@ -23,6 +23,7 @@ namespace RaceXNA
        public BoundingSphere BigSphere { get; protected set; }
        protected List<BoundingBox> Boxes { get; set; }
        public BoundingBox BigBox { get; protected set; }
+       public List<BoxDisplayer> VisibleBoxes { get; protected set; }
 
 
        public BaseObject(RacingGame raceGame, String modelName, Vector3 initPos, float initScale, Vector3 initRot)
@@ -37,6 +38,9 @@ namespace RaceXNA
 
        public override void Initialize()
        {
+           Boxes = new List<BoundingBox>();
+           VisibleBoxes = new List<BoxDisplayer>();
+
            ModelData = RaceGame.ModelMgr.Find(ModelName);
 
            World = Matrix.Identity * Matrix.CreateScale(Scale);
@@ -80,10 +84,12 @@ namespace RaceXNA
 
       protected void CreateBoxes()
       {
-          Boxes = new List<BoundingBox>();
           foreach(ModelMesh mesh in ModelData.Meshes)
           {
-              Boxes.Add(CreateNewBox(mesh));
+              BoundingBox box = CreateNewBox(mesh);
+
+              Boxes.Add(box);
+              VisibleBoxes.Add(new BoxDisplayer(RaceGame, box.GetCorners(), World)); 
           }
       }
 
@@ -150,30 +156,14 @@ namespace RaceXNA
             }
             mesh.Draw();
          }
+
+         foreach (BoxDisplayer visibleBox in VisibleBoxes)
+         {
+             visibleBox.Draw(gameTime);
+         }
+
          base.Draw(gameTime);
       }
-
-      //public override void Draw(GameTime gameTime)
-      //{
-      //   //Jeu.GraphicsDevice.RenderState.CullMode = CullMode.CullCounterClockwiseFace;
-      //   // Au cas où le modèle se composerait de plusieurs morceaux
-      //   Matrix[] transformations = new Matrix[Modèle.Bones.Count];
-      //   Modèle.CopyAbsoluteBoneTransformsTo(transformations);
-
-      //   foreach (ModelMesh maille in Modèle.Meshes)
-      //   {
-      //      Matrix mondeLocal = transformations[maille.ParentBone.Index] * GetMonde();
-      //      foreach (BasicEffect effet in maille.Effects) //foreach (ModelMeshPart portionDeMaillage in maille.MeshParts)
-      //      {
-      //         effet.EnableDefaultLighting();
-      //         effet.Projection = Jeu.CaméraJeu.Projection;
-      //         effet.View = Jeu.CaméraJeu.Vue;
-      //         effet.World = mondeLocal;
-      //      }
-      //      maille.Draw();
-      //   }
-      //   base.Draw(gameTime);
-      //}
 
       public virtual Matrix GetWorld()
       {

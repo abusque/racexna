@@ -186,14 +186,18 @@ namespace RaceXNA
             BigSphere = new BoundingSphere(Position, BigSphere.Radius);
             BoundingBox box;
 
-            if (BigSphere.Intersects(oneObstacle.BigSphere))
+            //if (BigSphere.Intersects(oneObstacle.BigSphere))
+            if(true)
             {
                 for (int i = 0; i < Boxes.Count; ++i)
                 {
                     box = Boxes[i];
                     Vector3[] corners = box.GetCorners();
-                    Vector3.Transform(corners, ref World, corners);
+                    Matrix localWorld = GetWorld();
+                    Vector3.Transform(corners, ref localWorld, corners);
                     box = BoundingBox.CreateFromPoints(corners);
+                    VisibleBoxes[i].SetCorners(corners);
+                    VisibleBoxes[i].SetWorld(World);
 
                     for (int j = 0; j < oneObstacle.GetBoxesCount(); ++j)
                     {
