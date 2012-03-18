@@ -9,24 +9,7 @@ namespace RaceXNA
    {
       RacingGame RaceGame { get; set; }
       public BasicEffect Effect3D { get; private set; }
-
-      bool isWireframe_;
-      bool IsWireframe
-      {
-         get { return isWireframe_; }
-         set
-         {
-            isWireframe_ = value;
-            if (isWireframe_)
-            {
-               RaceGame.GraphicsDevice.RenderState.FillMode = FillMode.WireFrame;
-            }
-            else
-            {
-               RaceGame.GraphicsDevice.RenderState.FillMode = FillMode.Solid;
-            }
-         }
-      }
+      private bool IsWireframe { get; set; }
 
       public ModelDisplay(RacingGame raceGame)
          : base(raceGame)
@@ -49,12 +32,20 @@ namespace RaceXNA
 
       public override void Draw(GameTime gameTime)
       {
-         RaceGame.GraphicsDevice.RenderState.CullMode = CullMode.CullCounterClockwiseFace;
-         RaceGame.GraphicsDevice.RenderState.DepthBufferEnable = true;
-         Effect3D.View = RaceGame.GameCamera.View;
-         Effect3D.Projection = RaceGame.GameCamera.Projection;
-         //Effet3D.EnableDefaultLighting();
-         base.Draw(gameTime);
+          if (IsWireframe)
+          {
+              RaceGame.GraphicsDevice.RenderState.FillMode = FillMode.WireFrame;
+          }
+          else
+          {
+              RaceGame.GraphicsDevice.RenderState.FillMode = FillMode.Solid;
+          }
+          RaceGame.GraphicsDevice.RenderState.CullMode = CullMode.CullCounterClockwiseFace;
+          RaceGame.GraphicsDevice.RenderState.DepthBufferEnable = true;
+          Effect3D.View = RaceGame.GameCamera.View;
+          Effect3D.Projection = RaceGame.GameCamera.Projection;
+          //Effet3D.EnableDefaultLighting();
+          base.Draw(gameTime);
       }
 
       private void HandleInput()
