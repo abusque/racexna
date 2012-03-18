@@ -16,7 +16,7 @@ namespace RaceXNA
         const float FRICTION = 2.5f;
 
         const float MAX_ROT = 0.75f;
-        const float ROT_COEFF = 0.1f; //doit être suppérieur à 0 pour faire sens
+        const float ROT_COEFF = 0.15f; //Valeur positive, sinon rot. inverse
 
         public enum Gears { Neutral, Forward, Reverse };
 
