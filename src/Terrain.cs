@@ -42,7 +42,7 @@ namespace RaceXNA
 
         public override void Initialize()
         {
-            TerrainTexture = RaceGame.TextureMgr.Find("colormap");
+            TerrainTexture = RaceGame.TextureMgr.Find(ColorMapName);
             ReadHeightMap();
             CreateVertices();
             CreateIndices();
