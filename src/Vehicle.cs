@@ -18,8 +18,6 @@ namespace RaceXNA
         const float MAX_ROT = 0.75f;
         const float ROT_COEFF = 0.15f; //Valeur positive, sinon rot. inverse
 
-        public enum Gears { Neutral, Forward, Reverse };
-
         public float Acceleration;
 
         float speed;
@@ -59,7 +57,6 @@ namespace RaceXNA
         }
 
         public ChasingCamera Camera { get; private set; }
-        public Gears GearState { get; private set; }
         public BoundingBox CarBoundingBox { get; private set; }
         public bool IsCollision { get; set; }
 
@@ -69,7 +66,6 @@ namespace RaceXNA
             Acceleration = 0;
             Speed = 0;
             Camera = new ChasingCamera(this);
-            GearState = Gears.Neutral;
             IsCollision = false;
         }
 
@@ -117,18 +113,14 @@ namespace RaceXNA
             if (leftTriggerValue > 0)
             {
                 Acceleration = leftTriggerValue * MIN_ACCEL;
-                GearState = Gears.Reverse;
             }
-            else if (rightTriggerValue  > 0)
+            else if (rightTriggerValue > 0)
             {
                 Acceleration = rightTriggerValue * MAX_ACCEL;
-                GearState = Gears.Forward;
-                
             }
             else
             {
                 Acceleration = 0;
-                GearState = Gears.Neutral;
             }
             
             Speed += Acceleration / RaceGame.FpsHandler.FpsValue;
