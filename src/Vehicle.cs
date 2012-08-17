@@ -201,7 +201,6 @@ namespace RaceXNA
                         }
                     }
                 }
-                return true;
             }
 
             return false;
