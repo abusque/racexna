@@ -14,10 +14,10 @@ namespace RaceXNA
         const float MAX_SPEED = 120.0f;
         const float MIN_SPEED = -20.0f;
         const float BASE_ACCEL = 7.0f;
-        const float FRICTION = 2.5f;
+        const float FRICTION = 7.5f;
 
         const float MAX_ROT = 1.6f;
-        const float ROT_COEFF = 0.15f; //Valeur positive, sinon rot. inverse
+        const float ROT_COEFF = 0.15f;
 
         public float Acceleration;
 
