@@ -53,12 +53,13 @@ namespace RaceXNA
 
         public override void Draw(GameTime gameTime)
         {
+            SetVertices();
             CullMode previousCullMode = RaceGame.GraphicsDevice.RenderState.CullMode;
             RaceGame.GraphicsDevice.RenderState.CullMode = CullMode.None;
             FillMode previousFillMode = RaceGame.GraphicsDevice.RenderState.FillMode;
             RaceGame.GraphicsDevice.RenderState.FillMode = FillMode.WireFrame;
             RaceGame.GraphicsDevice.VertexDeclaration = new VertexDeclaration(RaceGame.GraphicsDevice, VertexPositionColor.VertexElements);
-            SetVertices();
+            //SetVertices();
             RaceGame.ModelDisplayer.Effect3D.World = World;
             RaceGame.ModelDisplayer.Effect3D.VertexColorEnabled = true;
             RaceGame.ModelDisplayer.Effect3D.Begin();

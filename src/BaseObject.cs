@@ -53,7 +53,7 @@ namespace RaceXNA
            base.Initialize();
        }
 
-      private void CreateSpheres()
+      protected void CreateSpheres()
       {
          Spheres = new BoundingSphere[ModelData.Meshes.Count];
          float radius;
@@ -89,6 +89,7 @@ namespace RaceXNA
               BoundingBox box = CreateNewBox(mesh);
 
               Boxes.Add(box);
+              VisibleBoxes.RemoveRange(0, VisibleBoxes.Count);
               VisibleBoxes.Add(new BoxDisplayer(RaceGame, box.GetCorners(), World)); 
           }
       }

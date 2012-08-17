@@ -87,6 +87,9 @@ namespace RaceXNA
 
             Move();
 
+            CreateSpheres();
+            CreateBoxes();
+
             HandleCollision();
 
             #region ProgrammerHelper
