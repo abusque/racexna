@@ -10,6 +10,7 @@ namespace RaceXNA
     {
         const float MAX_ACCEL = 20.0f;
         const float MIN_ACCEL = -15.0f;
+        const float BRAKE_ACCEL = 60.0f;
         const float MAX_SPEED = 120.0f;
         const float MIN_SPEED = -20.0f;
         const float BASE_ACCEL = 7.0f;
@@ -112,11 +113,17 @@ namespace RaceXNA
 
             if (leftTriggerValue > 0)
             {
-                Acceleration = leftTriggerValue * MIN_ACCEL;
+                if (Speed <= 0)
+                    Acceleration = leftTriggerValue * MIN_ACCEL;
+                else
+                    Acceleration = -BRAKE_ACCEL;
             }
             else if (rightTriggerValue > 0)
             {
-                Acceleration = rightTriggerValue * MAX_ACCEL;
+                if (Speed >= 0)
+                    Acceleration = rightTriggerValue * MAX_ACCEL;
+                else
+                    Acceleration = BRAKE_ACCEL;
             }
             else
             {
