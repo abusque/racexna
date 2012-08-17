@@ -16,7 +16,7 @@ namespace RaceXNA
         const float BASE_ACCEL = 7.0f;
         const float FRICTION = 2.5f;
 
-        const float MAX_ROT = 0.75f;
+        const float MAX_ROT = 1.6f;
         const float ROT_COEFF = 0.15f; //Valeur positive, sinon rot. inverse
 
         public float Acceleration;
@@ -60,12 +60,14 @@ namespace RaceXNA
         public ChasingCamera Camera { get; private set; }
         public BoundingBox CarBoundingBox { get; private set; }
         public bool IsCollision { get; set; }
+        public float CurrentSteering { get; set; }
 
         public Vehicle(RacingGame raceGame, String modelName, Vector3 initPos, float initScale, Vector3 initRot)
             : base(raceGame, modelName, initPos, initScale, initRot)
         {
             Acceleration = 0;
             Speed = 0;
+            CurrentSteering = 0;
             Camera = new ChasingCamera(this);
             IsCollision = false;
         }
@@ -153,7 +155,7 @@ namespace RaceXNA
 
             float leftThumbStickHorizontalValue = -RaceGame.InputMgr.ControllerState.ThumbSticks.Left.X;
 
-            Yaw = MAX_ROT * leftThumbStickHorizontalValue * ROT_COEFF * (float)(Math.Sqrt(Math.Abs(Speed))) / RaceGame.FpsHandler.FpsValue;
+            Yaw = MAX_ROT * leftThumbStickHorizontalValue * ROT_COEFF * (float)(Math.Sqrt(Math.Abs(0.5 * Speed))) / RaceGame.FpsHandler.FpsValue;
             
             Rotation = new Vector3(Rotation.X, Rotation.Y + Yaw, Rotation.Z);
         }
