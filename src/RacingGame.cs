@@ -24,7 +24,7 @@ namespace RaceXNA
         public ResourceManager<Texture2D> TextureMgr { get; private set; }
         public ResourceManager<SpriteFont> FontMgr { get; private set; }
         public ResourceManager<Model> ModelMgr { get; private set; }
-        public ResourceManager<Song> MusicsMgr { get; private set; }
+        public ResourceManager<Song> MusicMgr { get; private set; }
         public FpsCounter FpsHandler { get; private set; }
         public FpsDisplay FpsDisplayer { get; private set; }
         public HUD HeadsUpDisplay { get; private set; }
@@ -54,11 +54,11 @@ namespace RaceXNA
             FontMgr = new ResourceManager<SpriteFont>(this);
             TextureMgr = new ResourceManager<Texture2D>(this);
             ModelMgr = new ResourceManager<Model>(this);
-            MusicsMgr = new ResourceManager<Song>(this);
+            MusicMgr = new ResourceManager<Song>(this);
 
             LoadAssets();
 
-            //MediaPlayer.Play(MusicsMgr.Find("KalimariDesert"));
+            MediaPlayer.Play(MusicMgr.Find("RenditionFull"));
 
             FpsHandler = new FpsCounter(this, FPS_INTERVAL);
             FpsDisplayer = new FpsDisplay(this, "Pericles20");
@@ -101,6 +101,7 @@ namespace RaceXNA
             TextureMgr.Add("Textures/heightmap");
             TextureMgr.Add("Textures/colormap");
             TextureMgr.Add("Textures/flatmap");
+            MusicMgr.Add("Music/RenditionFull");
         }
 
         protected override void LoadContent()
