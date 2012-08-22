@@ -16,8 +16,8 @@ namespace RaceXNA
         const float FRICTION = 7.5f;
 
         const float ROT_COEFF = 0.075f;
-        const float DELTA_ROT = 0.01f;
-        const float MAX_YAW = 2.25f;
+        const float DELTA_ROT = 5.0f;
+        const float MAX_YAW = 1.8f;
 
         public float Acceleration;
 
@@ -149,13 +149,13 @@ namespace RaceXNA
 
             if (targetRot < PrevRot)
             {
-                attenuatedRot = PrevRot - DELTA_ROT;
+                attenuatedRot = PrevRot - DELTA_ROT / RaceGame.FpsHandler.FpsValue;
                 if (attenuatedRot < targetRot)
                     attenuatedRot = targetRot;
             }
             else if (targetRot > PrevRot)
             {
-                attenuatedRot = PrevRot + DELTA_ROT;
+                attenuatedRot = PrevRot + DELTA_ROT / RaceGame.FpsHandler.FpsValue;
                 if (attenuatedRot > targetRot)
                     attenuatedRot = targetRot;
             }
