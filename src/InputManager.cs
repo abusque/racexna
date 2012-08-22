@@ -8,6 +8,7 @@ namespace RaceXNA
    {
       private Game RaceGame;
       public GamePadState ControllerState { get; private set; }
+      public GamePadState PreviousControllerState { get; private set; }
       private Keys[] PreviousKeys { get; set; }
       private Keys[] CurrentKeys { get; set; }
       private KeyboardState KbState { get; set; }
@@ -35,13 +36,11 @@ namespace RaceXNA
          PreviousKeys = CurrentKeys;
          KbState = Keyboard.GetState();
          CurrentKeys = KbState.GetPressedKeys();
-
+         PreviousControllerState = ControllerState;
          ControllerState = GamePad.GetState(PlayerIndex.One);
 
          if (RaceGame.IsMouseVisible)
-         {
             UpdateMouseState();
-         }
 
          base.Update(gameTime);
       }
