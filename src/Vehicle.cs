@@ -13,10 +13,11 @@ namespace RaceXNA
         const float MAX_SPEED = 120.0f;
         const float MIN_SPEED = -20.0f;
         const float BASE_ACCEL = 7.0f;
-        const float FRICTION = 2.5f;
+        const float FRICTION = 7.5f;
 
-        const float MAX_ROT = 0.75f;
-        const float ROT_COEFF = 0.15f; //Valeur positive, sinon rot. inverse
+        const float ROT_COEFF = 0.075f;
+        const float DELTA_ROT = 0.01f;
+        const float MAX_YAW = 2.25f;
 
         public float Acceleration;
 
@@ -59,12 +60,14 @@ namespace RaceXNA
         public ChasingCamera Camera { get; private set; }
         public BoundingBox CarBoundingBox { get; private set; }
         public bool IsCollision { get; set; }
+        public float PrevRot { get; set; }
 
         public Vehicle(RacingGame raceGame, String modelName, Vector3 initPos, float initScale, Vector3 initRot)
             : base(raceGame, modelName, initPos, initScale, initRot)
         {
             Acceleration = 0;
             Speed = 0;
+            PrevRot = 0;
             Camera = new ChasingCamera(this);
             IsCollision = false;
         }
@@ -96,9 +99,9 @@ namespace RaceXNA
             if (RaceGame.InputMgr.ControllerState.IsButtonDown(Buttons.X))
             {
                 if (Speed >=0)
-                    Rotation = new Vector3(Rotation.X, Rotation.Y + MAX_ROT * -RaceGame.InputMgr.ControllerState.ThumbSticks.Left.X * 1.5f / RaceGame.FpsHandler.FpsValue, Rotation.Z);
+                    Rotation = new Vector3(Rotation.X, Rotation.Y + ROT_COEFF * -RaceGame.InputMgr.ControllerState.ThumbSticks.Left.X * 1.5f / RaceGame.FpsHandler.FpsValue, Rotation.Z);
                 else
-                    Rotation = new Vector3(Rotation.X, Rotation.Y - MAX_ROT * -RaceGame.InputMgr.ControllerState.ThumbSticks.Left.X * 1.5f / RaceGame.FpsHandler.FpsValue, Rotation.Z);
+                    Rotation = new Vector3(Rotation.X, Rotation.Y - ROT_COEFF * -RaceGame.InputMgr.ControllerState.ThumbSticks.Left.X * 1.5f / RaceGame.FpsHandler.FpsValue, Rotation.Z);
             }
             #endregion
 
@@ -141,14 +144,41 @@ namespace RaceXNA
 
         private void HandleRotation()
         {
-            if (Speed < 0.01f && Speed > -0.01f)
-                return;
+            float targetRot = -RaceGame.InputMgr.ControllerState.ThumbSticks.Left.X;
+            float attenuatedRot;
 
-            float leftThumbStickHorizontalValue = -RaceGame.InputMgr.ControllerState.ThumbSticks.Left.X;
+            if (targetRot < PrevRot)
+            {
+                attenuatedRot = PrevRot - DELTA_ROT;
+                if (attenuatedRot < targetRot)
+                    attenuatedRot = targetRot;
+            }
+            else if (targetRot > PrevRot)
+            {
+                attenuatedRot = PrevRot + DELTA_ROT;
+                if (attenuatedRot > targetRot)
+                    attenuatedRot = targetRot;
+            }
+            else
+            {
+                attenuatedRot = targetRot;
+            }
 
-            Yaw = MAX_ROT * leftThumbStickHorizontalValue * ROT_COEFF * (float)(Math.Sqrt(Math.Abs(Speed))) / RaceGame.FpsHandler.FpsValue;
-            
-            Rotation = new Vector3(Rotation.X, Rotation.Y + Yaw, Rotation.Z);
+            PrevRot = attenuatedRot;
+
+            Yaw = ROT_COEFF * attenuatedRot * (float)(Math.Abs(Speed));
+
+            if (Yaw > MAX_YAW)
+            {
+                Yaw = MAX_YAW;
+            }
+            else if (Yaw < -MAX_YAW)
+            {
+                Yaw = -MAX_YAW;
+            }
+
+            if (Speed >= 0.01f || Speed <= -0.01f)
+                Rotation = new Vector3(Rotation.X, Rotation.Y + Yaw / RaceGame.FpsHandler.FpsValue, Rotation.Z);
         }
 
         private void Move()
