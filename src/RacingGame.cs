@@ -38,6 +38,7 @@ namespace RaceXNA
         public Track GameTrack { get; private set; }
         public BaseObject OneObstacle { get; private set; }
         public bool Paused { get; private set; }
+        public Rectangle PausedRectangle { get; private set; }
 
         public RacingGame()
         {
@@ -58,6 +59,11 @@ namespace RaceXNA
             MusicMgr = new ResourceManager<Song>(this);
 
             LoadAssets();
+
+
+            Texture2D pauseTex = TextureMgr.Find("pause");
+            PausedRectangle = new Rectangle((Window.ClientBounds.Width - pauseTex.Width) / 2, (Window.ClientBounds.Height - pauseTex.Height) / 2,
+                                            pauseTex.Width, pauseTex.Height);
 
             MediaPlayer.Play(MusicMgr.Find("RenditionFull"));
 
@@ -102,6 +108,7 @@ namespace RaceXNA
             TextureMgr.Add("Textures/heightmap");
             TextureMgr.Add("Textures/colormap");
             TextureMgr.Add("Textures/flatmap");
+            TextureMgr.Add("Textures/pause");
             MusicMgr.Add("Music/RenditionFull");
         }
 
@@ -120,6 +127,7 @@ namespace RaceXNA
 
             if (Paused)
             {
+                
                 InputMgr.Update(gameTime);
                 return;
             }
@@ -150,6 +158,9 @@ namespace RaceXNA
 
         protected override void Draw(GameTime gameTime)
         {
+            if(Paused)
+                spriteBatch.Draw(TextureMgr.Find("pause"), PausedRectangle, Color.White);
+
             base.Draw(gameTime);
         }
 
