@@ -10,7 +10,6 @@ namespace RaceXNA
    public class BaseObject : Microsoft.Xna.Framework.DrawableGameComponent
    {
        const float RADIUS_MODIFICATOR = 0.65f;
-       public BoundingSphere TestSphere { get; private set; }
 
        public RacingGame RaceGame { get; private set; }
        private string ModelName { get; set; }
@@ -24,6 +23,7 @@ namespace RaceXNA
        protected List<BoundingBox> Boxes { get; set; }
        public BoundingBox BigBox { get; protected set; }
        public List<BoxDisplayer> VisibleBoxes { get; protected set; }
+       public BoundingSphere SphereTest { get; protected set; }
 
 
        public BaseObject(RacingGame raceGame, String modelName, Vector3 initPos, float initScale, Vector3 initRot)
@@ -80,6 +80,7 @@ namespace RaceXNA
           {
               BigSphere = BoundingSphere.CreateMerged(BigSphere, Spheres[i]);
           }
+          //SphereTest = new BoundingSphere(BigSphere.Position; 1/Math.Sqrt(2) * BigSphere.Radius);
       }
 
       protected void CreateBoxes()
