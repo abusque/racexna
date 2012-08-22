@@ -96,8 +96,8 @@ namespace RaceXNA
 
             Move();
 
-            CreateSpheres();
-            CreateBoxes();
+            //CreateSpheres();
+            //CreateBoxes();
 
             HandleCollision();
 

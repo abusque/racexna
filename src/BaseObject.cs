@@ -22,7 +22,6 @@ namespace RaceXNA
        protected BoundingSphere[] Spheres { get; set; }
        public BoundingSphere BigSphere { get; protected set; }
        protected List<BoundingBox> Boxes { get; set; }
-       public BoundingBox BigBox { get; protected set; }
        public List<BoxDisplayer> VisibleBoxes { get; protected set; }
 
 
@@ -89,7 +88,7 @@ namespace RaceXNA
               BoundingBox box = CreateNewBox(mesh);
 
               Boxes.Add(box);
-              VisibleBoxes.RemoveRange(0, VisibleBoxes.Count);
+              //VisibleBoxes.RemoveRange(0, VisibleBoxes.Count);
               VisibleBoxes.Add(new BoxDisplayer(RaceGame, box.GetCorners(), World)); 
           }
       }
@@ -107,7 +106,7 @@ namespace RaceXNA
           for (int i = 0; i < verticesPosition.Length; i++)
           {
               verticesPosition[i] = meshVertices[i].Position;
-              //verticesPosition[i] = Vector3.Transform(verticesPosition[i], World);
+              verticesPosition[i] = Vector3.Transform(verticesPosition[i], World);
           }
 
           return BoundingBox.CreateFromPoints(verticesPosition);
