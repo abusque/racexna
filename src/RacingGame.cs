@@ -37,6 +37,7 @@ namespace RaceXNA
         public Terrain Ground { get; private set; }
         public Track GameTrack { get; private set; }
         public BaseObject OneObstacle { get; private set; }
+        public bool Paused { get; private set; }
 
         public RacingGame()
         {
@@ -115,6 +116,21 @@ namespace RaceXNA
 
         protected override void Update(GameTime gameTime)
         {
+            CheckInputs();
+
+            if (Paused)
+            {
+                InputMgr.Update(gameTime);
+                return;
+            }
+
+            base.Update(gameTime);
+        }
+
+        private void CheckInputs()
+        {
+            if (InputMgr.ControllerState.Buttons.Start == ButtonState.Pressed && !(InputMgr.PreviousControllerState.Buttons.Start == ButtonState.Pressed))
+                Paused = !Paused;
             if (InputMgr.ControllerState.Buttons.Back == ButtonState.Pressed)
                 this.Exit();
             if (InputMgr.IsNewKey(Keys.F2))
@@ -122,8 +138,6 @@ namespace RaceXNA
                 graphics.SynchronizeWithVerticalRetrace = !graphics.SynchronizeWithVerticalRetrace;
                 IsFixedTimeStep = !IsFixedTimeStep;
             }
-
-            base.Update(gameTime);
         }
 
         protected override bool BeginDraw()
