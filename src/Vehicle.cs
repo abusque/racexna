@@ -53,7 +53,16 @@ namespace RaceXNA
             }
             set
             {
-                yaw = value;
+                if (value > MAX_YAW)
+                {
+                    yaw = MAX_YAW;
+                }
+                else if (value < -MAX_YAW)
+                {
+                    yaw = -MAX_YAW;
+                }
+                else
+                    yaw = value;
             }
         }
 
@@ -167,15 +176,6 @@ namespace RaceXNA
             PrevRot = attenuatedRot;
 
             Yaw = ROT_COEFF * attenuatedRot * (float)(Math.Abs(Speed));
-
-            if (Yaw > MAX_YAW)
-            {
-                Yaw = MAX_YAW;
-            }
-            else if (Yaw < -MAX_YAW)
-            {
-                Yaw = -MAX_YAW;
-            }
 
             if (Speed >= 0.01f || Speed <= -0.01f)
                 Rotation = new Vector3(Rotation.X, Rotation.Y + Yaw / RaceGame.FpsHandler.FpsValue, Rotation.Z);
