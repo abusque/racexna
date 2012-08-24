@@ -23,7 +23,6 @@ namespace RaceXNA
        protected List<BoundingBox> Boxes { get; set; }
        public BoundingSphere SphereTest { get; protected set; }
 
-
        public BaseObject(RacingGame raceGame, String modelName, Vector3 initPos, float initScale, Vector3 initRot)
           : base(raceGame)
        {
