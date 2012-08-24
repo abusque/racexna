@@ -217,7 +217,7 @@ namespace RaceXNA
                 {
                     box = Boxes[i];
                     Vector3[] corners = box.GetCorners();
-                    Matrix localWorld = GetWorld();
+                    Matrix localWorld = GetWorldNoScale();
                     Vector3.Transform(corners, ref localWorld, corners);
                     box = BoundingBox.CreateFromPoints(corners);
                     //VisibleBoxes[i].SetCorners(corners);

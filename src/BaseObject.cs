@@ -9,7 +9,7 @@ namespace RaceXNA
 {
    public class BaseObject : Microsoft.Xna.Framework.DrawableGameComponent
    {
-       const float RADIUS_MODIFICATOR = 0.65f;
+       const float RADIUS_MODIFICATOR = 0.75f;
 
        public RacingGame RaceGame { get; private set; }
        private string ModelName { get; set; }
@@ -169,6 +169,11 @@ namespace RaceXNA
       public virtual Matrix GetWorld()
       {
          return World;
+      }
+
+      public virtual Matrix GetWorldNoScale()
+      {
+          return Matrix.Identity * Matrix.CreateFromYawPitchRoll(Rotation.Y, Rotation.X, Rotation.Z) * Matrix.CreateTranslation(Position);
       }
    }
 }
