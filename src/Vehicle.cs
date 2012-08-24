@@ -220,8 +220,6 @@ namespace RaceXNA
                     Matrix localWorld = GetWorldNoScale();
                     Vector3.Transform(corners, ref localWorld, corners);
                     box = BoundingBox.CreateFromPoints(corners);
-                    //VisibleBoxes[i].SetCorners(corners);
-                    //VisibleBoxes[i].SetWorld(World);
 
                     for (int j = 0; j < oneObstacle.GetBoxesCount(); ++j)
                     {
