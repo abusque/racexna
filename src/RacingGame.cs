@@ -30,7 +30,8 @@ namespace RaceXNA
         public HUD HeadsUpDisplay { get; private set; }
         public AccelerationDisplay AccelerationDisplayer { get; private set; }
         public SpeedDisplay SpeedDisplayer { get; private set; }
-        public ChasingCamera GameCamera { get; private set; }
+        //public ChasingCamera GameCamera { get; private set; }
+        public SpringCamera GameCamera { get; private set; }
         //public FreeCamera GameCamera { get; private set; }
         public Vehicle Car { get; private set; }
         public ModelDisplay ModelDisplayer { get; private set; }
