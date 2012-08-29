@@ -21,9 +21,7 @@ namespace RaceXNA
        protected BoundingSphere[] Spheres { get; set; }
        public BoundingSphere BigSphere { get; protected set; }
        protected List<BoundingBox> Boxes { get; set; }
-       public List<BoxDisplayer> VisibleBoxes { get; protected set; }
        public BoundingSphere SphereTest { get; protected set; }
-
 
        public BaseObject(RacingGame raceGame, String modelName, Vector3 initPos, float initScale, Vector3 initRot)
           : base(raceGame)
@@ -38,7 +36,6 @@ namespace RaceXNA
        public override void Initialize()
        {
            Boxes = new List<BoundingBox>();
-           VisibleBoxes = new List<BoxDisplayer>();
 
            ModelData = RaceGame.ModelMgr.Find(ModelName);
 
@@ -76,10 +73,7 @@ namespace RaceXNA
       {
           BigSphere = BoundingSphere.CreateMerged(Spheres[0], Spheres[1]);
           for (int i = 2; i < Spheres.Length; ++i)
-          {
               BigSphere = BoundingSphere.CreateMerged(BigSphere, Spheres[i]);
-          }
-          //SphereTest = new BoundingSphere(BigSphere.Position; 1/Math.Sqrt(2) * BigSphere.Radius);
       }
 
       protected void CreateBoxes()
@@ -89,8 +83,6 @@ namespace RaceXNA
               BoundingBox box = CreateNewBox(mesh);
 
               Boxes.Add(box);
-              //VisibleBoxes.RemoveRange(0, VisibleBoxes.Count);
-              VisibleBoxes.Add(new BoxDisplayer(RaceGame, box.GetCorners(), World)); 
           }
       }
 
@@ -156,11 +148,6 @@ namespace RaceXNA
                effect.World = localWorld;
             }
             mesh.Draw();
-         }
-
-         foreach (BoxDisplayer visibleBox in VisibleBoxes)
-         {
-             visibleBox.Draw(gameTime);
          }
 
          base.Draw(gameTime);

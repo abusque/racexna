@@ -89,8 +89,8 @@ namespace RaceXNA
                 for (int j = 0; j < Height; ++j)
                 {
                     Vertices[i + j * Width].Position = new Vector3(Origin.X + i, Origin.Y + VerticesHeight[i, j], Origin.Z - j);
-                    Vertices[i + j * Width].TextureCoordinate.X = (float)i / 127.0f;
-                    Vertices[i + j * Width].TextureCoordinate.Y = (float)j / 127.0f;
+                    Vertices[i + j * Width].TextureCoordinate.X = (float)i / Width;
+                    Vertices[i + j * Width].TextureCoordinate.Y = (float)j / Height;
                 }
             }
         }
