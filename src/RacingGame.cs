@@ -40,6 +40,9 @@ namespace RaceXNA
         public BaseObject OneObstacle { get; private set; }
         public bool Paused { get; private set; }
         public Rectangle PausedRectangle { get; private set; }
+        public Model SkyboxModel { get; private set; }
+        private Texture2D[] SkyboxTextures;
+
 
         public RacingGame()
         {
@@ -111,6 +114,22 @@ namespace RaceXNA
             TextureMgr.Add("Textures/flatmap");
             TextureMgr.Add("Textures/pause");
             MusicMgr.Add("Music/RenditionFull");
+            LoadSkyboxModel("Models/skybox2", out SkyboxTextures);
+        }
+
+        private void LoadSkyboxModel(string assetName, out Texture2D[] skyboxTextures)
+        {
+            SkyboxModel = Content.Load<Model>(assetName);
+            skyboxTextures = new Texture2D[SkyboxModel.Meshes.Count];
+
+            int i = 0;
+            foreach (ModelMesh mesh in SkyboxModel.Meshes)
+                foreach (BasicEffect currentEffect in mesh.Effects)
+                    skyboxTextures[i++] = currentEffect.Texture;
+
+            //foreach (ModelMesh mesh in SkyboxModel.Meshes)
+            //    foreach (ModelMeshPart meshPart in mesh.MeshParts)
+            //        meshPart.Effect = effect.Clone();
         }
 
         protected override void LoadContent()
