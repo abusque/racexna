@@ -96,7 +96,6 @@ namespace RaceXNA
             Vector3 acceleration = force / MASS;
             Velocity += acceleration * elapsed;
 
-            // Apply velocity
             Position += Velocity * elapsed;
 
             UpdateMatrices();
