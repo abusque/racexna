@@ -64,8 +64,8 @@ namespace RaceXNA
             transform.Up = TargetVehicle.GetWorld().Up;
             transform.Right = Vector3.Cross(TargetVehicle.GetWorld().Up, TargetVehicle.GetWorld().Forward);
 
-            desiredPosition = TargetVehicle.Position + Vector3.TransformNormal(DesiredPositionOffset, transform);
-            lookAt = TargetVehicle.Position + Vector3.TransformNormal(LookAtOffset, transform);
+            DesiredPosition = TargetVehicle.Position + Vector3.TransformNormal(DesiredPositionOffset, transform);
+            LookAt = TargetVehicle.Position + Vector3.TransformNormal(LookAtOffset, transform);
         }
 
         private void UpdateMatrices()

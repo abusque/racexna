@@ -17,7 +17,7 @@ namespace RaceXNA
     public class Track : Microsoft.Xna.Framework.GameComponent
     {
         RacingGame RaceGame { get; set; }
-        Terrain Ground { get; set; }
+        public Terrain Ground { get; private set; }
         public List<BaseObject> Obstacles { get; private set; }
 
         public Track(RacingGame game, Terrain ground)

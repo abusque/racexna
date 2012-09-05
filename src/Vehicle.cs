@@ -194,7 +194,7 @@ namespace RaceXNA
         {
             for (int i = 0; i < RaceGame.GameTrack.Obstacles.Count; ++i)
             {
-                if (CheckCollision(RaceGame.GameTrack.Obstacles[i]))
+                if (IsObstacleCollision(RaceGame.GameTrack.Obstacles[i]))
                 {
                     Vector3 VectorCollision = new Vector3(Position.X - RaceGame.GameTrack.Obstacles[i].Position.X,
                                                           Position.Y - RaceGame.GameTrack.Obstacles[i].Position.Y,
@@ -204,10 +204,14 @@ namespace RaceXNA
                     Position += VectorCollision;
                     Speed = 0;
                 }
+                else if (RaceGame.GameTrack.Ground.IsOnHeightmap(Position))
+                {
+                    CheckTerrainCollision(Position);
+                }
             }
         }
 
-        private bool CheckCollision(BaseObject oneObstacle)
+        private bool IsObstacleCollision(BaseObject oneObstacle)
         {
             BigSphere = new BoundingSphere(Position, BigSphere.Radius);
             BoundingBox box;
@@ -233,6 +237,24 @@ namespace RaceXNA
             }
 
             return false;
+        }
+
+        private void CheckTerrainCollision(Vector3 newPos)
+        {
+            Vector3 normal;
+
+            RaceGame.GameTrack.Ground.GetHeightAndNormal(newPos,
+                out newPos.Y, out normal);
+
+            World.Up = normal;
+
+            World.Right = Vector3.Cross(World.Forward, World.Up);
+            World.Right = Vector3.Normalize(World.Right);
+
+            World.Forward = Vector3.Cross(World.Up, World.Right);
+            World.Forward = Vector3.Normalize(World.Forward);
+
+            Position = newPos;
         }
     }
 }
