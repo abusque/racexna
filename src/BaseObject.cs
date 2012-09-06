@@ -15,6 +15,7 @@ namespace RaceXNA
        private string ModelName { get; set; }
        public Model ModelData { get; private set; }
        protected Matrix World;
+       protected Matrix Orientation;
        public Vector3 Position { get; protected set; }
        public float Scale { get; protected set; }
        public Vector3 Rotation { get; protected set; }
@@ -39,9 +40,13 @@ namespace RaceXNA
 
            ModelData = RaceGame.ModelMgr.Find(ModelName);
 
-           World = Matrix.Identity * Matrix.CreateScale(Scale);
-           World *= Matrix.CreateFromYawPitchRoll(Rotation.Y, Rotation.X, Rotation.Z);
-           World.Translation = Position;
+           //World = Matrix.Identity * Matrix.CreateScale(Scale);
+           //World *= Matrix.CreateFromYawPitchRoll(Rotation.Y, Rotation.X, Rotation.Z);
+           //World.Translation = Position;
+
+           Orientation = Matrix.Identity;
+
+           World = Orientation * Matrix.CreateScale(Scale) * Matrix.CreateFromYawPitchRoll(Rotation.Y, Rotation.X, Rotation.Z) * Matrix.CreateTranslation(Position);
 
            CreateSpheres();
            CreateBoxes();
@@ -122,9 +127,11 @@ namespace RaceXNA
 
       public override void Update(GameTime gameTime)
       {
-         World = Matrix.Identity * Matrix.CreateScale(Scale);
-         World *= Matrix.CreateFromYawPitchRoll(Rotation.Y, Rotation.X, Rotation.Z);
-         World *= Matrix.CreateTranslation(Position);
+         //World = Matrix.Identity * Matrix.CreateScale(Scale);
+         //World *= Matrix.CreateFromYawPitchRoll(Rotation.Y, Rotation.X, Rotation.Z);
+         //World *= Matrix.CreateTranslation(Position);
+
+          World = Orientation * Matrix.CreateScale(Scale) * Matrix.CreateFromYawPitchRoll(Rotation.Y, Rotation.X, Rotation.Z) * Matrix.CreateTranslation(Position) ;
 
          base.Update(gameTime);
       }
@@ -160,7 +167,7 @@ namespace RaceXNA
 
       public virtual Matrix GetWorldNoScale()
       {
-          return Matrix.Identity * Matrix.CreateFromYawPitchRoll(Rotation.Y, Rotation.X, Rotation.Z) * Matrix.CreateTranslation(Position);
+          return Orientation * Matrix.CreateFromYawPitchRoll(Rotation.Y, Rotation.X, Rotation.Z) * Matrix.CreateTranslation(Position);
       }
    }
 }
