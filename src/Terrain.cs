@@ -18,22 +18,22 @@ namespace RaceXNA
     {
         const int INDICES_PER_TILE = 6;
         const int INDICES_PER_TRIANGLE = 3;
-        const float HEIGHT_FACTOR = 0.05f;
 
         RacingGame RaceGame { get; set; }
         Vector3 Origin { get; set; }
         string ColorMapName { get; set; }
         string HeightMapName { get; set; }
         int Width { get; set; }
-        int Height { get; set; }
+        int Length { get; set; }
         float[,] VerticesHeight { get; set; }
         VertexPositionNormalTexture[] Vertices { get; set; }
         int[] Indices { get; set; }
         Texture2D TerrainTexture { get; set; }
         Vector3[,] Normals { get; set; }
         float TerrainScale { get; set; }
+        float HeightFactor { get; set; }
 
-        public Terrain(RacingGame raceGame, Vector3 origin, string colorMapName, string heightMapName, float terrainScale)
+        public Terrain(RacingGame raceGame, Vector3 origin, string colorMapName, string heightMapName, float terrainScale, float heightFactor)
             : base(raceGame)
         {
             RaceGame = raceGame;
@@ -41,6 +41,7 @@ namespace RaceXNA
             ColorMapName = colorMapName;
             HeightMapName = heightMapName;
             TerrainScale = terrainScale;
+            HeightFactor = heightFactor;
         }
 
         public override void Initialize()
@@ -86,24 +87,24 @@ namespace RaceXNA
 
         private void CreateVertices()
         {
-            Vertices = new VertexPositionNormalTexture[Width * Height];
+            Vertices = new VertexPositionNormalTexture[Width * Length];
             for (int i = 0; i < Width; ++i)
             {
-                for (int j = 0; j < Height; ++j)
+                for (int j = 0; j < Length; ++j)
                 {
-                    Vertices[i + j * Width].Position = new Vector3(Origin.X + i, Origin.Y + VerticesHeight[i, j], Origin.Z - j);
+                    Vertices[i + j * Width].Position = new Vector3(Origin.X + i * TerrainScale, Origin.Y + VerticesHeight[i, j], Origin.Z - j * TerrainScale);
                     Vertices[i + j * Width].TextureCoordinate.X = (float)i / Width;
-                    Vertices[i + j * Width].TextureCoordinate.Y = (float)j / Height;
+                    Vertices[i + j * Width].TextureCoordinate.Y = (float)j / Length;
                 }
             }
         }
 
         private void CreateIndices()
         {
-            Indices = new int[(Width - 1) * (Height - 1) * INDICES_PER_TILE];
+            Indices = new int[(Width - 1) * (Length - 1) * INDICES_PER_TILE];
 
             int counter = 0;
-            for (int j = 0; j < Height - 1; ++j)
+            for (int j = 0; j < Length - 1; ++j)
             {
                 for (int i = 0; i < Width - 1; ++i)
                 {
@@ -128,24 +129,24 @@ namespace RaceXNA
             Texture2D heightMap = RaceGame.TextureMgr.Find(HeightMapName);
 
             Width = heightMap.Width;
-            Height = heightMap.Height;
+            Length = heightMap.Height;
 
-            Color[] pixelColors = new Color[Width * Height];
+            Color[] pixelColors = new Color[Width * Length];
             heightMap.GetData(pixelColors);
 
-            VerticesHeight = new float[Width, Height];
+            VerticesHeight = new float[Width, Length];
             for (int i = 0; i < Width; ++i)
             {
-                for (int j = 0; j < Height; ++j)
+                for (int j = 0; j < Length; ++j)
                 {
-                    VerticesHeight[i, j] = pixelColors[i + j * Width].R * HEIGHT_FACTOR;
+                    VerticesHeight[i, j] = pixelColors[i + j * Width].R * HeightFactor;
                 }
             }
         }
 
         private void CalculateNormals()
         {
-            Normals = new Vector3[Width, Height];
+            Normals = new Vector3[Width, Length];
 
             for (int i = 0; i < Vertices.Length; ++i)
             {
@@ -177,8 +178,8 @@ namespace RaceXNA
         {
             Vector3 relativePos = carPos - Origin;
 
-            return (relativePos.X >= 0 && relativePos.X < Width &&
-                relativePos.Z <= 0 && relativePos.Z > -Height + 1);
+            return (relativePos.X >= 0 && relativePos.X < Width * TerrainScale &&
+                relativePos.Z <= 0 && relativePos.Z > (-Length + 1) * TerrainScale);
         }
 
         public void GetHeightAndNormal(Vector3 position, out float height, out Vector3 normal)
@@ -190,7 +191,7 @@ namespace RaceXNA
             top = -((int)relativePos.Z / (int)TerrainScale);
 
             float xNormalized = (relativePos.X % TerrainScale) / TerrainScale;
-            float zNormalized = (relativePos.Z % TerrainScale) / TerrainScale;
+            float zNormalized = (-relativePos.Z % TerrainScale) / TerrainScale;
 
             float topHeight = MathHelper.Lerp(
                 Vertices[left + top * Width].Position.Y,
