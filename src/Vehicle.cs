@@ -246,13 +246,13 @@ namespace RaceXNA
             RaceGame.GameTrack.Ground.GetHeightAndNormal(newPos,
                 out newPos.Y, out normal);
 
-            World.Up = normal;
+            Orientation.Up = normal;
 
-            World.Right = Vector3.Cross(World.Forward, World.Up);
-            World.Right = Vector3.Normalize(World.Right);
+            Orientation.Right = Vector3.Cross(Orientation.Forward, Orientation.Up);
+            Orientation.Right = Vector3.Normalize(Orientation.Right);
 
-            World.Forward = Vector3.Cross(World.Up, World.Right);
-            World.Forward = Vector3.Normalize(World.Forward);
+            Orientation.Forward = Vector3.Cross(Orientation.Up, Orientation.Right);
+            Orientation.Forward = Vector3.Normalize(Orientation.Forward);
 
             Position = newPos;
         }

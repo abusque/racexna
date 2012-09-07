@@ -46,7 +46,8 @@ namespace RaceXNA
 
            Orientation = Matrix.Identity;
 
-           World = Orientation * Matrix.CreateScale(Scale) * Matrix.CreateFromYawPitchRoll(Rotation.Y, Rotation.X, Rotation.Z) * Matrix.CreateTranslation(Position);
+           //World = Orientation * Matrix.CreateScale(Scale) * Matrix.CreateFromYawPitchRoll(Rotation.Y, Rotation.X, Rotation.Z) * Matrix.CreateTranslation(Position);
+           World = Matrix.CreateScale(Scale) * Orientation * Matrix.CreateTranslation(Position);
 
            CreateSpheres();
            CreateBoxes();
@@ -127,13 +128,14 @@ namespace RaceXNA
 
       public override void Update(GameTime gameTime)
       {
-         //World = Matrix.Identity * Matrix.CreateScale(Scale);
-         //World *= Matrix.CreateFromYawPitchRoll(Rotation.Y, Rotation.X, Rotation.Z);
-         //World *= Matrix.CreateTranslation(Position);
+          //World = Matrix.Identity * Matrix.CreateScale(Scale);
+          //World *= Matrix.CreateFromYawPitchRoll(Rotation.Y, Rotation.X, Rotation.Z);
+          //World *= Matrix.CreateTranslation(Position);
 
-          World = Orientation * Matrix.CreateScale(Scale) * Matrix.CreateFromYawPitchRoll(Rotation.Y, Rotation.X, Rotation.Z) * Matrix.CreateTranslation(Position) ;
+          //World = Orientation * Matrix.CreateScale(Scale) * Matrix.CreateFromYawPitchRoll(Rotation.Y, Rotation.X, Rotation.Z) * Matrix.CreateTranslation(Position);
+          World = Matrix.CreateScale(Scale) * Orientation * Matrix.CreateTranslation(Position);
 
-         base.Update(gameTime);
+          base.Update(gameTime);
       }
 
       public override void Draw(GameTime gameTime)
@@ -167,7 +169,8 @@ namespace RaceXNA
 
       public virtual Matrix GetWorldNoScale()
       {
-          return Orientation * Matrix.CreateFromYawPitchRoll(Rotation.Y, Rotation.X, Rotation.Z) * Matrix.CreateTranslation(Position);
+          //return Orientation * Matrix.CreateFromYawPitchRoll(Rotation.Y, Rotation.X, Rotation.Z) * Matrix.CreateTranslation(Position);
+          return World = Orientation * Matrix.CreateTranslation(Position);
       }
    }
 }
