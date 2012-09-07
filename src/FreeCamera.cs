@@ -94,17 +94,5 @@ namespace RaceXNA
 
           View = Matrix.CreateLookAt(Position, Target, CameraRotation.Up);
       }
-
-      //private bool IsCollision(Vector3 pos, BaseObject obj)
-      //{
-      //   BoundingSphere sphereCamera = new BoundingSphere(pos, RADIUS);
-
-      //   for (int i = 0; i < obj.ModelData.Meshes.Count; ++i)
-      //      if(sphereCamera.Intersects(obj.GetSphere(i)))
-      //         return true;
-
-      //   return false;
-      //}
-      
    }
 }

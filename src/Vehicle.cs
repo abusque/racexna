@@ -93,16 +93,12 @@ namespace RaceXNA
         
         private void CreateCollisionSpheres()
         {
-            //BoundingBox bigBox = Boxes[0];
-            //for (int i = 1; i < Boxes.Count(); i++)
-            //{
-            //    bigBox = BoundingBox.CreateMerged(bigBox, Boxes[i]);
-            //}
-            //float radius = Math.Abs(bigBox.Max.X - bigBox.Min.X)/4;
             float radius = BigSphere.Radius / 2;
             radius *= SMALL_RADIUS_FACTOR;
+
             Vector3 forw = World.Forward;
             forw = Vector3.Normalize(forw);
+
             CollisionSpheres[0] = new BoundingSphere(Position + forw * radius, radius);
             CollisionSpheres[1] = new BoundingSphere(Position, radius);
             CollisionSpheres[2] = new BoundingSphere(Position - forw * radius, radius);
@@ -116,9 +112,6 @@ namespace RaceXNA
             HandleRotation();
 
             Move();
-
-            //CreateSpheres();
-            //CreateBoxes();
 
             HandleCollision();
 
@@ -230,27 +223,10 @@ namespace RaceXNA
         private bool IsObstacleCollision(BaseObject oneObstacle)
         {
             BigSphere = new BoundingSphere(Position, BigSphere.Radius);
-            //BoundingBox box;
 
             CreateCollisionSpheres();
             if (BigSphere.Intersects(oneObstacle.BigSphere))
             {
-                //for (int i = 0; i < Boxes.Count; ++i)
-                //{
-                //    box = Boxes[i];
-                //    Vector3[] corners = box.GetCorners();
-                //    Matrix localWorld = GetWorldNoScale();
-                //    Vector3.Transform(corners, ref localWorld, corners);
-                //    box = BoundingBox.CreateFromPoints(corners);
-
-                //    for (int j = 0; j < oneObstacle.GetBoxesCount(); ++j)
-                //    {
-                //        if (box.Intersects(oneObstacle.GetBox(j)))
-                //        {
-                //            return true;
-                //        }
-                //    }
-                //}
                 for (int i = 0; i < CollisionSpheres.Length; ++i)
                 {
                     for (int j = 0; j < oneObstacle.GetSpheresLenght(); ++j)

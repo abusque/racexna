@@ -39,9 +39,7 @@ namespace RaceXNA
         {
             Obstacles.Add(new BaseObject(RaceGame, "L200-FBX", new Vector3(30, 0, -60), 0.01f, 0.0f));
             Obstacles.Add(new BaseObject(RaceGame, "L200-FBX", new Vector3(0, 0, -60), 0.01f, 0.0f));
-            //Obstacles.Add(new BaseObject(RaceGame, "L200-FBX", new Vector3(20, 0, -40), 0.01f, 0.0f));
-            //Obstacles.Add(new BaseObject(RaceGame, "L200-FBX", new Vector3(0, 0, -30), 0.01f, 0.0f));
-            //Obstacles.Add(new BaseObject(RaceGame, "L200-FBX", new Vector3(60, 0, -90), 0.01f, 0.0f));
+
             for (int i = 0; i < Obstacles.Count; ++i)
             {
                 RaceGame.Components.Add(Obstacles[i]);

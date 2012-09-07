@@ -12,8 +12,6 @@ namespace RaceXNA
       private Keys[] PreviousKeys { get; set; }
       private Keys[] CurrentKeys { get; set; }
       private KeyboardState KbState { get; set; }
-      private MouseState PreviousMouseState { get; set; }
-      private MouseState CurrentMouseState { get; set; }
 
       public InputManager(Game game)
          : base(game)
@@ -25,8 +23,6 @@ namespace RaceXNA
       {
          PreviousKeys = new Keys[0];
          CurrentKeys = new Keys[0];
-         CurrentMouseState = Mouse.GetState();
-         PreviousMouseState = CurrentMouseState;
          ControllerState = GamePad.GetState(PlayerIndex.One);
          base.Initialize();
       }
@@ -39,18 +35,7 @@ namespace RaceXNA
          PreviousControllerState = ControllerState;
          ControllerState = GamePad.GetState(PlayerIndex.One);
 
-         if (RaceGame.IsMouseVisible)
-            UpdateMouseState();
-
          base.Update(gameTime);
-      }
-
-      private void UpdateMouseState()
-      {
-         PreviousMouseState = CurrentMouseState;
-         CurrentMouseState = Mouse.GetState();
-
-         Vector2 Position = GetMousePos();
       }
 
       public bool IsKbActive
@@ -76,21 +61,6 @@ namespace RaceXNA
       public bool IsKeyDown(Keys key)
       {
           return KbState.IsKeyDown(key);
-      }
-
-      public bool IsNewRightClick()
-      {
-         return CurrentMouseState.RightButton == ButtonState.Pressed && PreviousMouseState.RightButton == ButtonState.Released;
-      }
-
-      public bool IsNewLeftClick()
-      {
-         return CurrentMouseState.LeftButton == ButtonState.Pressed && PreviousMouseState.LeftButton == ButtonState.Released;
-      }
-
-      public Vector2 GetMousePos()
-      {
-         return new Vector2(CurrentMouseState.X, CurrentMouseState.Y);
       }
    }
 }
