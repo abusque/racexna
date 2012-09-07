@@ -121,6 +121,11 @@ namespace RaceXNA
           return Boxes.Count;
       }
 
+      public int GetSpheresLenght()
+      {
+          return Spheres.Length;
+      }
+
       public override void Update(GameTime gameTime)
       {
           World = Matrix.CreateScale(Scale) * Orientation * Matrix.CreateTranslation(Position);

@@ -18,6 +18,7 @@ namespace RaceXNA
         const float ROT_COEFF = 0.075f;
         const float DELTA_ROT = 5.0f;
         const float MAX_YAW = 1.8f;
+        const float SMALL_RADIUS_FACTOR = 0.85f;
 
         public float Acceleration;
 
@@ -70,6 +71,7 @@ namespace RaceXNA
         public BoundingBox CarBoundingBox { get; private set; }
         public bool IsCollision { get; set; }
         public float PrevRot { get; set; }
+        public BoundingSphere[] CollisionSpheres { get; set; }
 
         public Vehicle(RacingGame raceGame, String modelName, Vector3 initPos, float initScale, float initRot)
             : base(raceGame, modelName, initPos, initScale, initRot)
@@ -85,6 +87,25 @@ namespace RaceXNA
         public override void Initialize()
         {
             base.Initialize();
+            CollisionSpheres = new BoundingSphere[3];
+            CreateCollisionSpheres();
+        }
+        
+        private void CreateCollisionSpheres()
+        {
+            //BoundingBox bigBox = Boxes[0];
+            //for (int i = 1; i < Boxes.Count(); i++)
+            //{
+            //    bigBox = BoundingBox.CreateMerged(bigBox, Boxes[i]);
+            //}
+            //float radius = Math.Abs(bigBox.Max.X - bigBox.Min.X)/4;
+            float radius = BigSphere.Radius / 2;
+            radius *= SMALL_RADIUS_FACTOR;
+            Vector3 forw = World.Forward;
+            forw = Vector3.Normalize(forw);
+            CollisionSpheres[0] = new BoundingSphere(Position + forw * radius, radius);
+            CollisionSpheres[1] = new BoundingSphere(Position, radius);
+            CollisionSpheres[2] = new BoundingSphere(Position - forw * radius, radius);
         }
 
         public override void Update(GameTime gameTime)
@@ -209,21 +230,32 @@ namespace RaceXNA
         private bool IsObstacleCollision(BaseObject oneObstacle)
         {
             BigSphere = new BoundingSphere(Position, BigSphere.Radius);
-            BoundingBox box;
+            //BoundingBox box;
 
+            CreateCollisionSpheres();
             if (BigSphere.Intersects(oneObstacle.BigSphere))
             {
-                for (int i = 0; i < Boxes.Count; ++i)
-                {
-                    box = Boxes[i];
-                    Vector3[] corners = box.GetCorners();
-                    Matrix localWorld = GetWorldNoScale();
-                    Vector3.Transform(corners, ref localWorld, corners);
-                    box = BoundingBox.CreateFromPoints(corners);
+                //for (int i = 0; i < Boxes.Count; ++i)
+                //{
+                //    box = Boxes[i];
+                //    Vector3[] corners = box.GetCorners();
+                //    Matrix localWorld = GetWorldNoScale();
+                //    Vector3.Transform(corners, ref localWorld, corners);
+                //    box = BoundingBox.CreateFromPoints(corners);
 
-                    for (int j = 0; j < oneObstacle.GetBoxesCount(); ++j)
+                //    for (int j = 0; j < oneObstacle.GetBoxesCount(); ++j)
+                //    {
+                //        if (box.Intersects(oneObstacle.GetBox(j)))
+                //        {
+                //            return true;
+                //        }
+                //    }
+                //}
+                for (int i = 0; i < CollisionSpheres.Length; ++i)
+                {
+                    for (int j = 0; j < oneObstacle.GetSpheresLenght(); ++j)
                     {
-                        if (box.Intersects(oneObstacle.GetBox(j)))
+                        if (CollisionSpheres[i].Intersects(oneObstacle.GetBox(j)))
                         {
                             return true;
                         }
