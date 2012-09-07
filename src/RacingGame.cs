@@ -59,7 +59,6 @@ namespace RaceXNA
 
             LoadAssets();
 
-
             Texture2D pauseTex = TextureMgr.Find("pause");
             PausedRectangle = new Rectangle((Window.ClientBounds.Width - pauseTex.Width) / 2, (Window.ClientBounds.Height - pauseTex.Height) / 2,
                                             pauseTex.Width, pauseTex.Height);
@@ -114,10 +113,6 @@ namespace RaceXNA
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-        }
-
-        protected override void UnloadContent()
-        {
         }
 
         protected override void Update(GameTime gameTime)
