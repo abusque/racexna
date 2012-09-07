@@ -34,9 +34,8 @@ namespace RaceXNA
         //public FreeCamera GameCamera { get; private set; }
         public Vehicle Car { get; private set; }
         public ModelDisplay ModelDisplayer { get; private set; }
-        public Terrain Ground { get; private set; }
+        Terrain Ground { get; set; }
         public Track GameTrack { get; private set; }
-        public BaseObject OneObstacle { get; private set; }
         public bool Paused { get; private set; }
         public Rectangle PausedRectangle { get; private set; }
 
@@ -75,7 +74,7 @@ namespace RaceXNA
             HeadsUpDisplay = new HUD(this);
 
             Car = new Vehicle(this, "L200-FBX", new Vector3(0, 0, -2), 0.01f, new Vector3(0, MathHelper.Pi, 0));
-            Ground = new Terrain(this, new Vector3(-20, 0, 0), "colormap", "flatmap");
+            Ground = new Terrain(this, new Vector3(-20, 0, 0), "colormap", "heightmap", 1.0f);
             GameTrack = new Track(this, Ground);
 
             GameCamera = Car.Camera;

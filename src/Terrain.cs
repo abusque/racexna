@@ -18,7 +18,7 @@ namespace RaceXNA
     {
         const int INDICES_PER_TILE = 6;
         const int INDICES_PER_TRIANGLE = 3;
-        const float HEIGHT_FACTOR = 0.1f;
+        const float HEIGHT_FACTOR = 0.05f;
 
         RacingGame RaceGame { get; set; }
         Vector3 Origin { get; set; }
@@ -30,14 +30,17 @@ namespace RaceXNA
         VertexPositionNormalTexture[] Vertices { get; set; }
         int[] Indices { get; set; }
         Texture2D TerrainTexture { get; set; }
+        Vector3[,] Normals { get; set; }
+        float TerrainScale { get; set; }
 
-        public Terrain(RacingGame raceGame, Vector3 origin, string colorMapName, string heightMapName)
+        public Terrain(RacingGame raceGame, Vector3 origin, string colorMapName, string heightMapName, float terrainScale)
             : base(raceGame)
         {
             RaceGame = raceGame;
             Origin = origin;
             ColorMapName = colorMapName;
             HeightMapName = heightMapName;
+            TerrainScale = terrainScale;
         }
 
         public override void Initialize()
@@ -142,6 +145,8 @@ namespace RaceXNA
 
         private void CalculateNormals()
         {
+            Normals = new Vector3[Width, Height];
+
             for (int i = 0; i < Vertices.Length; ++i)
             {
                 Vertices[i].Normal = Vector3.Zero;
@@ -166,6 +171,51 @@ namespace RaceXNA
             {
                 Vertices[i].Normal.Normalize();
             }
+        }
+
+        public bool IsOnHeightmap(Vector3 carPos)
+        {
+            Vector3 relativePos = carPos - Origin;
+
+            return (relativePos.X >= 0 && relativePos.X < Width &&
+                relativePos.Z <= 0 && relativePos.Z > -Height + 1);
+        }
+
+        public void GetHeightAndNormal(Vector3 position, out float height, out Vector3 normal)
+        {
+            Vector3 relativePos = position - Origin;
+
+            int left, top;
+            left = (int)relativePos.X / (int)TerrainScale;
+            top = -((int)relativePos.Z / (int)TerrainScale);
+
+            float xNormalized = (relativePos.X % TerrainScale) / TerrainScale;
+            float zNormalized = (relativePos.Z % TerrainScale) / TerrainScale;
+
+            float topHeight = MathHelper.Lerp(
+                Vertices[left + top * Width].Position.Y,
+                Vertices[(left + 1) + top * Width].Position.Y,
+                xNormalized);
+
+            float bottomHeight = MathHelper.Lerp(
+                Vertices[left + (top + 1) * Width].Position.Y,
+                Vertices[(left + 1) + (top + 1) * Width].Position.Y,
+                xNormalized);
+
+            height = MathHelper.Lerp(topHeight, bottomHeight, zNormalized);
+
+            Vector3 topNormal = Vector3.Lerp(
+                Vertices[left + top * Width].Normal,
+                Vertices[(left + 1) + top * Width].Normal,
+                xNormalized);
+
+            Vector3 bottomNormal = Vector3.Lerp(
+                Vertices[left + (top + 1) * Width].Normal,
+                Vertices[(left + 1) + (top + 1) * Width].Normal,
+                xNormalized);
+
+            normal = Vector3.Lerp(topNormal, bottomNormal, zNormalized);
+            normal.Normalize();
         }
     }
 }
