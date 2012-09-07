@@ -71,7 +71,7 @@ namespace RaceXNA
         public bool IsCollision { get; set; }
         public float PrevRot { get; set; }
 
-        public Vehicle(RacingGame raceGame, String modelName, Vector3 initPos, float initScale, Vector3 initRot)
+        public Vehicle(RacingGame raceGame, String modelName, Vector3 initPos, float initScale, float initRot)
             : base(raceGame, modelName, initPos, initScale, initRot)
         {
             Acceleration = 0;
@@ -105,13 +105,6 @@ namespace RaceXNA
             if (RaceGame.InputMgr.ControllerState.IsButtonDown(Buttons.B))
             {
                 Speed = 0; Acceleration = 0;
-            }
-            if (RaceGame.InputMgr.ControllerState.IsButtonDown(Buttons.X))
-            {
-                if (Speed >=0)
-                    Rotation = new Vector3(Rotation.X, Rotation.Y + ROT_COEFF * -RaceGame.InputMgr.ControllerState.ThumbSticks.Left.X * 1.5f / RaceGame.FpsHandler.FpsValue, Rotation.Z);
-                else
-                    Rotation = new Vector3(Rotation.X, Rotation.Y - ROT_COEFF * -RaceGame.InputMgr.ControllerState.ThumbSticks.Left.X * 1.5f / RaceGame.FpsHandler.FpsValue, Rotation.Z);
             }
             #endregion
 
@@ -179,7 +172,9 @@ namespace RaceXNA
             Yaw = ROT_COEFF * attenuatedRot * (float)(Math.Abs(Speed));
 
             if (Speed >= 0.01f || Speed <= -0.01f)
-                Rotation = new Vector3(Rotation.X, Rotation.Y + Yaw / RaceGame.FpsHandler.FpsValue, Rotation.Z);
+                Rotation += Yaw / RaceGame.FpsHandler.FpsValue;
+
+            Orientation = Matrix.CreateRotationY(Rotation);
         }
 
         private void Move()

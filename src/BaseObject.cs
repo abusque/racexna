@@ -18,13 +18,13 @@ namespace RaceXNA
        protected Matrix Orientation;
        public Vector3 Position { get; protected set; }
        public float Scale { get; protected set; }
-       public Vector3 Rotation { get; protected set; }
+       public float Rotation { get; protected set; }
        protected BoundingSphere[] Spheres { get; set; }
        public BoundingSphere BigSphere { get; protected set; }
        protected List<BoundingBox> Boxes { get; set; }
        public BoundingSphere SphereTest { get; protected set; }
 
-       public BaseObject(RacingGame raceGame, String modelName, Vector3 initPos, float initScale, Vector3 initRot)
+       public BaseObject(RacingGame raceGame, String modelName, Vector3 initPos, float initScale, float initRot)
           : base(raceGame)
        {
           RaceGame = raceGame;
@@ -40,13 +40,8 @@ namespace RaceXNA
 
            ModelData = RaceGame.ModelMgr.Find(ModelName);
 
-           //World = Matrix.Identity * Matrix.CreateScale(Scale);
-           //World *= Matrix.CreateFromYawPitchRoll(Rotation.Y, Rotation.X, Rotation.Z);
-           //World.Translation = Position;
-
            Orientation = Matrix.Identity;
 
-           //World = Orientation * Matrix.CreateScale(Scale) * Matrix.CreateFromYawPitchRoll(Rotation.Y, Rotation.X, Rotation.Z) * Matrix.CreateTranslation(Position);
            World = Matrix.CreateScale(Scale) * Orientation * Matrix.CreateTranslation(Position);
 
            CreateSpheres();
@@ -128,11 +123,6 @@ namespace RaceXNA
 
       public override void Update(GameTime gameTime)
       {
-          //World = Matrix.Identity * Matrix.CreateScale(Scale);
-          //World *= Matrix.CreateFromYawPitchRoll(Rotation.Y, Rotation.X, Rotation.Z);
-          //World *= Matrix.CreateTranslation(Position);
-
-          //World = Orientation * Matrix.CreateScale(Scale) * Matrix.CreateFromYawPitchRoll(Rotation.Y, Rotation.X, Rotation.Z) * Matrix.CreateTranslation(Position);
           World = Matrix.CreateScale(Scale) * Orientation * Matrix.CreateTranslation(Position);
 
           base.Update(gameTime);
@@ -169,7 +159,6 @@ namespace RaceXNA
 
       public virtual Matrix GetWorldNoScale()
       {
-          //return Orientation * Matrix.CreateFromYawPitchRoll(Rotation.Y, Rotation.X, Rotation.Z) * Matrix.CreateTranslation(Position);
           return World = Orientation * Matrix.CreateTranslation(Position);
       }
    }

@@ -72,7 +72,7 @@ namespace RaceXNA
 
             HeadsUpDisplay = new HUD(this);
 
-            Car = new Vehicle(this, "L200-FBX", new Vector3(0, 0, -2), 0.01f, new Vector3(0, MathHelper.Pi, 0));
+            Car = new Vehicle(this, "L200-FBX", new Vector3(0, 0, -2), 0.01f, MathHelper.Pi);
             Ground = new Terrain(this, new Vector3(-20, 0, 0), "colormap", "heightmap", 10.0f, 0.5f);
             GameTrack = new Track(this, Ground);
 
