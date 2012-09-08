@@ -131,7 +131,14 @@ namespace RaceXNA
         private void CheckInputs()
         {
             if (InputMgr.ControllerState.Buttons.Start == ButtonState.Pressed && !(InputMgr.PreviousControllerState.Buttons.Start == ButtonState.Pressed))
+            {
                 Paused = !Paused;
+
+                if (Paused)
+                    MediaPlayer.Pause();
+                else
+                    MediaPlayer.Resume();
+            }
             if (InputMgr.ControllerState.Buttons.Back == ButtonState.Pressed)
                 this.Exit();
             if (InputMgr.IsNewKey(Keys.F2))
