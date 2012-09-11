@@ -19,6 +19,7 @@ namespace RaceXNA
         RacingGame RaceGame { get; set; }
         public Terrain Ground { get; private set; }
         public List<BaseObject> Obstacles { get; private set; }
+        bool HeightSet { get; set; }
 
         public Track(RacingGame game, Terrain ground)
             : base(game)
@@ -31,7 +32,9 @@ namespace RaceXNA
         {
             Obstacles = new List<BaseObject>();
             RaceGame.Components.Add(Ground);
+
             SetObstacles();
+
             base.Initialize();
         }
 
@@ -48,6 +51,14 @@ namespace RaceXNA
 
         public override void Update(GameTime gameTime)
         {
+            if (!HeightSet)
+            {
+                foreach (BaseObject obstacle in Obstacles)
+                    obstacle.SetInitialHeight(Ground);
+
+                HeightSet = true;
+            }
+
             base.Update(gameTime);
         }
     }

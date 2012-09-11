@@ -44,9 +44,6 @@ namespace RaceXNA
 
            World = Matrix.CreateScale(Scale) * Orientation * Matrix.CreateTranslation(Position);
 
-           CreateSpheres();
-           CreateBoxes();
-
            base.Initialize();
        }
 
@@ -165,6 +162,19 @@ namespace RaceXNA
       public virtual Matrix GetWorldNoScale()
       {
           return World = Orientation * Matrix.CreateTranslation(Position);
+      }
+
+      public void SetInitialHeight(Terrain terrain)
+      {
+          Vector3 newPos = new Vector3(Position.X, Position.Y, Position.Z);
+
+          terrain.GetHeight(newPos, out newPos.Y);
+          Position = newPos;
+
+          World = Matrix.CreateScale(Scale) * Orientation * Matrix.CreateTranslation(Position);
+
+          CreateSpheres();
+          CreateBoxes();
       }
    }
 }

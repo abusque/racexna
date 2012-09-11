@@ -218,5 +218,29 @@ namespace RaceXNA
             normal = Vector3.Lerp(topNormal, bottomNormal, zNormalized);
             normal.Normalize();
         }
+
+        public void GetHeight(Vector3 position, out float height)
+        {
+            Vector3 relativePos = position - Origin;
+
+            int left, top;
+            left = (int)relativePos.X / (int)TerrainScale;
+            top = -((int)relativePos.Z / (int)TerrainScale);
+
+            float xNormalized = (relativePos.X % TerrainScale) / TerrainScale;
+            float zNormalized = (-relativePos.Z % TerrainScale) / TerrainScale;
+
+            float topHeight = MathHelper.Lerp(
+                Vertices[left + top * Width].Position.Y,
+                Vertices[(left + 1) + top * Width].Position.Y,
+                xNormalized);
+
+            float bottomHeight = MathHelper.Lerp(
+                Vertices[left + (top + 1) * Width].Position.Y,
+                Vertices[(left + 1) + (top + 1) * Width].Position.Y,
+                xNormalized);
+
+            height = MathHelper.Lerp(topHeight, bottomHeight, zNormalized);
+        }
     }
 }

@@ -79,7 +79,6 @@ namespace RaceXNA
             Acceleration = 0;
             Speed = 0;
             PrevRot = 0;
-            //Camera = new ChasingCamera(this);
             Camera = new SpringCamera(this, new Vector3(0, 400, -1000), new Vector3(0, 300, 0));
             IsCollision = false;
         }
