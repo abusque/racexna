@@ -10,10 +10,10 @@ namespace RaceXNA
     {
         const float MAX_ACCEL = 20.0f;
         const float MIN_ACCEL = -15.0f;
-        const float MAX_SPEED = 120.0f;
+        const float MAX_SPEED = 80.0f;
         const float MIN_SPEED = -20.0f;
         const float BASE_ACCEL = 7.0f;
-        const float FRICTION = 7.5f;
+        const float FRICTION = 9.0f;
 
         const float ROT_COEFF = 0.075f;
         const float DELTA_ROT = 5.0f;
