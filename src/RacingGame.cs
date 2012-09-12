@@ -38,6 +38,10 @@ namespace RaceXNA
         public Track GameTrack { get; private set; }
         public bool Paused { get; private set; }
         public Rectangle PausedRectangle { get; private set; }
+        public enum GameState { StartScreen, Playing };
+        public GameState CurrentState { get; private set; }
+        public Texture2D PressStartScreen { get; private set; }
+        public Rectangle PressStartRectangle { get; private set; }
 
         public RacingGame()
         {
@@ -47,6 +51,8 @@ namespace RaceXNA
             IsFixedTimeStep = true;
             IsMouseVisible = false;
             graphics.IsFullScreen = false;
+            CurrentState = GameState.StartScreen;
+
             //MediaPlayer.IsRepeating = true;
         }
 
@@ -59,6 +65,8 @@ namespace RaceXNA
 
             LoadAssets();
 
+            PressStartScreen = TextureMgr.Find("PressStart");
+            PressStartRectangle = new Rectangle(0, 0, Window.ClientBounds.Width, Window.ClientBounds.Height);
             Texture2D pauseTex = TextureMgr.Find("pause");
             PausedRectangle = new Rectangle((Window.ClientBounds.Width - pauseTex.Width) / 2, (Window.ClientBounds.Height - pauseTex.Height) / 2,
                                             pauseTex.Width, pauseTex.Height);
@@ -91,13 +99,15 @@ namespace RaceXNA
             Components.Add(FpsDisplayer);
 
             base.Initialize();
+            
+            Car.Enabled = false;
+            HeadsUpDisplay.GameChronometer.Enabled = false;
         }
 
         private void LoadAssets()
         {
             FontMgr.Add("Fonts/Pericles20");
             ModelMgr.Add("Models/L200-FBX");
-            ModelMgr.Add("Models/tree");
             TextureMgr.Add("Textures/grass1");
             TextureMgr.Add("Textures/asphalt1");
             TextureMgr.Add("Textures/sand1");
@@ -107,6 +117,7 @@ namespace RaceXNA
             TextureMgr.Add("Textures/colormap");
             TextureMgr.Add("Textures/flatmap");
             TextureMgr.Add("Textures/pause");
+            TextureMgr.Add("Textures/PressStart");
             MusicMgr.Add("Music/RenditionFull");
         }
 
@@ -117,20 +128,35 @@ namespace RaceXNA
 
         protected override void Update(GameTime gameTime)
         {
-            CheckInputs();
-
-            if (Paused)
+            if (CurrentState == GameState.StartScreen)
             {
-                InputMgr.Update(gameTime);
-                return;
+                if (InputMgr.ControllerState.Buttons.Start == ButtonState.Pressed 
+                    && !(InputMgr.PreviousControllerState.Buttons.Start == ButtonState.Pressed))
+                {
+                    CurrentState = GameState.Playing;
+                    Car.Enabled = true;
+                    HeadsUpDisplay.GameChronometer.Enabled = true;
+                }
             }
+            else
+            {
+                CheckInputs();
 
+                if (Paused)
+                {
+                    InputMgr.Update(gameTime);
+                    return;
+                }
+                
+            }
             base.Update(gameTime);
+            
         }
 
         private void CheckInputs()
         {
-            if (InputMgr.ControllerState.Buttons.Start == ButtonState.Pressed && !(InputMgr.PreviousControllerState.Buttons.Start == ButtonState.Pressed))
+            if (InputMgr.ControllerState.Buttons.Start == ButtonState.Pressed 
+                && !(InputMgr.PreviousControllerState.Buttons.Start == ButtonState.Pressed))
             {
                 Paused = !Paused;
 
@@ -158,10 +184,17 @@ namespace RaceXNA
 
         protected override void Draw(GameTime gameTime)
         {
-            if(Paused)
-                spriteBatch.Draw(TextureMgr.Find("pause"), PausedRectangle, Color.White);
+            if (CurrentState == GameState.StartScreen)
+            {
+                spriteBatch.Draw(PressStartScreen, PressStartRectangle, Color.White);
+            }
+            else
+            {
+                if (Paused)
+                    spriteBatch.Draw(TextureMgr.Find("pause"), PausedRectangle, Color.White);
 
-            base.Draw(gameTime);
+                base.Draw(gameTime);
+            }
         }
 
         protected override void EndDraw()

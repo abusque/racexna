@@ -20,7 +20,7 @@ namespace RaceXNA
 
         AccelerationDisplay AccelerationDisplayer { get; set; }
         SpeedDisplay SpeedDisplayer { get; set; }
-        Chronometer GameChronometer { get; set; }
+        public Chronometer GameChronometer { get; private set; }
         Odometer GameOdometer { get; set; }
         Vector2 OdometerInitialPos { get; set; }
 
