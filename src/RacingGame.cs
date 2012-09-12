@@ -176,7 +176,7 @@ namespace RaceXNA
 
         protected override bool BeginDraw()
         {
-            GraphicsDevice.Clear(Color.Chocolate);
+            GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
 
             return base.BeginDraw();
