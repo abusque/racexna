@@ -44,6 +44,8 @@ namespace RaceXNA
 
            World = Matrix.CreateScale(Scale) * Orientation * Matrix.CreateTranslation(Position);
 
+           CreateSpheres();
+
            base.Initialize();
        }
 
@@ -67,7 +69,7 @@ namespace RaceXNA
          CreateBigSphere();
       }
 
-      protected void CreateBigSphere()
+      private void CreateBigSphere()
       {
           BigSphere = BoundingSphere.CreateMerged(Spheres[0], Spheres[1]);
           for (int i = 2; i < Spheres.Length; ++i)
@@ -118,7 +120,7 @@ namespace RaceXNA
           return Boxes.Count;
       }
 
-      public int GetSpheresLenght()
+      public int GetSpheresLength()
       {
           return Spheres.Length;
       }
