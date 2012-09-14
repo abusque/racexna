@@ -86,7 +86,6 @@ namespace RaceXNA
         public override void Initialize()
         {
             base.Initialize();
-
             CollisionSpheres = new BoundingSphere[3];
             CreateCollisionSpheres();
         }

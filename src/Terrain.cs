@@ -20,7 +20,7 @@ namespace RaceXNA
         const int INDICES_PER_TRIANGLE = 3;
 
         RacingGame RaceGame { get; set; }
-        Vector3 Origin { get; set; }
+        public Vector3 Origin { get; private set; }
         string ColorMapName { get; set; }
         string HeightMapName { get; set; }
         int Width { get; set; }
@@ -30,7 +30,7 @@ namespace RaceXNA
         int[] Indices { get; set; }
         Texture2D TerrainTexture { get; set; }
         Vector3[,] Normals { get; set; }
-        float TerrainScale { get; set; }
+        public float TerrainScale { get; private set; }
         float HeightFactor { get; set; }
 
         public Terrain(RacingGame raceGame, Vector3 origin, string colorMapName, string heightMapName, float terrainScale, float heightFactor)
