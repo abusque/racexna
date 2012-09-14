@@ -40,7 +40,7 @@ namespace RaceXNA
 
         private void SetObstacles()
         {
-            string modelName = "L200-FBX";
+            string modelName = "tree stomp sculpture";
             float modelScale = 0.02f;
             Obstacles.Add(new BaseObject(RaceGame, modelName, Ground.Origin + new Vector3(29, 0, -8) * Ground.TerrainScale, modelScale, 0.0f));
             Obstacles.Add(new BaseObject(RaceGame, modelName, Ground.Origin + new Vector3(63, 0, -18) * Ground.TerrainScale, modelScale, 0.0f));

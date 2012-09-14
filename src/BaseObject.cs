@@ -71,9 +71,16 @@ namespace RaceXNA
 
       private void CreateBigSphere()
       {
-          BigSphere = BoundingSphere.CreateMerged(Spheres[0], Spheres[1]);
-          for (int i = 2; i < Spheres.Length; ++i)
-              BigSphere = BoundingSphere.CreateMerged(BigSphere, Spheres[i]);
+          if (ModelData.Meshes.Count > 1)
+          {
+              BigSphere = BoundingSphere.CreateMerged(Spheres[0], Spheres[1]);
+              for (int i = 2; i < Spheres.Length; ++i)
+                  BigSphere = BoundingSphere.CreateMerged(BigSphere, Spheres[i]);
+          }
+          else
+          {
+              BigSphere = Spheres[0];
+          }
       }
 
       protected void CreateBoxes()
