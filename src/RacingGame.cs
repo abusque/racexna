@@ -90,8 +90,9 @@ namespace RaceXNA
             Components.Add(FpsHandler);
             Components.Add(InputMgr);
             Components.Add(ModelDisplayer);
-            Components.Add(Car); //Mettre GameCamera apres Car pour eviter les problemes
             Components.Add(GameTrack);
+            Components.Add(Car); //Mettre GameCamera apres Car pour eviter les problemes
+
             Components.Add(GameCamera);
 
             //Laisser FpsDisplayer a la fin de la liste pour eviter les problemes d'affichage
@@ -108,6 +109,8 @@ namespace RaceXNA
         {
             FontMgr.Add("Fonts/Pericles20");
             ModelMgr.Add("Models/L200-FBX");
+            ModelMgr.Add("Models/tree");
+            ModelMgr.Add("Models/tree stomp sculpture");
             TextureMgr.Add("Textures/grass1");
             TextureMgr.Add("Textures/asphalt1");
             TextureMgr.Add("Textures/sand1");

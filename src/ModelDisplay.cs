@@ -42,9 +42,9 @@ namespace RaceXNA
           }
           RaceGame.GraphicsDevice.RenderState.CullMode = CullMode.CullCounterClockwiseFace;
           RaceGame.GraphicsDevice.RenderState.DepthBufferEnable = true;
-          Effect3D.View = RaceGame.GameCamera.View;
-          Effect3D.Projection = RaceGame.GameCamera.Projection;
-          //Effet3D.EnableDefaultLighting();
+          //Effect3D.View = RaceGame.GameCamera.View;
+          //Effect3D.Projection = RaceGame.GameCamera.Projection;
+          //Effect3D.EnableDefaultLighting();
           base.Draw(gameTime);
       }
 

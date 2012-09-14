@@ -57,9 +57,9 @@ namespace RaceXNA
 
         public override void Draw(GameTime gameTime)
         {
+            RaceGame.ModelDisplayer.Draw(gameTime);
+
             RaceGame.GraphicsDevice.VertexDeclaration = new VertexDeclaration(GraphicsDevice, VertexPositionNormalTexture.VertexElements);
-            RaceGame.GraphicsDevice.RenderState.CullMode = CullMode.None;
-            RaceGame.GraphicsDevice.RenderState.FillMode = FillMode.Solid;
 
             BasicEffect displayEffect = RaceGame.ModelDisplayer.Effect3D;
             displayEffect.World = Matrix.Identity;

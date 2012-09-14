@@ -134,8 +134,8 @@ namespace RaceXNA
 
       public override void Draw(GameTime gameTime)
       {
-         //Jeu.GraphicsDevice.RenderState.CullMode = CullMode.CullCounterClockwiseFace;
-         // Au cas où le modèle se composerait de plusieurs morceaux
+         RaceGame.ModelDisplayer.Draw(gameTime);
+
          Matrix[] transformations = new Matrix[ModelData.Bones.Count];
          ModelData.CopyAbsoluteBoneTransformsTo(transformations);
 
