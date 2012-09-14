@@ -40,8 +40,32 @@ namespace RaceXNA
 
         private void SetObstacles()
         {
-            Obstacles.Add(new BaseObject(RaceGame, "L200-FBX", new Vector3(30, 0, -60), 0.01f, 0.0f));
-            Obstacles.Add(new BaseObject(RaceGame, "L200-FBX", new Vector3(0, 0, -60), 0.01f, (float)Math.PI));
+            string modelName = "L200-FBX";
+            float modelScale = 0.02f;
+            Obstacles.Add(new BaseObject(RaceGame, modelName, Ground.Origin + new Vector3(29, 0, -8) * Ground.TerrainScale, modelScale, 0.0f));
+            Obstacles.Add(new BaseObject(RaceGame, modelName, Ground.Origin + new Vector3(63, 0, -18) * Ground.TerrainScale, modelScale, 0.0f));
+            Obstacles.Add(new BaseObject(RaceGame, modelName, Ground.Origin + new Vector3(101, 0, -13) * Ground.TerrainScale, modelScale, 0.0f));
+            Obstacles.Add(new BaseObject(RaceGame, modelName, Ground.Origin + new Vector3(101, 0, -19) * Ground.TerrainScale, modelScale, 0.0f));
+            Obstacles.Add(new BaseObject(RaceGame, modelName, Ground.Origin + new Vector3(111, 0, -20) * Ground.TerrainScale, modelScale, 0.0f));
+            Obstacles.Add(new BaseObject(RaceGame, modelName, Ground.Origin + new Vector3(94, 0, -31) * Ground.TerrainScale, modelScale, 0.0f));
+            Obstacles.Add(new BaseObject(RaceGame, modelName, Ground.Origin + new Vector3(15, 0, -36) * Ground.TerrainScale, modelScale, 0.0f));
+            Obstacles.Add(new BaseObject(RaceGame, modelName, Ground.Origin + new Vector3(111, 0, -43) * Ground.TerrainScale, modelScale, 0.0f));
+            Obstacles.Add(new BaseObject(RaceGame, modelName, Ground.Origin + new Vector3(50, 0, -50) * Ground.TerrainScale, modelScale, 0.0f));
+            Obstacles.Add(new BaseObject(RaceGame, modelName, Ground.Origin + new Vector3(106, 0, -53) * Ground.TerrainScale, modelScale, 0.0f));
+            Obstacles.Add(new BaseObject(RaceGame, modelName, Ground.Origin + new Vector3(57, 0, -55) * Ground.TerrainScale, modelScale, 0.0f));
+            Obstacles.Add(new BaseObject(RaceGame, modelName, Ground.Origin + new Vector3(98, 0, -62) * Ground.TerrainScale, modelScale, 0.0f));
+            Obstacles.Add(new BaseObject(RaceGame, modelName, Ground.Origin + new Vector3(75, 0, -68) * Ground.TerrainScale, modelScale, 0.0f));
+            Obstacles.Add(new BaseObject(RaceGame, modelName, Ground.Origin + new Vector3(28, 0, -69) * Ground.TerrainScale, modelScale, 0.0f));
+            Obstacles.Add(new BaseObject(RaceGame, modelName, Ground.Origin + new Vector3(42, 0, -69) * Ground.TerrainScale, modelScale, 0.0f));
+            Obstacles.Add(new BaseObject(RaceGame, modelName, Ground.Origin + new Vector3(81, 0, -78) * Ground.TerrainScale, modelScale, 0.0f));
+            Obstacles.Add(new BaseObject(RaceGame, modelName, Ground.Origin + new Vector3(13, 0, -85) * Ground.TerrainScale, modelScale, 0.0f));
+            Obstacles.Add(new BaseObject(RaceGame, modelName, Ground.Origin + new Vector3(103, 0, -89) * Ground.TerrainScale, modelScale, 0.0f));
+            Obstacles.Add(new BaseObject(RaceGame, modelName, Ground.Origin + new Vector3(73, 0, -90) * Ground.TerrainScale, modelScale, 0.0f));
+            Obstacles.Add(new BaseObject(RaceGame, modelName, Ground.Origin + new Vector3(49, 0, -92) * Ground.TerrainScale, modelScale, 0.0f));
+            Obstacles.Add(new BaseObject(RaceGame, modelName, Ground.Origin + new Vector3(37, 0, -101) * Ground.TerrainScale, modelScale, 0.0f));
+            Obstacles.Add(new BaseObject(RaceGame, modelName, Ground.Origin + new Vector3(106, 0, -53) * Ground.TerrainScale, modelScale, 0.0f));
+            Obstacles.Add(new BaseObject(RaceGame, modelName, Ground.Origin + new Vector3(120, 0, -121) * Ground.TerrainScale, modelScale, 0.0f));
+            Obstacles.Add(new BaseObject(RaceGame, modelName, Ground.Origin + new Vector3(24, 0, -122) * Ground.TerrainScale, modelScale, 0.0f));
 
             for (int i = 0; i < Obstacles.Count; ++i)
             {
