@@ -77,9 +77,10 @@ namespace RaceXNA
         public bool IsCollision { get; set; }
         public float PrevRot { get; set; }
         public BoundingSphere[] CollisionSpheres { get; set; }
-        public SoundEffect CrashSound { get; private set; }
-        public SoundEffect EngineSound { get; private set; }
-        public SoundEffect BrakeSound { get; private set; }
+        SoundEffect CrashSound { get; set; }
+        SoundEffect EngineSound { get; set; }
+        SoundEffect BrakeSound { get; set; }
+        SoundEffectInstance BrakeSoundInstance { get; set; }
 
         #endregion Properties
 
@@ -99,7 +100,8 @@ namespace RaceXNA
             CollisionSpheres = new BoundingSphere[3];
             CreateCollisionSpheres();
             CrashSound = RaceGame.SfxMgr.Find("Sounds/crash");
-            BrakeSound = RaceGame.SfxMgr.Find("Sound/crash");
+            BrakeSound = RaceGame.SfxMgr.Find("Sound/brake");
+            BrakeSoundInstance = BrakeSound.CreateInstance();
         }
         
         private void CreateCollisionSpheres()
@@ -143,15 +145,15 @@ namespace RaceXNA
 
             if (leftTriggerValue > 0)
             {
-                if (Speed > MIN_BRAKE_SPEED)
-                    BrakeSound.Play();
+                if (Speed > MIN_BRAKE_SPEED && BrakeSoundInstance.State == SoundState.Stopped)
+                    BrakeSoundInstance.Play();
 
                 Acceleration = leftTriggerValue * MIN_ACCEL;
             }
             else if (rightTriggerValue > 0)
             {
-                if (Speed < -MIN_BRAKE_SPEED)
-                    BrakeSound.Play();
+                if (Speed < -MIN_BRAKE_SPEED && BrakeSoundInstance.State == SoundState.Stopped)
+                    BrakeSoundInstance.Play();
 
                 Acceleration = rightTriggerValue * MAX_ACCEL;
             }
