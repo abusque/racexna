@@ -78,6 +78,7 @@ namespace RaceXNA
         BoundingSphere[] CollisionSpheres { get; set; }
         SoundEffect CrashSound { get; set; }
         SoundEffect EngineSound { get; set; }
+        SoundEffectInstance EngineSoundInstance { get; set; }
         SoundEffect BrakeSound { get; set; }
         SoundEffectInstance BrakeSoundInstance { get; set; }
         bool BrakeSoundPlayed { get; set; }
@@ -104,6 +105,11 @@ namespace RaceXNA
             BrakeSound = RaceGame.SfxMgr.Find("Sound/brake");
             BrakeSoundInstance = BrakeSound.CreateInstance();
             BrakeSoundPlayed = false;
+            EngineSound = RaceGame.SfxMgr.Find("Sounds/engine");
+            EngineSoundInstance = EngineSound.CreateInstance();
+            EngineSoundInstance.IsLooped = true;
+            EngineSoundInstance.Volume = 0.0f;
+            EngineSoundInstance.Play();
         }
         
         private void CreateCollisionSpheres()
@@ -185,6 +191,8 @@ namespace RaceXNA
                 if (Speed > 0.0f)
                     Speed = 0.0f;
             }
+
+            EngineSoundInstance.Volume = 0.0075f * Math.Abs(Speed);
         }
 
         private void HandleRotation()

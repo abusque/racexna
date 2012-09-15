@@ -128,6 +128,7 @@ namespace RaceXNA
             MusicMgr.Add("Music/RenditionLoop");
             SfxMgr.Add("Sounds/crash");
             SfxMgr.Add("Sounds/brake");
+            SfxMgr.Add("Sounds/engine");
         }
 
         protected override void LoadContent()
