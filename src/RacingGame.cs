@@ -71,7 +71,7 @@ namespace RaceXNA
             PausedRectangle = new Rectangle((Window.ClientBounds.Width - pauseTex.Width) / 2, (Window.ClientBounds.Height - pauseTex.Height) / 2,
                                             pauseTex.Width, pauseTex.Height);
 
-            MediaPlayer.Play(MusicMgr.Find("RenditionFull"));
+            MediaPlayer.Play(MusicMgr.Find("RenditionIntro"));
 
             FpsHandler = new FpsCounter(this, FPS_INTERVAL);
             FpsDisplayer = new FpsDisplay(this, "Pericles20");
@@ -121,7 +121,8 @@ namespace RaceXNA
             TextureMgr.Add("Textures/flatmap");
             TextureMgr.Add("Textures/pause");
             TextureMgr.Add("Textures/PressStart");
-            MusicMgr.Add("Music/RenditionFull");
+            MusicMgr.Add("Music/RenditionIntro");
+            MusicMgr.Add("Music/RenditionLoop");
         }
 
         protected override void LoadContent()
@@ -152,6 +153,13 @@ namespace RaceXNA
                 }
                 
             }
+
+            if (MediaPlayer.State == MediaState.Stopped)
+            {
+                MediaPlayer.Play(MusicMgr.Find("RenditionLoop"));
+                MediaPlayer.IsRepeating = true;
+            }
+
             base.Update(gameTime);
             
         }
