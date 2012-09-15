@@ -139,6 +139,8 @@ namespace RaceXNA
         {
             if (CurrentState == GameState.StartScreen)
             {
+                if (InputMgr.ControllerState.Buttons.Back == ButtonState.Pressed)
+                    this.Exit();
                 if (InputMgr.ControllerState.Buttons.Start == ButtonState.Pressed 
                     && !(InputMgr.PreviousControllerState.Buttons.Start == ButtonState.Pressed))
                 {
