@@ -18,13 +18,13 @@ namespace RaceXNA
        protected Matrix Orientation;
        public Vector3 Position { get; protected set; }
        public float Scale { get; protected set; }
-       public float Rotation { get; protected set; }
+       public Vector3 Rotation { get; protected set; }
        protected BoundingSphere[] Spheres { get; set; }
        public BoundingSphere BigSphere { get; protected set; }
        protected List<BoundingBox> Boxes { get; set; }
        public BoundingSphere SphereTest { get; protected set; }
 
-       public BaseObject(RacingGame raceGame, String modelName, Vector3 initPos, float initScale, float initRot)
+       public BaseObject(RacingGame raceGame, String modelName, Vector3 initPos, float initScale, Vector3 initRot)
           : base(raceGame)
        {
           RaceGame = raceGame;
@@ -40,7 +40,7 @@ namespace RaceXNA
 
            ModelData = RaceGame.ModelMgr.Find(ModelName);
 
-           Orientation = Matrix.Identity;
+           Orientation = Matrix.CreateRotationX(Rotation.X) * Matrix.CreateRotationY(Rotation.Y) * Matrix.CreateRotationZ(Rotation.Z);
 
            World = Matrix.CreateScale(Scale) * Orientation * Matrix.CreateTranslation(Position);
 

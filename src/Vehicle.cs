@@ -73,7 +73,7 @@ namespace RaceXNA
         public float PrevRot { get; set; }
         public BoundingSphere[] CollisionSpheres { get; set; }
 
-        public Vehicle(RacingGame raceGame, String modelName, Vector3 initPos, float initScale, float initRot)
+        public Vehicle(RacingGame raceGame, String modelName, Vector3 initPos, float initScale, Vector3 initRot)
             : base(raceGame, modelName, initPos, initScale, initRot)
         {
             Acceleration = 0;
@@ -185,9 +185,9 @@ namespace RaceXNA
             Yaw = ROT_COEFF * attenuatedRot * (float)(Math.Abs(Speed));
 
             if (Speed >= 0.01f || Speed <= -0.01f)
-                Rotation += Yaw / RaceGame.FpsHandler.FpsValue;
+                Rotation = new Vector3(Rotation.X, Rotation.Y + Yaw / RaceGame.FpsHandler.FpsValue, Rotation.Z);
 
-            Orientation = Matrix.CreateRotationY(Rotation);
+            Orientation = Matrix.CreateRotationX(Rotation.X) * Matrix.CreateRotationY(Rotation.Y) * Matrix.CreateRotationZ(Rotation.Z);
         }
 
         private void Move()
