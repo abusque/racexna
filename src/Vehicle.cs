@@ -1,5 +1,6 @@
 using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -8,18 +9,21 @@ namespace RaceXNA
 {
     public class Vehicle : BaseObject
     {
+        #region Constants
         const float MAX_ACCEL = 20.0f;
         const float MIN_ACCEL = -15.0f;
         const float MAX_SPEED = 80.0f;
         const float MIN_SPEED = -20.0f;
         const float BASE_ACCEL = 7.0f;
         const float FRICTION = 9.0f;
-
+        const float MIN_CRASH_SPEED = 15.0f;
         const float ROT_COEFF = 0.075f;
         const float DELTA_ROT = 5.0f;
         const float MAX_YAW = 1.8f;
         const float SMALL_RADIUS_FACTOR = 0.85f;
+        #endregion Constants
 
+        #region Properties
         public float Acceleration;
 
         float speed;
@@ -72,6 +76,9 @@ namespace RaceXNA
         public bool IsCollision { get; set; }
         public float PrevRot { get; set; }
         public BoundingSphere[] CollisionSpheres { get; set; }
+        public SoundEffect CrashSound { get; private set; }
+        public ResourceManager<SoundEffect> SfxMgr { get; private set; }
+        #endregion Properties
 
         public Vehicle(RacingGame raceGame, String modelName, Vector3 initPos, float initScale, Vector3 initRot)
             : base(raceGame, modelName, initPos, initScale, initRot)
@@ -81,6 +88,7 @@ namespace RaceXNA
             PrevRot = 0;
             Camera = new SpringCamera(this, new Vector3(0, 400, -1000), new Vector3(0, 300, 0));
             IsCollision = false;
+            SfxMgr = new ResourceManager<SoundEffect>(RaceGame);
         }
 
         public override void Initialize()
@@ -88,6 +96,8 @@ namespace RaceXNA
             base.Initialize();
             CollisionSpheres = new BoundingSphere[3];
             CreateCollisionSpheres();
+            SfxMgr.Add("Sounds/crash");
+            CrashSound = SfxMgr.Find("Sounds/crash");
         }
         
         private void CreateCollisionSpheres()
@@ -204,6 +214,9 @@ namespace RaceXNA
             {
                 if (IsObstacleCollision(RaceGame.GameTrack.Obstacles[i]))
                 {
+                    if (Speed > MIN_CRASH_SPEED)
+                        CrashSound.Play();
+
                     Vector3 VectorCollision = new Vector3(Position.X - RaceGame.GameTrack.Obstacles[i].Position.X,
                                                           Position.Y - RaceGame.GameTrack.Obstacles[i].Position.Y,
                                                           Position.Z - RaceGame.GameTrack.Obstacles[i].Position.Z);
