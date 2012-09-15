@@ -17,6 +17,7 @@ namespace RaceXNA
         const float BASE_ACCEL = 7.0f;
         const float FRICTION = 9.0f;
         const float MIN_CRASH_SPEED = 15.0f;
+        const float MIN_BRAKE_SPEED = 15.0f;
         const float ROT_COEFF = 0.075f;
         const float DELTA_ROT = 5.0f;
         const float MAX_YAW = 1.8f;
@@ -77,7 +78,9 @@ namespace RaceXNA
         public float PrevRot { get; set; }
         public BoundingSphere[] CollisionSpheres { get; set; }
         public SoundEffect CrashSound { get; private set; }
-        public ResourceManager<SoundEffect> SfxMgr { get; private set; }
+        public SoundEffect EngineSound { get; private set; }
+        public SoundEffect BrakeSound { get; private set; }
+
         #endregion Properties
 
         public Vehicle(RacingGame raceGame, String modelName, Vector3 initPos, float initScale, Vector3 initRot)
@@ -88,7 +91,6 @@ namespace RaceXNA
             PrevRot = 0;
             Camera = new SpringCamera(this, new Vector3(0, 400, -1000), new Vector3(0, 300, 0));
             IsCollision = false;
-            SfxMgr = new ResourceManager<SoundEffect>(RaceGame);
         }
 
         public override void Initialize()
@@ -96,8 +98,8 @@ namespace RaceXNA
             base.Initialize();
             CollisionSpheres = new BoundingSphere[3];
             CreateCollisionSpheres();
-            SfxMgr.Add("Sounds/crash");
-            CrashSound = SfxMgr.Find("Sounds/crash");
+            CrashSound = RaceGame.SfxMgr.Find("Sounds/crash");
+            BrakeSound = RaceGame.SfxMgr.Find("Sound/crash");
         }
         
         private void CreateCollisionSpheres()
@@ -141,10 +143,16 @@ namespace RaceXNA
 
             if (leftTriggerValue > 0)
             {
+                if (Speed > MIN_BRAKE_SPEED)
+                    BrakeSound.Play();
+
                 Acceleration = leftTriggerValue * MIN_ACCEL;
             }
             else if (rightTriggerValue > 0)
             {
+                if (Speed < -MIN_BRAKE_SPEED)
+                    BrakeSound.Play();
+
                 Acceleration = rightTriggerValue * MAX_ACCEL;
             }
             else

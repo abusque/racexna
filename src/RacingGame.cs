@@ -17,14 +17,15 @@ namespace RaceXNA
     {
         const float FPS_INTERVAL = 1.0f;
 
+        #region Properties
         public GraphicsDeviceManager graphics;
         public SpriteBatch spriteBatch;
-
         public InputManager InputMgr { get; private set; }
         public ResourceManager<Texture2D> TextureMgr { get; private set; }
         public ResourceManager<SpriteFont> FontMgr { get; private set; }
         public ResourceManager<Model> ModelMgr { get; private set; }
         public ResourceManager<Song> MusicMgr { get; private set; }
+        public ResourceManager<SoundEffect> SfxMgr { get; private set; }
         public FpsCounter FpsHandler { get; private set; }
         public FpsDisplay FpsDisplayer { get; private set; }
         public HUD HeadsUpDisplay { get; private set; }
@@ -42,6 +43,7 @@ namespace RaceXNA
         public GameState CurrentState { get; private set; }
         public Texture2D PressStartScreen { get; private set; }
         public Rectangle PressStartRectangle { get; private set; }
+        #endregion Properties
 
         public RacingGame()
         {
@@ -62,6 +64,7 @@ namespace RaceXNA
             TextureMgr = new ResourceManager<Texture2D>(this);
             ModelMgr = new ResourceManager<Model>(this);
             MusicMgr = new ResourceManager<Song>(this);
+            SfxMgr = new ResourceManager<SoundEffect>(this);
 
             LoadAssets();
 
@@ -123,6 +126,8 @@ namespace RaceXNA
             TextureMgr.Add("Textures/PressStart");
             MusicMgr.Add("Music/RenditionIntro");
             MusicMgr.Add("Music/RenditionLoop");
+            SfxMgr.Add("Sounds/crash");
+            SfxMgr.Add("Sounds/brake");
         }
 
         protected override void LoadContent()
