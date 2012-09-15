@@ -25,7 +25,7 @@ namespace RaceXNA
         #endregion Constants
 
         #region Properties
-        public float Acceleration;
+        public float Acceleration { get; private set; }
 
         float speed;
         public float Speed 
@@ -46,7 +46,7 @@ namespace RaceXNA
         }
 
         float yaw;
-        public float Yaw
+        float Yaw
         {
             get
             {
@@ -73,15 +73,13 @@ namespace RaceXNA
         }
 
         public SpringCamera Camera { get; private set; }
-        public BoundingBox CarBoundingBox { get; private set; }
-        public bool IsCollision { get; set; }
-        public float PrevRot { get; set; }
-        public BoundingSphere[] CollisionSpheres { get; set; }
+        bool IsCollision { get; set; }
+        float PrevRot { get; set; }
+        BoundingSphere[] CollisionSpheres { get; set; }
         SoundEffect CrashSound { get; set; }
         SoundEffect EngineSound { get; set; }
         SoundEffect BrakeSound { get; set; }
         SoundEffectInstance BrakeSoundInstance { get; set; }
-
         #endregion Properties
 
         public Vehicle(RacingGame raceGame, String modelName, Vector3 initPos, float initScale, Vector3 initRot)
