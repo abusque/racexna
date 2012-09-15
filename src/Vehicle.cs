@@ -80,6 +80,7 @@ namespace RaceXNA
         SoundEffect EngineSound { get; set; }
         SoundEffect BrakeSound { get; set; }
         SoundEffectInstance BrakeSoundInstance { get; set; }
+        bool BrakeSoundPlayed { get; set; }
         #endregion Properties
 
         public Vehicle(RacingGame raceGame, String modelName, Vector3 initPos, float initScale, Vector3 initRot)
@@ -95,11 +96,14 @@ namespace RaceXNA
         public override void Initialize()
         {
             base.Initialize();
+
             CollisionSpheres = new BoundingSphere[3];
             CreateCollisionSpheres();
+
             CrashSound = RaceGame.SfxMgr.Find("Sounds/crash");
             BrakeSound = RaceGame.SfxMgr.Find("Sound/brake");
             BrakeSoundInstance = BrakeSound.CreateInstance();
+            BrakeSoundPlayed = false;
         }
         
         private void CreateCollisionSpheres()
@@ -126,13 +130,6 @@ namespace RaceXNA
 
             HandleCollision();
 
-            #region ProgrammerHelper
-            if (RaceGame.InputMgr.ControllerState.IsButtonDown(Buttons.B))
-            {
-                Speed = 0; Acceleration = 0;
-            }
-            #endregion
-
             base.Update(gameTime);
         }
 
@@ -143,15 +140,29 @@ namespace RaceXNA
 
             if (leftTriggerValue > 0)
             {
-                if (Speed > MIN_BRAKE_SPEED && BrakeSoundInstance.State == SoundState.Stopped)
+                if (Speed > MIN_BRAKE_SPEED && BrakeSoundInstance.State == SoundState.Stopped && !BrakeSoundPlayed)
+                {
                     BrakeSoundInstance.Play();
+                    BrakeSoundPlayed = true;
+                }
+                else if (Speed < MIN_BRAKE_SPEED)
+                {
+                    BrakeSoundPlayed = false;
+                }
 
                 Acceleration = leftTriggerValue * MIN_ACCEL;
             }
             else if (rightTriggerValue > 0)
             {
-                if (Speed < -MIN_BRAKE_SPEED && BrakeSoundInstance.State == SoundState.Stopped)
+                if (Speed < -MIN_BRAKE_SPEED && BrakeSoundInstance.State == SoundState.Stopped && !BrakeSoundPlayed)
+                {
                     BrakeSoundInstance.Play();
+                    BrakeSoundPlayed = true;
+                }
+                else if (Speed > -MIN_BRAKE_SPEED)
+                {
+                    BrakeSoundPlayed = false;
+                }
 
                 Acceleration = rightTriggerValue * MAX_ACCEL;
             }
