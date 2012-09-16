@@ -37,7 +37,7 @@ namespace RaceXNA
 
         public override void Initialize()
         {
-            BottomMargin = RaceGame.Window.ClientBounds.Height - 100;
+            BottomMargin = RaceGame.Window.ClientBounds.Height - 50;
             RightMargin = RaceGame.Window.ClientBounds.Width - 80;
 
             BottomRightPosition = new Vector2(RaceGame.Window.ClientBounds.Width - RightMargin,

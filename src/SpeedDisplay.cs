@@ -17,9 +17,6 @@ namespace RaceXNA
 
     public class SpeedDisplay : Microsoft.Xna.Framework.DrawableGameComponent
     {
-        const int BOTTOM_MARGIN = 350;
-        const int RIGHT_MARGIN = 720;
-
         RacingGame RaceGame { get; set; }
         Vector2 BottomRightPosition { get; set; }
         Vector2 StringPosition { get; set; }
@@ -28,6 +25,8 @@ namespace RaceXNA
         SpriteFont FontDisplay { get; set; }
         float SpeedValue { get; set; }
         string FontName { get; set; }
+        float BottomMargin { get; set; }
+        float RightMargin { get; set; }
 
         public SpeedDisplay(RacingGame game, string fontName)
             : base(game)
@@ -38,8 +37,11 @@ namespace RaceXNA
 
         public override void Initialize()
         {
-            BottomRightPosition = new Vector2(RaceGame.Window.ClientBounds.Width - RIGHT_MARGIN,
-                                              RaceGame.Window.ClientBounds.Height - BOTTOM_MARGIN);
+            BottomMargin = RaceGame.Window.ClientBounds.Height - 100;
+            RightMargin = RaceGame.Window.ClientBounds.Width - 80;
+
+            BottomRightPosition = new Vector2(RaceGame.Window.ClientBounds.Width - RightMargin,
+                                              RaceGame.Window.ClientBounds.Height - BottomMargin);
             SpeedValue = -1;
             base.Initialize();
         }
