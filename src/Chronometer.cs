@@ -17,43 +17,53 @@ namespace RaceXNA
 
    public class Chronometer : Microsoft.Xna.Framework.DrawableGameComponent
    {
-       const int BOTTOM_MARGIN = 550;
-       const int MILISECONDS_RIGHT_MARGIN = 25;
-       const int SECONDS_RIGHT_MARGIN = 70;
-       const int MINUTES_RIGHT_MARGIN = 155;
+       #region Constants
+       const int MILLISECONDS_RIGHT_MARGIN = 25;
+       const int SECONDS_RIGHT_MARGIN = 60;
+       const int MINUTES_RIGHT_MARGIN = 125;
+       #endregion Constants
 
+       #region Properties
        RacingGame RaceGame { get; set; }
-       Vector2 MilisecondsBottomRightPosition { get; set; }
+
+       Vector2 MillisecondsBottomRightPosition { get; set; }
        Vector2 SecondsBottomRightPosition { get; set; }
        Vector2 MinutesBottomRightPosition { get; set; }
+
        Vector2 StringMilisecondsPosition { get; set; }
        Vector2 StringSecondsPosition { get; set; }
        Vector2 StringMinutesPosition { get; set; }
-       string StringMiliseconds { get; set; }
+
+       string StringMilliseconds { get; set; }
        string StringSeconds { get; set; }
        string StringMinutes { get; set; }
-       Vector2 DimentionMiliseconds { get; set; }
-       Vector2 DimentionSeconds { get; set; }
-       Vector2 DimentionMinutes { get; set; }
+
+       Vector2 DimensionMilliseconds { get; set; }
+       Vector2 DimensionSeconds { get; set; }
+       Vector2 DimensionMinutes { get; set; }
+
        SpriteFont FontDisplay { get; set; }
        string FontName { get; set; }
-       float milisecondsValue;
-       float MilisecondsValue 
+       Color DisplayColor { get; set; }
+
+       float millisecondsValue;
+       float MillisecondsValue 
        {
            get
            {
-               return milisecondsValue;
+               return millisecondsValue;
            }
            set
            {
-               milisecondsValue = value;
-               if (milisecondsValue >= 100)
+               millisecondsValue = value;
+               if (millisecondsValue >= 100)
                {
-                   milisecondsValue -= 100;
+                   millisecondsValue -= 100;
                    ++SecondsValue;
                }
            }
        }
+
        float secondsValue;
        float SecondsValue 
        {
@@ -72,8 +82,11 @@ namespace RaceXNA
 
            }
        }
+
        float MinutesValue { get; set; }
-       Color DisplayColor { get; set; }
+
+       float BottomMargin { get; set; }
+       #endregion Properties
 
        public Chronometer(RacingGame game, string fontName)
           : base(game)
@@ -84,13 +97,17 @@ namespace RaceXNA
 
        public override void Initialize()
        {
-           MilisecondsBottomRightPosition = new Vector2(RaceGame.Window.ClientBounds.Width - MILISECONDS_RIGHT_MARGIN,
-                                                        RaceGame.Window.ClientBounds.Height - BOTTOM_MARGIN);
+           BottomMargin = RaceGame.Window.ClientBounds.Height - 50;
+
+           MillisecondsBottomRightPosition = new Vector2(RaceGame.Window.ClientBounds.Width - MILLISECONDS_RIGHT_MARGIN,
+                                                        RaceGame.Window.ClientBounds.Height - BottomMargin);
            SecondsBottomRightPosition = new Vector2(RaceGame.Window.ClientBounds.Width - SECONDS_RIGHT_MARGIN,
-                                                    RaceGame.Window.ClientBounds.Height - BOTTOM_MARGIN);
+                                                    RaceGame.Window.ClientBounds.Height - BottomMargin);
            MinutesBottomRightPosition = new Vector2(RaceGame.Window.ClientBounds.Width - MINUTES_RIGHT_MARGIN,
-                                                    RaceGame.Window.ClientBounds.Height - BOTTOM_MARGIN);
+                                                    RaceGame.Window.ClientBounds.Height - BottomMargin);
+
            DisplayColor = Color.Chartreuse;
+
            base.Initialize();
        }
 
@@ -104,22 +121,20 @@ namespace RaceXNA
        {
            if (RaceGame.FpsHandler.FpsValue != 0)
            {
-               //float tempSecondsValue = (float)gameTime.ElapsedGameTime.TotalSeconds;
                float temporarySecondsValue = (float)gameTime.ElapsedGameTime.TotalSeconds;
-               MilisecondsValue += temporarySecondsValue * 100;
-               //MilisecondsValue += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+               MillisecondsValue += temporarySecondsValue * 100;
 
-               StringMiliseconds = MilisecondsValue.ToString("00");
-               DimentionMiliseconds = FontDisplay.MeasureString(StringMiliseconds);
-               StringMilisecondsPosition = MilisecondsBottomRightPosition - DimentionMiliseconds;
+               StringMilliseconds = MillisecondsValue.ToString("00");
+               DimensionMilliseconds = FontDisplay.MeasureString(StringMilliseconds);
+               StringMilisecondsPosition = MillisecondsBottomRightPosition - DimensionMilliseconds;
 
                StringSeconds = SecondsValue.ToString("00") + " : ";
-               DimentionSeconds = FontDisplay.MeasureString(StringSeconds);
-               StringSecondsPosition = SecondsBottomRightPosition - DimentionSeconds;
+               DimensionSeconds = FontDisplay.MeasureString(StringSeconds);
+               StringSecondsPosition = SecondsBottomRightPosition - DimensionSeconds;
 
                StringMinutes = MinutesValue.ToString("00") + " : ";
-               DimentionMinutes = FontDisplay.MeasureString(StringMinutes);
-               StringMinutesPosition = MinutesBottomRightPosition - DimentionMinutes;
+               DimensionMinutes = FontDisplay.MeasureString(StringMinutes);
+               StringMinutesPosition = MinutesBottomRightPosition - DimensionMinutes;
            }
 
            base.Update(gameTime);
@@ -128,8 +143,9 @@ namespace RaceXNA
        public override void Draw(GameTime gameTime)
        {
            FillMode previousFillMode = RaceGame.GraphicsDevice.RenderState.FillMode;
+
            RaceGame.GraphicsDevice.RenderState.FillMode = FillMode.Solid;
-           RaceGame.spriteBatch.DrawString(FontDisplay, StringMiliseconds, StringMilisecondsPosition, DisplayColor, 0,
+           RaceGame.spriteBatch.DrawString(FontDisplay, StringMilliseconds, StringMilisecondsPosition, DisplayColor, 0,
                                            Vector2.Zero, 1.0f, SpriteEffects.None, 0);
            RaceGame.spriteBatch.DrawString(FontDisplay, StringSeconds, StringSecondsPosition, DisplayColor, 0,
                                            Vector2.Zero, 1.0f, SpriteEffects.None, 0);
