@@ -14,68 +14,68 @@ using Microsoft.Xna.Framework.Storage;
 
 namespace RaceXNA
 {
-   public class FpsDisplay : Microsoft.Xna.Framework.DrawableGameComponent
-   {
-      const int BOTTOM_MARGIN = 300;
-      const int RIGHT_MARGIN = 720;
+    public class FpsDisplay : Microsoft.Xna.Framework.DrawableGameComponent
+    {
+        const int BOTTOM_MARGIN = 300;
+        const int RIGHT_MARGIN = 720;
 
-      RacingGame RaceGame { get; set; }
-      Vector2 BottomRightPosition { get; set; }
-      Vector2 StringPosition { get; set; }
-      string StringFps { get; set; }
-      Vector2 Dimention { get; set; }
-      SpriteFont FontDisplay { get; set; }
-      float FpsValue { get; set; }
-      string FontName { get; set; }
+        RacingGame RaceGame { get; set; }
+        Vector2 BottomRightPosition { get; set; }
+        Vector2 StringPosition { get; set; }
+        string StringFps { get; set; }
+        Vector2 Dimention { get; set; }
+        SpriteFont FontDisplay { get; set; }
+        float FpsValue { get; set; }
+        string FontName { get; set; }
 
-      public FpsDisplay(RacingGame game, string fontName)
-         : base(game)
-      {
-         RaceGame = game;
-         FontName = fontName;
-      }
+        public FpsDisplay(RacingGame game, string fontName)
+            : base(game)
+        {
+            RaceGame = game;
+            FontName = fontName;
+        }
 
-      public override void Initialize()
-      {
-         BottomRightPosition = new Vector2(RaceGame.Window.ClientBounds.Width - RIGHT_MARGIN,
-                                         RaceGame.Window.ClientBounds.Height - BOTTOM_MARGIN);
-         FpsValue = -1;
-         base.Initialize();
-      }
+        public override void Initialize()
+        {
+            BottomRightPosition = new Vector2(RaceGame.Window.ClientBounds.Width - RIGHT_MARGIN,
+                                            RaceGame.Window.ClientBounds.Height - BOTTOM_MARGIN);
+            FpsValue = -1;
+            base.Initialize();
+        }
 
-      protected override void LoadContent()
-      {
-         FontDisplay = RaceGame.FontMgr.Find(FontName);
-         base.LoadContent();
-      }
+        protected override void LoadContent()
+        {
+            FontDisplay = RaceGame.FontMgr.Find(FontName);
+            base.LoadContent();
+        }
 
-      public override void Update(GameTime gameTime)
-      {
-         if (RaceGame.HeadsUpDisplay.IsProgramerDisplay)
-         {
-             if (RaceGame.FpsHandler.FpsValue != FpsValue)
-             {
-                 StringFps = RaceGame.FpsHandler.FpsValue.ToString("0");
-                 Dimention = FontDisplay.MeasureString(StringFps);
-                 StringPosition = BottomRightPosition - Dimention;
-                 FpsValue = RaceGame.FpsHandler.FpsValue;
-             }
-         }
-         
-         base.Update(gameTime);
-      }
+        public override void Update(GameTime gameTime)
+        {
+            if (RaceGame.HeadsUpDisplay.IsProgramerDisplay)
+            {
+                if (RaceGame.FpsHandler.FpsValue != FpsValue)
+                {
+                    StringFps = RaceGame.FpsHandler.FpsValue.ToString("0");
+                    Dimention = FontDisplay.MeasureString(StringFps);
+                    StringPosition = BottomRightPosition - Dimention;
+                    FpsValue = RaceGame.FpsHandler.FpsValue;
+                }
+            }
 
-      public override void Draw(GameTime gameTime)
-      {
-         if (RaceGame.HeadsUpDisplay.IsProgramerDisplay)
-         {
-            FillMode previousFillMode = RaceGame.GraphicsDevice.RenderState.FillMode;
-            RaceGame.GraphicsDevice.RenderState.FillMode = FillMode.Solid;
-            RaceGame.spriteBatch.DrawString(FontDisplay, StringFps, StringPosition, Color.Tomato, 0,
-                                           Vector2.Zero, 1.0f, SpriteEffects.None, 0);
-            RaceGame.GraphicsDevice.RenderState.FillMode = previousFillMode;
-         }
-         base.Draw(gameTime);
-      }
-   }
+            base.Update(gameTime);
+        }
+
+        public override void Draw(GameTime gameTime)
+        {
+            if (RaceGame.HeadsUpDisplay.IsProgramerDisplay)
+            {
+                FillMode previousFillMode = RaceGame.GraphicsDevice.RenderState.FillMode;
+                RaceGame.GraphicsDevice.RenderState.FillMode = FillMode.Solid;
+                RaceGame.spriteBatch.DrawString(FontDisplay, StringFps, StringPosition, Color.Tomato, 0,
+                                               Vector2.Zero, 1.0f, SpriteEffects.None, 0);
+                RaceGame.GraphicsDevice.RenderState.FillMode = previousFillMode;
+            }
+            base.Draw(gameTime);
+        }
+    }
 }

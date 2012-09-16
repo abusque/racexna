@@ -28,7 +28,7 @@ namespace RaceXNA
         public float Acceleration { get; private set; }
 
         float speed;
-        public float Speed 
+        public float Speed
         {
             get
             {
@@ -111,7 +111,7 @@ namespace RaceXNA
             EngineSoundInstance.Volume = 0.0f;
             EngineSoundInstance.Play();
         }
-        
+
         private void CreateCollisionSpheres()
         {
             float radius = BigSphere.Radius / 2;
@@ -176,7 +176,7 @@ namespace RaceXNA
             {
                 Acceleration = 0;
             }
-            
+
             Speed += Acceleration / RaceGame.FpsHandler.FpsValue;
 
             if (Speed > 0.0f)

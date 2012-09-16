@@ -101,7 +101,7 @@ namespace RaceXNA
             Components.Add(HeadsUpDisplay);
 
             base.Initialize();
-            
+
             Car.Enabled = false;
             HeadsUpDisplay.ToggleChronometer();
         }
@@ -140,7 +140,7 @@ namespace RaceXNA
             {
                 if (InputMgr.ControllerState.Buttons.Back == ButtonState.Pressed)
                     this.Exit();
-                if (InputMgr.ControllerState.Buttons.Start == ButtonState.Pressed 
+                if (InputMgr.ControllerState.Buttons.Start == ButtonState.Pressed
                     && !(InputMgr.PreviousControllerState.Buttons.Start == ButtonState.Pressed))
                 {
                     CurrentState = GameState.Playing;
@@ -157,7 +157,7 @@ namespace RaceXNA
                     InputMgr.Update(gameTime);
                     return;
                 }
-                
+
             }
 
             if (MediaPlayer.State == MediaState.Stopped)
@@ -167,12 +167,12 @@ namespace RaceXNA
             }
 
             base.Update(gameTime);
-            
+
         }
 
         private void CheckInputs()
         {
-            if (InputMgr.ControllerState.Buttons.Start == ButtonState.Pressed 
+            if (InputMgr.ControllerState.Buttons.Start == ButtonState.Pressed
                 && !(InputMgr.PreviousControllerState.Buttons.Start == ButtonState.Pressed))
             {
                 Paused = !Paused;

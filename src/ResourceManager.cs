@@ -4,48 +4,48 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace RaceXNA
 {
-   class RessourceNotFoundException : ApplicationException { }
+    class RessourceNotFoundException : ApplicationException { }
 
-   public class ResourceManager<T>
-   {
-      private Object LockObj = new Object();
-      public RacingGame RaceGame { get; protected set; }
-      List<BaseResource<T>> Resources;
-      const int FILE_NOT_FOUND = -1;
+    public class ResourceManager<T>
+    {
+        private Object LockObj = new Object();
+        public RacingGame RaceGame { get; protected set; }
+        List<BaseResource<T>> Resources;
+        const int FILE_NOT_FOUND = -1;
 
-      public ResourceManager(RacingGame game)
-      {
-         RaceGame = game;
-         Resources = new List<BaseResource<T>>();
-      }
+        public ResourceManager(RacingGame game)
+        {
+            RaceGame = game;
+            Resources = new List<BaseResource<T>>();
+        }
 
-      public void Add(string path)
-      {
+        public void Add(string path)
+        {
 
-         BaseResource<T> fileToAdd = new BaseResource<T>(RaceGame.Content, path);
+            BaseResource<T> fileToAdd = new BaseResource<T>(RaceGame.Content, path);
 
-         if (!Resources.Contains(fileToAdd))
-         {
-            fileToAdd.Load();
-
-            lock (LockObj)
+            if (!Resources.Contains(fileToAdd))
             {
-               Resources.Add(fileToAdd);
+                fileToAdd.Load();
+
+                lock (LockObj)
+                {
+                    Resources.Add(fileToAdd);
+                }
             }
-         }
-      }
+        }
 
-      public T Find(string name)
-      {
-         BaseResource<T> fileToFind = new BaseResource<T>(RaceGame.Content, name);
-         int fileIndex = Resources.IndexOf(fileToFind);
+        public T Find(string name)
+        {
+            BaseResource<T> fileToFind = new BaseResource<T>(RaceGame.Content, name);
+            int fileIndex = Resources.IndexOf(fileToFind);
 
-         if (fileIndex == FILE_NOT_FOUND)
-         {
-            throw new RessourceNotFoundException();
-         }
+            if (fileIndex == FILE_NOT_FOUND)
+            {
+                throw new RessourceNotFoundException();
+            }
 
-         return Resources[fileIndex].ResourceData;
-      }
-   }
+            return Resources[fileIndex].ResourceData;
+        }
+    }
 }

@@ -89,7 +89,7 @@ namespace RaceXNA
             {
                 for (int j = 0; j < NeedleMapNbRows; ++j)
                 {
-                    NeedleSourceRectangles[j+i*NeedleMapNbColumns] = new Rectangle(j * NeedleWidth,i *  NeedleHeight, NeedleWidth, NeedleHeight);
+                    NeedleSourceRectangles[j + i * NeedleMapNbColumns] = new Rectangle(j * NeedleWidth, i * NeedleHeight, NeedleWidth, NeedleHeight);
                 }
             }
 
@@ -119,7 +119,7 @@ namespace RaceXNA
                     slightestDistance = Math.Abs(ActualSpeed - SpeedValues[i]);
                     ActualIndex = i;
                 }
-                
+
             }
         }
 

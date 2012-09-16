@@ -16,7 +16,7 @@ namespace RaceXNA
         public Color DefaultColor { get; private set; }
 
         public BoxDisplayer(RacingGame raceGame, Vector3[] corners, Matrix world)
-            :base(raceGame)
+            : base(raceGame)
         {
             RaceGame = raceGame;
             Corners = corners;
