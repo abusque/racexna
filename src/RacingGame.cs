@@ -52,7 +52,9 @@ namespace RaceXNA
             graphics.SynchronizeWithVerticalRetrace = true;
             IsFixedTimeStep = true;
             IsMouseVisible = false;
-            graphics.IsFullScreen = false;
+            graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+            graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+            graphics.IsFullScreen = true;
             CurrentState = GameState.StartScreen;
 
             //MediaPlayer.IsRepeating = true;
