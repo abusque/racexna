@@ -40,7 +40,7 @@ namespace RaceXNA
             SpeedDisplayer = new SpeedDisplay(RaceGame, "Pericles20");
             FpsDisplayer = new FpsDisplay(RaceGame, "Pericles20");
             GameChronometer = new Chronometer(RaceGame, "Pericles20");
-            GameOdometer = new Odometer(RaceGame, "Odometer", "NeedleMap",6,6);
+            GameOdometer = new Odometer(RaceGame, "Odometer", "NeedleMap", 6, 6);
 
             RaceGame.Components.Add(AccelerationDisplayer);
             RaceGame.Components.Add(SpeedDisplayer);
