@@ -20,9 +20,9 @@ namespace RaceXNA
 
         AccelerationDisplay AccelerationDisplayer { get; set; }
         SpeedDisplay SpeedDisplayer { get; set; }
-        public Chronometer GameChronometer { get; private set; }
+        FpsDisplay FpsDisplayer { get; set; }
+        Chronometer GameChronometer { get; set; }
         Odometer GameOdometer { get; set; }
-        Vector2 OdometerInitialPos { get; set; }
 
         public bool IsProgramerDisplay { get; set; }
 
@@ -35,12 +35,16 @@ namespace RaceXNA
         public override void Initialize()
         {
             IsProgramerDisplay = false;
+
             AccelerationDisplayer = new AccelerationDisplay(RaceGame, "Pericles20");
             SpeedDisplayer = new SpeedDisplay(RaceGame, "Pericles20");
+            FpsDisplayer = new FpsDisplay(RaceGame, "Pericles20");
             GameChronometer = new Chronometer(RaceGame, "Pericles20");
             GameOdometer = new Odometer(RaceGame, "Odometer", "NeedleMap",6,6);
+
             RaceGame.Components.Add(AccelerationDisplayer);
             RaceGame.Components.Add(SpeedDisplayer);
+            RaceGame.Components.Add(FpsDisplayer);
             RaceGame.Components.Add(GameChronometer);
             RaceGame.Components.Add(GameOdometer);
 
@@ -52,6 +56,11 @@ namespace RaceXNA
             if (RaceGame.InputMgr.IsNewKey(Keys.F1))
                 IsProgramerDisplay = !IsProgramerDisplay;
             base.Update(gameTime);
+        }
+
+        public void ToggleChronometer()
+        {
+            GameChronometer.Enabled = !GameChronometer.Enabled;
         }
     }
 }

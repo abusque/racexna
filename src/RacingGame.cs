@@ -27,7 +27,6 @@ namespace RaceXNA
         public ResourceManager<Song> MusicMgr { get; private set; }
         public ResourceManager<SoundEffect> SfxMgr { get; private set; }
         public FpsCounter FpsHandler { get; private set; }
-        public FpsDisplay FpsDisplayer { get; private set; }
         public HUD HeadsUpDisplay { get; private set; }
         public AccelerationDisplay AccelerationDisplayer { get; private set; }
         public SpeedDisplay SpeedDisplayer { get; private set; }
@@ -79,10 +78,8 @@ namespace RaceXNA
             MediaPlayer.Play(MusicMgr.Find("RenditionIntro"));
 
             FpsHandler = new FpsCounter(this, FPS_INTERVAL);
-            FpsDisplayer = new FpsDisplay(this, "Pericles20");
             InputMgr = new InputManager(this);
             ModelDisplayer = new ModelDisplay(this);
-
             HeadsUpDisplay = new HUD(this);
 
             Car = new Vehicle(this, "L200-FBX", new Vector3(0, 0, 0), 0.01f, new Vector3(0, MathHelper.Pi, 0));
@@ -102,12 +99,11 @@ namespace RaceXNA
 
             //Laisser FpsDisplayer a la fin de la liste pour eviter les problemes d'affichage
             Components.Add(HeadsUpDisplay);
-            Components.Add(FpsDisplayer);
 
             base.Initialize();
             
             Car.Enabled = false;
-            HeadsUpDisplay.GameChronometer.Enabled = false;
+            HeadsUpDisplay.ToggleChronometer();
         }
 
         private void LoadAssets()
@@ -149,7 +145,7 @@ namespace RaceXNA
                 {
                     CurrentState = GameState.Playing;
                     Car.Enabled = true;
-                    HeadsUpDisplay.GameChronometer.Enabled = true;
+                    HeadsUpDisplay.ToggleChronometer();
                 }
             }
             else
