@@ -55,8 +55,6 @@ namespace RaceXNA
             graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
             graphics.IsFullScreen = true;
             CurrentState = GameState.StartScreen;
-
-            //MediaPlayer.IsRepeating = true;
         }
 
         protected override void Initialize()
@@ -82,8 +80,8 @@ namespace RaceXNA
             ModelDisplayer = new ModelDisplay(this);
             HeadsUpDisplay = new HUD(this);
 
-            Car = new Vehicle(this, "L200-FBX", new Vector3(0, 0, 0), 0.01f, new Vector3(0, MathHelper.Pi, 0));
-            Ground = new Terrain(this, new Vector3(0, 0, 0), "colormap", "heightmap", 7.0f, 0.3f);
+            Car = new Vehicle(this, "L200-FBX", new Vector3(1, 1, -1), 0.01f, new Vector3(0, MathHelper.Pi, 0));
+            Ground = new Terrain(this, new Vector3(0, 0, 0), "colormap", "heightmap", 7.0f, 0.15f);
             GameTrack = new Track(this, Ground);
 
             GameCamera = Car.Camera;
@@ -121,6 +119,7 @@ namespace RaceXNA
             TextureMgr.Add("Textures/flatmap");
             TextureMgr.Add("Textures/pause");
             TextureMgr.Add("Textures/startscreen");
+            TextureMgr.Add("Textures/typemap");
             MusicMgr.Add("Music/RenditionIntro");
             MusicMgr.Add("Music/RenditionLoop");
             SfxMgr.Add("Sounds/crash");

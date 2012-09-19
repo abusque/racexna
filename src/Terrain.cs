@@ -32,6 +32,8 @@ namespace RaceXNA
         Vector3[,] Normals { get; set; }
         public float TerrainScale { get; private set; }
         float HeightFactor { get; set; }
+        public enum TerrainType { Grass, Ground } ;
+        public TerrainType[,] DataTerrainType { get; private set; }
 
         public Terrain(RacingGame raceGame, Vector3 origin, string colorMapName, string heightMapName, float terrainScale, float heightFactor)
             : base(raceGame)
@@ -51,6 +53,7 @@ namespace RaceXNA
             CreateVertices();
             CreateIndices();
             CalculateNormals();
+            DeterminateTerrainTypes();
 
             base.Initialize();
         }
@@ -241,6 +244,40 @@ namespace RaceXNA
                 xNormalized);
 
             height = MathHelper.Lerp(topHeight, bottomHeight, zNormalized);
+        }
+
+        private void DeterminateTerrainTypes()
+        {
+            DataTerrainType = new TerrainType[Width, Length];
+
+            Texture2D colorMap = RaceGame.TextureMgr.Find("typemap");
+
+            Color[] pixelColors = new Color[Width * Length];
+            colorMap.GetData(pixelColors);
+
+            for (int i = 0; i < Width; i++)
+            {
+                for (int j = 0; j < Length; j++)
+                {
+                    if (pixelColors[i + j * Width].G > 125 && pixelColors[i + j * Width].G < 130)
+                    {
+                        DataTerrainType[i, j] = TerrainType.Grass;
+                    }
+                    else
+                    {
+                        DataTerrainType[i, j] = TerrainType.Ground;
+                    }
+                }
+            }
+        }
+
+        public TerrainType GetTerrainType(Vector3 position)
+        {
+            Vector3 relativePos = position - Origin;
+            int left, top;
+            left = (int)relativePos.X / (int)TerrainScale;
+            top = -((int)relativePos.Z / (int)TerrainScale);
+            return DataTerrainType[left, top];
         }
     }
 }

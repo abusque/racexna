@@ -10,9 +10,11 @@ namespace RaceXNA
     public class Vehicle : BaseObject
     {
         #region Constants
-        const float MAX_ACCEL = 20.0f;
+        const float MAX_ACCEL_GROUND = 20.0f;
+        const float MAX_ACCEL_GRASS = 15.0f;
         const float MIN_ACCEL = -15.0f;
-        const float MAX_SPEED = 80.0f;
+        const float MAX_SPEED_GROUND = 80.0f;
+        const float MAX_SPEED_GRASS = 40.0f;
         const float MIN_SPEED = -20.0f;
         const float BASE_ACCEL = 7.0f;
         const float FRICTION = 9.0f;
@@ -22,11 +24,13 @@ namespace RaceXNA
         const float DELTA_ROT = 5.0f;
         const float MAX_YAW = 1.8f;
         const float SMALL_RADIUS_FACTOR = 0.85f;
+        const float FRICTION_FACTOR = 0.6f;
         #endregion Constants
 
         #region Properties
         public float Acceleration { get; private set; }
-
+        public float MaxAcceleration { get; private set; }
+        public float MaxSpeed { get; private set; }
         float speed;
         public float Speed
         {
@@ -36,10 +40,10 @@ namespace RaceXNA
             }
             private set
             {
-                if (value < MAX_SPEED && value > MIN_SPEED)
+                if (value < MaxSpeed && value > MIN_SPEED)
                     speed = value;
-                else if (value >= MAX_SPEED)
-                    speed = MAX_SPEED;
+                else if (value >= MaxSpeed)
+                    speed -= FRICTION_FACTOR;
                 else
                     speed = MIN_SPEED;
             }
@@ -92,6 +96,7 @@ namespace RaceXNA
             PrevRot = 0;
             Camera = new SpringCamera(this, new Vector3(0, 400, -1000), new Vector3(0, 300, 0));
             IsCollision = false;
+            MaxSpeed = MAX_SPEED_GROUND;
         }
 
         public override void Initialize()
@@ -170,7 +175,7 @@ namespace RaceXNA
                     BrakeSoundPlayed = false;
                 }
 
-                Acceleration = rightTriggerValue * MAX_ACCEL;
+                Acceleration = rightTriggerValue * MAX_ACCEL_GROUND;
             }
             else
             {
@@ -297,6 +302,17 @@ namespace RaceXNA
             Orientation.Forward = Vector3.Normalize(Orientation.Forward);
 
             Position = newPos;
+
+            if (RaceGame.GameTrack.Ground.GetTerrainType(newPos) == Terrain.TerrainType.Ground)
+            {
+                MaxAcceleration = MAX_ACCEL_GROUND;
+                MaxSpeed = MAX_SPEED_GROUND;
+            }
+            else
+            {
+                MaxAcceleration = MAX_ACCEL_GRASS;
+                MaxSpeed = MAX_SPEED_GRASS;
+            }
         }
     }
 }
