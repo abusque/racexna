@@ -55,8 +55,6 @@ namespace RaceXNA
             graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
             graphics.IsFullScreen = true;
             CurrentState = GameState.StartScreen;
-
-            //MediaPlayer.IsRepeating = true;
         }
 
         protected override void Initialize()
@@ -69,7 +67,7 @@ namespace RaceXNA
 
             LoadAssets();
 
-            PressStartScreen = TextureMgr.Find("PressStart");
+            PressStartScreen = TextureMgr.Find("startscreen");
             PressStartRectangle = new Rectangle(0, 0, Window.ClientBounds.Width, Window.ClientBounds.Height);
             Texture2D pauseTex = TextureMgr.Find("pause");
             PausedRectangle = new Rectangle((Window.ClientBounds.Width - pauseTex.Width) / 2, (Window.ClientBounds.Height - pauseTex.Height) / 2,
@@ -120,7 +118,7 @@ namespace RaceXNA
             TextureMgr.Add("Textures/colormap");
             TextureMgr.Add("Textures/flatmap");
             TextureMgr.Add("Textures/pause");
-            TextureMgr.Add("Textures/PressStart");
+            TextureMgr.Add("Textures/startscreen");
             TextureMgr.Add("Textures/typemap");
             MusicMgr.Add("Music/RenditionIntro");
             MusicMgr.Add("Music/RenditionLoop");
