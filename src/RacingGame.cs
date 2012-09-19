@@ -154,6 +154,8 @@ namespace RaceXNA
                 if (Paused)
                 {
                     InputMgr.Update(gameTime);
+                    if (InputMgr.ControllerState.Buttons.Back == ButtonState.Pressed)
+                        this.Exit();
                     return;
                 }
 
@@ -181,8 +183,6 @@ namespace RaceXNA
                 else
                     MediaPlayer.Resume();
             }
-            if (InputMgr.ControllerState.Buttons.Back == ButtonState.Pressed)
-                this.Exit();
             if (InputMgr.IsNewKey(Keys.F2))
             {
                 graphics.SynchronizeWithVerticalRetrace = !graphics.SynchronizeWithVerticalRetrace;
