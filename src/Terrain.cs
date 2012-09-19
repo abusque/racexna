@@ -21,6 +21,8 @@ namespace RaceXNA
 
         RacingGame RaceGame { get; set; }
         public Vector3 Origin { get; private set; }
+        public Vector3 BeginPoint { get; private set; }
+        public Vector3 EndPoint { get; private set; }
         string ColorMapName { get; set; }
         string HeightMapName { get; set; }
         int Width { get; set; }
@@ -54,6 +56,7 @@ namespace RaceXNA
             CreateIndices();
             CalculateNormals();
             DeterminateTerrainTypes();
+            DeterminateLimitPoints();
 
             base.Initialize();
         }
@@ -278,6 +281,18 @@ namespace RaceXNA
             left = (int)relativePos.X / (int)TerrainScale;
             top = -((int)relativePos.Z / (int)TerrainScale);
             return DataTerrainType[left, top];
+        }
+
+        public void DeterminateLimitPoints()
+        {
+            Vector3 ErrorMargin = new Vector3(0.8f * TerrainScale, 0, -0.8f * TerrainScale);
+            int i, j;
+            i = 1; j = 1;
+            BeginPoint = Vertices[i + j * Width].Position;
+            BeginPoint += ErrorMargin;
+            i = Width - 2; j = Length - 2;
+            EndPoint = Vertices[i + j * Width].Position;
+            EndPoint -= ErrorMargin;
         }
     }
 }

@@ -5,7 +5,7 @@ namespace RaceXNA
     public abstract class Camera : Microsoft.Xna.Framework.GameComponent
     {
         protected const float NEAR_PLANE_DISTANCE = 0.1f;
-        protected const float FAR_PLANE_DISTANCE = 1000;
+        protected const float FAR_PLANE_DISTANCE = 1200;
         protected const float FOV = MathHelper.PiOver4; //45 degrees
 
         protected RacingGame RaceGame { get; set; }

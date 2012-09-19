@@ -242,13 +242,12 @@ namespace RaceXNA
 
         private void HandleCollision()
         {
+            bool playCollisionSound = false;
             for (int i = 0; i < RaceGame.GameTrack.Obstacles.Count; ++i)
             {
                 if (IsObstacleCollision(RaceGame.GameTrack.Obstacles[i]))
                 {
-                    if (Speed > MIN_CRASH_SPEED)
-                        CrashSound.Play();
-
+                    playCollisionSound = Speed > MIN_CRASH_SPEED;
                     Vector3 VectorCollision = new Vector3(Position.X - RaceGame.GameTrack.Obstacles[i].Position.X,
                                                           Position.Y - RaceGame.GameTrack.Obstacles[i].Position.Y,
                                                           Position.Z - RaceGame.GameTrack.Obstacles[i].Position.Z);
@@ -261,6 +260,42 @@ namespace RaceXNA
                 {
                     CheckTerrainCollision(Position);
                 }
+            }
+
+            Vector3 RepulseVectorX = new Vector3(1, 0, 0);
+            Vector3 RepulseVectorZ = new Vector3(0, 0, -1);
+            RepulseVectorX /= 2*RaceGame.FpsHandler.FpsValue;
+            RepulseVectorZ /= 2*RaceGame.FpsHandler.FpsValue;
+
+            if (Position.X < RaceGame.GameTrack.Ground.BeginPoint.X)
+            {
+                playCollisionSound = Speed > MIN_CRASH_SPEED;
+                Position += RepulseVectorX;
+                Speed = 0;
+            }
+            else if (Position.X > RaceGame.GameTrack.Ground.EndPoint.X)
+            {
+                playCollisionSound = Speed > MIN_CRASH_SPEED;
+                Position -= RepulseVectorX;
+                Speed = 0;
+            }
+            else if (Position.Z > RaceGame.GameTrack.Ground.BeginPoint.Z)
+            {
+                playCollisionSound = Speed > MIN_CRASH_SPEED;
+                Position += RepulseVectorZ;
+                Speed = 0;
+            }
+            else if (Position.Z < RaceGame.GameTrack.Ground.EndPoint.Z)
+            {
+                playCollisionSound = Speed > MIN_CRASH_SPEED;
+                Position -= RepulseVectorZ;
+                Speed = 0;
+            }
+
+            if (playCollisionSound)
+            {
+                CrashSound.Play();
+                playCollisionSound = false;
             }
         }
 
