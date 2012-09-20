@@ -109,9 +109,6 @@ namespace RaceXNA
             FontMgr.Add("Fonts/Pericles20");
             ModelMgr.Add("Models/L200-FBX");
             ModelMgr.Add("Models/tree stomp sculpture");
-            TextureMgr.Add("Textures/grass1");
-            TextureMgr.Add("Textures/asphalt1");
-            TextureMgr.Add("Textures/sand1");
             TextureMgr.Add("Textures/Odometer");
             TextureMgr.Add("Textures/NeedleMap");
             TextureMgr.Add("Textures/heightmap");
