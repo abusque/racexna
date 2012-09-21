@@ -82,7 +82,7 @@ namespace RaceXNA
         BoundingSphere[] CollisionSpheres { get; set; }
         SoundEffect CrashSound { get; set; }
         SoundEffect EngineSound { get; set; }
-        SoundEffectInstance EngineSoundInstance { get; set; }
+        public SoundEffectInstance EngineSoundInstance { get; private set; }
         SoundEffect BrakeSound { get; set; }
         SoundEffectInstance BrakeSoundInstance { get; set; }
         bool BrakeSoundPlayed { get; set; }

@@ -175,9 +175,15 @@ namespace RaceXNA
                 Paused = !Paused;
 
                 if (Paused)
+                {
                     MediaPlayer.Pause();
+                    Car.EngineSoundInstance.Pause();
+                }
                 else
+                {
                     MediaPlayer.Resume();
+                    Car.EngineSoundInstance.Resume();
+                }
             }
             if (InputMgr.IsNewKey(Keys.F2))
             {
