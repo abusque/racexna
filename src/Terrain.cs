@@ -285,14 +285,11 @@ namespace RaceXNA
 
         public void DeterminateLimitPoints()
         {
-            Vector3 ErrorMargin = new Vector3(0.8f * TerrainScale, 0, -0.8f * TerrainScale);
             int i, j;
-            i = 1; j = 1;
+            i = 0; j = 0;
             BeginPoint = Vertices[i + j * Width].Position;
-            BeginPoint += ErrorMargin;
-            i = Width - 2; j = Length - 2;
+            i = Width - 1; j = Length - 1;
             EndPoint = Vertices[i + j * Width].Position;
-            EndPoint -= ErrorMargin;
         }
     }
 }
