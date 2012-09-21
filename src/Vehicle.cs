@@ -253,7 +253,10 @@ namespace RaceXNA
                                                           Position.Z - RaceGame.GameTrack.Obstacles[i].Position.Z);
                     VectorCollision.Normalize();
                     VectorCollision /= RaceGame.FpsHandler.FpsValue;
-                    Position += VectorCollision;
+                    while (IsObstacleCollision(RaceGame.GameTrack.Obstacles[i]))
+                    {
+                        Position += VectorCollision;
+                    }
                     Speed = 0;
                 }
                 else if (RaceGame.GameTrack.Ground.IsOnHeightmap(Position))
@@ -262,34 +265,46 @@ namespace RaceXNA
                 }
             }
 
-            Vector3 RepulseVectorX = new Vector3(1, 0, 0);
-            Vector3 RepulseVectorZ = new Vector3(0, 0, -1);
-            RepulseVectorX /= 2*RaceGame.FpsHandler.FpsValue;
-            RepulseVectorZ /= 2*RaceGame.FpsHandler.FpsValue;
-
-            if (Position.X < RaceGame.GameTrack.Ground.BeginPoint.X)
+            Vector3 repulseX = new Vector3(0.1f, 0, 0);
+            Vector3 repulseZ = new Vector3(0, 0, 0.1f); 
+            foreach (BoundingSphere sphere in CollisionSpheres)
             {
-                playCollisionSound = Speed > MIN_CRASH_SPEED;
-                Position += RepulseVectorX;
-                Speed = 0;
-            }
-            else if (Position.X > RaceGame.GameTrack.Ground.EndPoint.X)
-            {
-                playCollisionSound = Speed > MIN_CRASH_SPEED;
-                Position -= RepulseVectorX;
-                Speed = 0;
-            }
-            else if (Position.Z > RaceGame.GameTrack.Ground.BeginPoint.Z)
-            {
-                playCollisionSound = Speed > MIN_CRASH_SPEED;
-                Position += RepulseVectorZ;
-                Speed = 0;
-            }
-            else if (Position.Z < RaceGame.GameTrack.Ground.EndPoint.Z)
-            {
-                playCollisionSound = Speed > MIN_CRASH_SPEED;
-                Position -= RepulseVectorZ;
-                Speed = 0;
+                if (Position.X - sphere.Radius < RaceGame.GameTrack.Ground.BeginPoint.X)
+                {
+                    playCollisionSound = true;
+                    Speed = 0;
+                    while (Position.X - sphere.Radius < RaceGame.GameTrack.Ground.BeginPoint.X)
+                    {
+                        Position += repulseX;
+                    }
+                }
+                else if (Position.X + sphere.Radius > RaceGame.GameTrack.Ground.EndPoint.X)
+                {
+                    playCollisionSound = true;
+                    Speed = 0;
+                    while (Position.X + sphere.Radius > RaceGame.GameTrack.Ground.EndPoint.X)
+                    {
+                        Position -= repulseX;
+                    }
+                }
+                if (Position.Z + sphere.Radius > RaceGame.GameTrack.Ground.BeginPoint.Z)
+                {
+                    playCollisionSound = true;
+                    Speed = 0;
+                    while (Position.Z + sphere.Radius > RaceGame.GameTrack.Ground.BeginPoint.Z)
+                    {
+                        Position -= repulseZ;
+                    }
+                }
+                else if (Position.Z - sphere.Radius < RaceGame.GameTrack.Ground.EndPoint.Z)
+                {
+                    playCollisionSound = true;
+                    Speed = 0;
+                    while (Position.Z - sphere.Radius < RaceGame.GameTrack.Ground.EndPoint.Z)
+                    {
+                        Position += repulseZ;
+                    }
+                }
             }
 
             if (playCollisionSound)
