@@ -19,7 +19,7 @@ namespace RaceXNA
         const int INDICES_PER_TILE = 6;
         const int INDICES_PER_TRIANGLE = 3;
         const int BORDERS_MOUNTAINS = 5;
-        const float MOUNTAINS_FACTOR = 5.0f;
+        const float MOUNTAINS_FACTOR = 1.6f;
 
         RacingGame RaceGame { get; set; }
         public Vector3 Origin { get; private set; }
@@ -299,7 +299,7 @@ namespace RaceXNA
             int i, j;
             i = BORDERS_MOUNTAINS; j = BORDERS_MOUNTAINS;
             BeginPoint = Vertices[i + j * Width].Position;
-            i = Width - 1 - BORDERS_MOUNTAINS; j = Length - 1 - BORDERS_MOUNTAINS;
+            i = Width - BORDERS_MOUNTAINS; j = Length - BORDERS_MOUNTAINS;
             EndPoint = Vertices[i + j * Width].Position;
         }
     }
