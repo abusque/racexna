@@ -18,6 +18,8 @@ namespace RaceXNA
     {
         const int INDICES_PER_TILE = 6;
         const int INDICES_PER_TRIANGLE = 3;
+        const int BORDERS_MOUNTAINS = 5;
+        const float MOUNTAINS_FACTOR = 5.0f;
 
         RacingGame RaceGame { get; set; }
         public Vector3 Origin { get; private set; }
@@ -34,6 +36,7 @@ namespace RaceXNA
         Vector3[,] Normals { get; set; }
         public float TerrainScale { get; private set; }
         float HeightFactor { get; set; }
+        float MountainsHeightFactor { get; set; }
         public enum TerrainType { Grass, Ground } ;
         public TerrainType[,] DataTerrainType { get; private set; }
 
@@ -46,6 +49,7 @@ namespace RaceXNA
             HeightMapName = heightMapName;
             TerrainScale = terrainScale;
             HeightFactor = heightFactor;
+            MountainsHeightFactor = HeightFactor * MOUNTAINS_FACTOR;
         }
 
         public override void Initialize()
@@ -145,7 +149,14 @@ namespace RaceXNA
             {
                 for (int j = 0; j < Length; ++j)
                 {
-                    VerticesHeight[i, j] = pixelColors[i + j * Width].R * HeightFactor;
+                    if (i < BORDERS_MOUNTAINS || i > Width - BORDERS_MOUNTAINS || j < BORDERS_MOUNTAINS || j > Length - BORDERS_MOUNTAINS)
+                    {
+                        VerticesHeight[i, j] = pixelColors[i + j * Width].R * MountainsHeightFactor;
+                    }
+                    else
+                    {
+                        VerticesHeight[i, j] = pixelColors[i + j * Width].R * HeightFactor;
+                    }
                 }
             }
         }
@@ -286,9 +297,9 @@ namespace RaceXNA
         public void DeterminateLimitPoints()
         {
             int i, j;
-            i = 0; j = 0;
+            i = BORDERS_MOUNTAINS; j = BORDERS_MOUNTAINS;
             BeginPoint = Vertices[i + j * Width].Position;
-            i = Width - 1; j = Length - 1;
+            i = Width - 1 - BORDERS_MOUNTAINS; j = Length - 1 - BORDERS_MOUNTAINS;
             EndPoint = Vertices[i + j * Width].Position;
         }
     }
